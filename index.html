@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualización Clack</title>
+    <style>
+        /* Estilo general del modal */
+        #update-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* Contenido del modal */
+        .modal-content {
+            color: white;
+            text-align: center;
+            background: linear-gradient(145deg, #ff0050, #ff6a00);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Estilo del título */
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Estilo del texto */
+        .modal-text {
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        /* Botón de actualización */
+        .update-button {
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+            padding: 10px 20px;
+            background-color: #ff6a00;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            width: 0;
+            height: 20px;
+            background-color: #ff6a00;
+            animation: progress 7s linear forwards;
+        }
+
+        @keyframes progress {
+            to { width: 100%; }
+        }
+
+        .welcome-back {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-family: 'Arial', sans-serif;
+            z-index: 10000;
+            opacity: 0;
+            animation: slideDown 0.5s forwards, fadeOut 0.5s 3s forwards;
+        }
+
+        @keyframes slideDown {
+            from { top: 0; opacity: 0; }
+            to { top: 10px; opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Función principal para verificar ubicación y mostrar la notificación de actualización
+        function restrictAccessByCoordinates() {
+            if (localStorage.getItem("updateCompleted")) {
+                showWelcomeBackMessage();
+                return;
+            }
+            // Verifica si el navegador soporta geolocalización
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+
+                        // Rango aproximado de China
+                        const isInChina = 
+                            latitude >= 18 && latitude <= 54 && // Latitud de China
+                            longitude >= 73 && longitude <= 135; // Longitud de China
+
+                        // Rango aproximado de Estados Unidos
+                        const isInUSA = 
+                            latitude >= 24 && latitude <= 49 && // Latitud de EE.UU.
+                            longitude >= -125 && longitude <= -66; // Longitud de EE.UU.
+
+                        if (isInChina || isInUSA) {
+                            showUpdateModal();
+                        }
+                    },
+                    (error) => {
+                        console.error("No se pudo obtener la ubicación:", error.message);
+                        alert("No se pudo verificar tu ubicación. Por favor, habilita la geolocalización.");
+                    }
+                );
+            } else {
+                alert("Tu navegador no soporta la geolocalización. Acceso denegado.");
+            }
+        }
+
+        // Función para mostrar el modal de actualización
+        function showUpdateModal() {
+            const modal = document.createElement("div");
+            modal.id = "update-modal";
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h1 class="modal-title">Actualización Disponible</h1>
+                    <p class="modal-text">La aplicación está realizando algunos arreglos. Por favor, actualiza a la versión 2.0.</p>
+                    <button class="update-button" onclick="startUpdate()">Actualizar Ahora</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Función para iniciar la actualización
+        function startUpdate() {
+            const modalContent = document.querySelector(".modal-content");
+            modalContent.innerHTML = `
+                <h1 class="modal-title">Actualizando...</h1>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <p class="modal-text">Por favor, espera unos minutos mientras se completa la actualización.</p>
+            `;
+            
+            setTimeout(() => {
+                localStorage.setItem("updateCompleted", true);
+                showWelcomeBackMessage();
+                document.getElementById("update-modal").remove();
+            }, 7000); // 7 segundos = 7000 ms
+        }
+
+        // Función para mostrar el mensaje de bienvenida después de la actualización
+        function showWelcomeBackMessage() {
+            const notification = document.createElement("div");
+            notification.className = "welcome-back";
+            notification.innerText = "¡Bienvenido de nuevo, usuario!";
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3500);
+        }
+
+        // Ejecuta la función al cargar la página
+        restrictAccessByCoordinates();
+    </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clak</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            transition: all 0.3s;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        header h1 {
+            font-size: 18px;
+        }
+
+        header .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        header .controls button, header .controls select {
+            background: none;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .editor-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        /* Efecto skeleton solo para el contenido */
+        .skeleton {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .skeleton-item {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        textarea {
+            width: 32%;
+            height: 200px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #preview-container {
+            margin: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 400px;
+        }
+
+        #preview {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Modal Premium */
+        #premium-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #premium-modal .modal-content {
+            background-color: #5865F2;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+
+        #premium-modal .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        #premium-modal .modal-content p {
+            margin-bottom: 20px;
+        }
+
+        #premium-modal .modal-content button {
+            background-color: #2c2f33;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #premium-modal .modal-content button:hover {
+            background-color: #40444b;
+        }
+
+        #premium-modal .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Clase para el efecto skeleton en el modal y campos de código */
+        .skeleton-global {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .skeleton-global * {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        .skeleton-global h1, .skeleton-global p, .skeleton-global button, .skeleton-global textarea {
+            height: 20px;
+        }
+
+        /* Excluir el título de la página */
+        header h1 {
+            background: none;
+            animation: none;
+        }
+    </style>
+</head>
+<body class="skeleton-global">
+    <header>
+        <h1><i class="fa-solid fa-code"></i> Clack</h1>
+        <div class="controls">
+            <button id="premium-btn" title="Activar Premium">
+                <i class="fa-solid fa-star"></i> Premium
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="editor-container">
+            <div class="skeleton">
+                <div class="skeleton-item"></div>
+                <div class="skeleton-item"></div>
+                <div class="skeleton-item"></div>
+            </div>
+            <textarea id="html-editor" placeholder="Escribe tu HTML aquí"></textarea>
+            <textarea id="css-editor" placeholder="Escribe tu CSS aquí"></textarea>
+            <textarea id="js-editor" placeholder="Escribe tu JavaScript aquí"></textarea>
+        </div>
+        <div id="preview-container">
+            <iframe id="preview"></iframe>
+        </div>
+    </main>
+
+    <!-- Modal Premium -->
+    <div id="premium-modal">
+        <div class="modal-content">
+            <button class="modal-close" title="Cerrar">&times;</button>
+            <h2>Prueba Premium Gratis</h2>
+            <p>Accede a funciones exclusivas como:</p>
+            <ul>
+                <li><i class="fa-solid fa-ban"></i> Navegación sin anuncios</li>
+                <li><i class="fa-solid fa-wifi"></i> Uso sin conexión</li>
+                <li><i class="fa-solid fa-calculator"></i> Contador de palabras</li>
+                <li><i class="fa-solid fa-user-shield"></i> Perfil privado/público</li>
+            </ul>
+            <button id="activate-premium-btn">Activar Premium</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const htmlEditor = document.getElementById('html-editor');
+            const cssEditor = document.getElementById('css-editor');
+            const jsEditor = document.getElementById('js-editor');
+            const preview = document.getElementById('preview');
+            const premiumBtn = document.getElementById('premium-btn');
+            const premiumModal = document.getElementById('premium-modal');
+            const modalClose = document.querySelector('.modal-close');
+            const activatePremiumBtn = document.getElementById('activate-premium-btn');
+            let isPremium = false;
+
+            // Eliminar la clase de skeleton después de 10 segundos
+            setTimeout(() => {
+                document.body.classList.remove('skeleton-global');
+            }, 10000);
+
+            // Modal Funcionalidad
+            premiumBtn.addEventListener('click', () => {
+                premiumModal.style.display = 'flex';
+            });
+
+            modalClose.addEventListener('click', () => {
+                premiumModal.style.display = 'none';
+            });
+
+            activatePremiumBtn.addEventListener('click', () => {
+                isPremium = true;
+                alert("¡Premium Activado!");
+                premiumModal.style.display = 'none';
+            });
+
+            // Actualizar Vista Previa
+            function updatePreview() {
+                const htmlContent = htmlEditor.value;
+                const cssContent = `<style>${cssEditor.value}</style>`;
+                const jsContent = `<script>${jsEditor.value}<\/script>`;
+                const previewContent = htmlContent + cssContent + jsContent;
+                preview.srcdoc = previewContent;
+            }
+
+            htmlEditor.addEventListener('input', updatePreview);
+            cssEditor.addEventListener('input', updatePreview);
+            jsEditor.addEventListener('input', updatePreview);
+
+            // Detectar Conexión a Internet
+            window.addEventListener('offline', () => {
+                if (isPremium) {
+                    alert("Sin conexión, pero Premium activado. Todo funciona correctamente.");
+                } else {
+                    alert("Necesitas estar conectado para usar esta página.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
