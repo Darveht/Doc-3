@@ -105,17 +105,26 @@
 </head>
 <body>
     <script>
+        // Función para borrar todos los elementos de localStorage
+        function clearLocalStorage() {
+            localStorage.clear();
+            console.log("Local storage borrado");
+        }
+
         // Función principal para verificar ubicación y mostrar la notificación de actualización
         function restrictAccessByCoordinates() {
             if (localStorage.getItem("updateCompleted")) {
                 showWelcomeBackMessage();
                 return;
             }
+            console.log("Verificando geolocalización...");
             // Verifica si el navegador soporta geolocalización
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const { latitude, longitude } = position.coords;
+
+                        console.log(`Ubicación: ${latitude}, ${longitude}`);
 
                         // Rango aproximado de China
                         const isInChina = 
@@ -143,6 +152,7 @@
 
         // Función para mostrar el modal de actualización
         function showUpdateModal() {
+            console.log("Mostrando modal de actualización...");
             const modal = document.createElement("div");
             modal.id = "update-modal";
             modal.innerHTML = `
@@ -157,6 +167,7 @@
 
         // Función para iniciar la actualización
         function startUpdate() {
+            console.log("Iniciando actualización...");
             const modalContent = document.querySelector(".modal-content");
             modalContent.innerHTML = `
                 <h1 class="modal-title">Actualizando...</h1>
@@ -175,6 +186,7 @@
 
         // Función para mostrar el mensaje de bienvenida después de la actualización
         function showWelcomeBackMessage() {
+            console.log("Mostrando mensaje de bienvenida...");
             const notification = document.createElement("div");
             notification.className = "welcome-back";
             notification.innerText = "¡Bienvenido de nuevo, usuario!";
@@ -186,10 +198,12 @@
         }
 
         // Ejecuta la función al cargar la página
+        clearLocalStorage();
         restrictAccessByCoordinates();
     </script>
 </body>
 </html>
+
 
 
 <!DOCTYPE html>
