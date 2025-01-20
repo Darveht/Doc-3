@@ -1,75 +1,95 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clak</title>
+    <title>클락 (Clak)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #ff0000, #000);
+            background: linear-gradient(135deg, #111, #550000);
             color: white;
             transition: all 0.3s;
         }
 
         header {
-            background: rgba(0, 0, 0, 0.8);
+            background: #900;
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            border-bottom: 2px solid #ff0000;
+            padding: 10px 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
         }
 
         header h1 {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
-            text-transform: uppercase;
+        }
+
+        header .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         header .controls button {
-            background: #ff0000;
+            background: #333;
             color: white;
             border: none;
-            padding: 8px 15px;
-            font-size: 14px;
+            padding: 10px;
             border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
+            transition: background 0.3s;
         }
 
         header .controls button:hover {
-            background: #d10000;
+            background: #555;
+        }
+
+        header .controls button i {
+            margin-right: 5px;
+        }
+
+        main {
+            padding: 20px;
         }
 
         .editor-container {
             display: flex;
+            gap: 20px;
             justify-content: space-between;
-            gap: 10px;
-            padding: 20px;
+            flex-wrap: wrap;
         }
 
         textarea {
-            width: 32%;
-            height: 300px;
+            width: 30%;
+            height: 200px;
             padding: 10px;
             font-family: monospace;
             font-size: 14px;
-            border: 1px solid #ccc;
+            border: 1px solid #444;
             border-radius: 5px;
-            background: #111;
+            background: #222;
             color: white;
+            resize: none;
+        }
+
+        textarea::placeholder {
+            color: #999;
         }
 
         #preview-container {
-            margin: 20px;
-            border: 1px solid #ff0000;
+            margin: 20px 0;
+            border: 1px solid #444;
             border-radius: 5px;
             overflow: hidden;
-            height: 400px;
+            height: 300px;
+            background: #111;
         }
 
         #preview {
@@ -78,99 +98,39 @@
             border: none;
         }
 
-        /* Modal Premium */
-        #premium-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        #premium-modal .modal-content {
-            background: #ff0000;
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 500px;
+        footer {
             text-align: center;
-        }
-
-        #premium-modal .modal-content h2 {
-            margin-bottom: 15px;
-        }
-
-        #premium-modal .modal-content p {
-            margin-bottom: 15px;
-        }
-
-        #premium-modal .modal-content button {
-            background: #000;
+            padding: 10px;
+            background: #900;
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #premium-modal .modal-content button:hover {
-            background: #333;
-        }
-
-        #premium-modal .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1><i class="fa-solid fa-code"></i> Clack</h1>
+        <h1 id="title"><i class="fa-solid fa-code"></i> 클락 (Clak)</h1>
         <div class="controls">
-            <button id="premium-btn"><i class="fa-solid fa-star"></i> Premium</button>
+            <button id="lang-btn" title="Change Language">
+                <i class="fa-solid fa-language"></i> 한국어 (Korean)
+            </button>
         </div>
     </header>
 
     <main>
         <div class="editor-container">
-            <textarea id="html-editor" placeholder="Escribe tu HTML aquí"></textarea>
-            <textarea id="css-editor" placeholder="Escribe tu CSS aquí"></textarea>
-            <textarea id="js-editor" placeholder="Escribe tu JavaScript aquí"></textarea>
+            <textarea id="html-editor" placeholder="HTML 입력..."></textarea>
+            <textarea id="css-editor" placeholder="CSS 입력..."></textarea>
+            <textarea id="js-editor" placeholder="JavaScript 입력..."></textarea>
         </div>
         <div id="preview-container">
             <iframe id="preview"></iframe>
         </div>
     </main>
 
-    <div id="premium-modal">
-        <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <h2>Prueba Premium Desactivada</h2>
-            <p>La función de uso sin conexión estará desactivada temporalmente por 20 minutos.</p>
-        </div>
-    </div>
+    <footer>
+        <span id="footer-text">클락 © 2025 | All Rights Reserved</span>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -178,37 +138,61 @@
             const cssEditor = document.getElementById('css-editor');
             const jsEditor = document.getElementById('js-editor');
             const preview = document.getElementById('preview');
-            const premiumModal = document.getElementById('premium-modal');
-            const premiumBtn = document.getElementById('premium-btn');
-            const modalClose = document.querySelector('.modal-close');
+            const langBtn = document.getElementById('lang-btn');
+            const title = document.getElementById('title');
+            const footerText = document.getElementById('footer-text');
 
-            // Actualizar Vista Previa
+            let currentLanguage = 'ko'; // Idioma actual: 'ko' (coreano) por defecto.
+
+            const translations = {
+                en: {
+                    title: '<i class="fa-solid fa-code"></i> Clak',
+                    langBtn: '<i class="fa-solid fa-language"></i> English',
+                    htmlPlaceholder: 'Enter HTML...',
+                    cssPlaceholder: 'Enter CSS...',
+                    jsPlaceholder: 'Enter JavaScript...',
+                    footerText: 'Clak © 2025 | All Rights Reserved'
+                },
+                ko: {
+                    title: '<i class="fa-solid fa-code"></i> 클락 (Clak)',
+                    langBtn: '<i class="fa-solid fa-language"></i> 한국어 (Korean)',
+                    htmlPlaceholder: 'HTML 입력...',
+                    cssPlaceholder: 'CSS 입력...',
+                    jsPlaceholder: 'JavaScript 입력...',
+                    footerText: '클락 © 2025 | All Rights Reserved'
+                }
+            };
+
+            // Cambiar idioma y texto
+            langBtn.addEventListener('click', () => {
+                currentLanguage = currentLanguage === 'ko' ? 'en' : 'ko';
+                const langContent = translations[currentLanguage];
+                title.innerHTML = langContent.title;
+                langBtn.innerHTML = langContent.langBtn;
+                htmlEditor.placeholder = langContent.htmlPlaceholder;
+                cssEditor.placeholder = langContent.cssPlaceholder;
+                jsEditor.placeholder = langContent.jsPlaceholder;
+                footerText.textContent = langContent.footerText;
+                document.documentElement.lang = currentLanguage;
+            });
+
+            // Actualizar vista previa
             function updatePreview() {
                 const htmlContent = htmlEditor.value;
                 const cssContent = `<style>${cssEditor.value}</style>`;
                 const jsContent = `<script>${jsEditor.value}<\/script>`;
-                preview.srcdoc = htmlContent + cssContent + jsContent;
+                const previewContent = htmlContent + cssContent + jsContent;
+                preview.srcdoc = previewContent;
             }
 
             htmlEditor.addEventListener('input', updatePreview);
             cssEditor.addEventListener('input', updatePreview);
             jsEditor.addEventListener('input', updatePreview);
-
-            // Abrir/Cerrar Modal
-            premiumBtn.addEventListener('click', () => {
-                premiumModal.style.display = 'flex';
-                setTimeout(() => {
-                    premiumModal.style.display = 'none';
-                }, 1200000); // 20 minutos
-            });
-
-            modalClose.addEventListener('click', () => {
-                premiumModal.style.display = 'none';
-            });
         });
     </script>
 </body>
 </html>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
