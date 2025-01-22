@@ -193,6 +193,7 @@
 </body>
 </html>
 
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -200,6 +201,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>업데이트 중</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -222,11 +224,11 @@
       align-items: center;
       flex-direction: column;
       z-index: 9999;
+      animation: fadeIn 1.5s ease;
     }
 
     .block-content {
       text-align: center;
-      animation: fadeIn 1.5s ease;
     }
 
     .block-content h1 {
@@ -260,6 +262,21 @@
       transform: scale(1.1);
     }
 
+    .close-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+      animation: pulse 1.5s infinite;
+    }
+
+    .close-icon:hover {
+      color: #ff5864;
+      transform: scale(1.1);
+    }
+
     @keyframes fadeIn {
       0% {
         opacity: 0;
@@ -268,15 +285,34 @@
         opacity: 1;
       }
     }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Pantalla de bloqueo -->
+  <!-- Pantalla de notificación -->
   <div class="block-screen" id="block-screen">
+    <i class="fas fa-times close-icon" onclick="closeNotification()"></i>
     <div class="block-content">
       <h1 id="block-title">업데이트 중입니다</h1>
       <p id="block-message">
-        애플리케이션은 무기한 유지보수 중입니다. 나중에 다시 시도해주세요. 불편을 끼쳐드려 죄송합니다.
+        성능 향상이 완료되었습니다. 애플리케이션 사용 중 변화가 감지되면 즉시 고객 지원 센터에 문의해 주세요.
       </p>
       <div class="language-selector">
         <button onclick="changeLanguage('ko')">한국어</button>
@@ -287,24 +323,29 @@
     </div>
   </div>
 
+  <!-- Página original -->
+  <div id="original-page" style="display: none;">
+    <!-- Aquí puedes agregar tu contenido original -->
+  </div>
+
   <script>
     // Textos en diferentes idiomas
     const translations = {
       ko: {
         title: "업데이트 중입니다",
-        message: "애플리케이션은 무기한 유지보수 중입니다. 나중에 다시 시도해주세요. 불편을 끼쳐드려 죄송합니다."
+        message: "성능 향상이 완료되었습니다. 애플리케이션 사용 중 변화가 감지되면 즉시 고객 지원 센터에 문의해 주세요."
       },
       es: {
-        title: "Estamos actualizando",
-        message: "La aplicación está en mantenimiento indefinido. Vuelve más tarde. Disculpa las molestias."
+        title: "Mejoras completadas",
+        message: "Las mejoras de rendimiento se han completado. Si notas algún cambio en la aplicación, por favor contacta al soporte de inmediato."
       },
       en: {
-        title: "We are updating",
-        message: "The application is under indefinite maintenance. Please check back later. Sorry for the inconvenience."
+        title: "Performance Improved",
+        message: "Performance improvements have been completed. If you notice any changes in the app, please contact support immediately."
       },
       zh: {
-        title: "我们正在更新",
-        message: "应用程序正在无限期维护。请稍后再试。抱歉给您带来不便。"
+        title: "性能改进完成",
+        message: "性能改进已完成。如果您在应用程序中发现任何更改，请立即联系支持团队。"
       }
     };
 
@@ -314,10 +355,18 @@
       document.getElementById("block-message").innerText = translations[lang].message;
     }
 
-    // Bloqueo indefinido (quitar manualmente si es necesario)
-    const isBlocked = true; // Cambia esto a false para desbloquear manualmente
-    if (!isBlocked) {
-      document.getElementById("block-screen").style.display = "none";
+    // Función para cerrar la notificación
+    function closeNotification() {
+      const blockScreen = document.getElementById("block-screen");
+      const originalPage = document.getElementById("original-page");
+
+      // Animar la desaparición de la pantalla de bloqueo
+      blockScreen.style.animation = "fadeOut 1s ease";
+      setTimeout(() => {
+        blockScreen.style.display = "none"; // Ocultar después de la animación
+        originalPage.style.display = "block"; // Mostrar la página original
+        document.body.style.overflow = "auto"; // Permitir el scroll de la página
+      }, 1000); // Tiempo igual a la duración de la animación
     }
   </script>
 </body>
