@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>클락 (Clak)</title>
+    <title>编辑器</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        /* Estilo general */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             background: linear-gradient(135deg, #111, #550000);
             color: white;
+            overflow-x: hidden;
             transition: all 0.3s;
         }
 
@@ -23,17 +25,6 @@
             align-items: center;
             padding: 10px 20px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-        }
-
-        header h1 {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        header .controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
         }
 
         header .controls button {
@@ -51,45 +42,46 @@
             background: #555;
         }
 
-        header .controls button i {
-            margin-right: 5px;
-        }
-
         main {
             padding: 20px;
         }
 
         .editor-container {
             display: flex;
-            gap: 20px;
-            justify-content: space-between;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
         textarea {
-            width: 30%;
-            height: 200px;
+            width: calc(33.33% - 20px);
+            height: 40vh;
             padding: 10px;
-            font-family: monospace;
-            font-size: 14px;
-            border: 1px solid #444;
-            border-radius: 5px;
             background: #222;
             color: white;
+            border: 2px solid #444;
+            border-radius: 5px;
             resize: none;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
         }
 
-        textarea::placeholder {
-            color: #999;
+        textarea:focus {
+            outline: none;
+            border-color: #900;
+        }
+
+        .counter {
+            font-size: 12px;
+            margin-top: 5px;
         }
 
         #preview-container {
-            margin: 20px 0;
-            border: 1px solid #444;
+            margin-top: 20px;
+            border: 2px solid #444;
             border-radius: 5px;
             overflow: hidden;
             height: 300px;
-            background: #111;
+            background: #000;
         }
 
         #preview {
@@ -109,27 +101,35 @@
 </head>
 <body>
     <header>
-        <h1 id="title"><i class="fa-solid fa-code"></i> 클락 (Clak)</h1>
+        <h1><i class="fa-solid fa-code"></i> 编辑器</h1>
         <div class="controls">
-            <button id="lang-btn" title="Change Language">
-                <i class="fa-solid fa-language"></i> 한국어 (Korean)
-            </button>
+            <button id="theme-btn"><i class="fa-solid fa-moon"></i> 切换主题</button>
         </div>
     </header>
 
     <main>
         <div class="editor-container">
-            <textarea id="html-editor" placeholder="HTML 입력..."></textarea>
-            <textarea id="css-editor" placeholder="CSS 입력..."></textarea>
-            <textarea id="js-editor" placeholder="JavaScript 입력..."></textarea>
+            <div>
+                <textarea id="html-editor" placeholder="输入 HTML..."></textarea>
+                <div id="html-counter" class="counter">字数: 0 | 字符数: 0 | 删除次数: 0</div>
+            </div>
+            <div>
+                <textarea id="css-editor" placeholder="输入 CSS..."></textarea>
+                <div id="css-counter" class="counter">字数: 0 | 字符数: 0 | 删除次数: 0</div>
+            </div>
+            <div>
+                <textarea id="js-editor" placeholder="输入 JavaScript..."></textarea>
+                <div id="js-counter" class="counter">字数: 0 | 字符数: 0 | 删除次数: 0</div>
+            </div>
         </div>
+
         <div id="preview-container">
             <iframe id="preview"></iframe>
         </div>
     </main>
 
     <footer>
-        <span id="footer-text">클락 © 2025 | All Rights Reserved</span>
+        编辑器 © 2025 | 保留所有权利
     </footer>
 
     <script>
@@ -138,56 +138,62 @@
             const cssEditor = document.getElementById('css-editor');
             const jsEditor = document.getElementById('js-editor');
             const preview = document.getElementById('preview');
-            const langBtn = document.getElementById('lang-btn');
-            const title = document.getElementById('title');
-            const footerText = document.getElementById('footer-text');
+            const themeBtn = document.getElementById('theme-btn');
 
-            let currentLanguage = 'ko'; // Idioma actual: 'ko' (coreano) por defecto.
+            let htmlDeletes = 0, cssDeletes = 0, jsDeletes = 0;
 
-            const translations = {
-                en: {
-                    title: '<i class="fa-solid fa-code"></i> Clak',
-                    langBtn: '<i class="fa-solid fa-language"></i> English',
-                    htmlPlaceholder: 'Enter HTML...',
-                    cssPlaceholder: 'Enter CSS...',
-                    jsPlaceholder: 'Enter JavaScript...',
-                    footerText: 'Clak © 2025 | All Rights Reserved'
-                },
-                ko: {
-                    title: '<i class="fa-solid fa-code"></i> 클락 (Clak)',
-                    langBtn: '<i class="fa-solid fa-language"></i> 한국어 (Korean)',
-                    htmlPlaceholder: 'HTML 입력...',
-                    cssPlaceholder: 'CSS 입력...',
-                    jsPlaceholder: 'JavaScript 입력...',
-                    footerText: '클락 © 2025 | All Rights Reserved'
+            function updateCounters(editor, counterElement, deleteCount) {
+                const text = editor.value;
+                const words = text.split(/\s+/).filter(Boolean).length;
+                const chars = text.length;
+                counterElement.textContent = `字数: ${words} | 字符数: ${chars} | 删除次数: ${deleteCount}`;
+            }
+
+            function detectDeletes(editor, lastValue, deleteCount) {
+                if (editor.value.length < lastValue.length) {
+                    return deleteCount + 1;
                 }
-            };
+                return deleteCount;
+            }
 
-            // Cambiar idioma y texto
-            langBtn.addEventListener('click', () => {
-                currentLanguage = currentLanguage === 'ko' ? 'en' : 'ko';
-                const langContent = translations[currentLanguage];
-                title.innerHTML = langContent.title;
-                langBtn.innerHTML = langContent.langBtn;
-                htmlEditor.placeholder = langContent.htmlPlaceholder;
-                cssEditor.placeholder = langContent.cssPlaceholder;
-                jsEditor.placeholder = langContent.jsPlaceholder;
-                footerText.textContent = langContent.footerText;
-                document.documentElement.lang = currentLanguage;
-            });
-
-            // Actualizar vista previa
             function updatePreview() {
                 const htmlContent = htmlEditor.value;
                 const cssContent = `<style>${cssEditor.value}</style>`;
                 const jsContent = `<script>${jsEditor.value}<\/script>`;
-                const previewContent = htmlContent + cssContent + jsContent;
-                preview.srcdoc = previewContent;
+                preview.srcdoc = htmlContent + cssContent + jsContent;
             }
 
-            htmlEditor.addEventListener('input', updatePreview);
-            cssEditor.addEventListener('input', updatePreview);
-            jsEditor.addEventListener('input', updatePreview);
+            htmlEditor.addEventListener('input', () => {
+                htmlDeletes = detectDeletes(htmlEditor, htmlEditor.dataset.lastValue || '', htmlDeletes);
+                updateCounters(htmlEditor, document.getElementById('html-counter'), htmlDeletes);
+                htmlEditor.dataset.lastValue = htmlEditor.value;
+                updatePreview();
+            });
+
+            cssEditor.addEventListener('input', () => {
+                cssDeletes = detectDeletes(cssEditor, cssEditor.dataset.lastValue || '', cssDeletes);
+                updateCounters(cssEditor, document.getElementById('css-counter'), cssDeletes);
+                cssEditor.dataset.lastValue = cssEditor.value;
+                updatePreview();
+            });
+
+            jsEditor.addEventListener('input', () => {
+                jsDeletes = detectDeletes(jsEditor, jsEditor.dataset.lastValue || '', jsDeletes);
+                updateCounters(jsEditor, document.getElementById('js-counter'), jsDeletes);
+                jsEditor.dataset.lastValue = jsEditor.value;
+                updatePreview();
+            });
+
+            themeBtn.addEventListener('click', () => {
+                document.body.classList.toggle('light-mode');
+                if (document.body.classList.contains('light-mode')) {
+                    document.body.style.background = 'linear-gradient(135deg, #fff, #aaa)';
+                    themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i> 切换为深色模式';
+                } else {
+                    document.body.style.background = 'linear-gradient(135deg, #111, #550000)';
+                    themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i> 切换为亮色模式';
+                }
+            });
         });
     </script>
 </body>
@@ -195,11 +201,11 @@
 
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="zh">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>업데이트 중</title>
+  <title>更新中</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -225,6 +231,8 @@
       flex-direction: column;
       z-index: 9999;
       animation: fadeIn 1.5s ease;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .block-content {
@@ -239,27 +247,7 @@
     .block-content p {
       font-size: 1.2rem;
       margin-bottom: 20px;
-      max-width: 90%;
-    }
-
-    .language-selector {
-      margin-top: 20px;
-    }
-
-    .language-selector button {
-      background-color: #fff;
-      color: #111;
-      border: none;
-      padding: 10px 20px;
-      margin: 5px;
-      border-radius: 25px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .language-selector button:hover {
-      transform: scale(1.1);
+      max-width: 600px;
     }
 
     .close-icon {
@@ -310,16 +298,10 @@
   <div class="block-screen" id="block-screen">
     <i class="fas fa-times close-icon" onclick="closeNotification()"></i>
     <div class="block-content">
-      <h1 id="block-title">업데이트 중입니다</h1>
+      <h1 id="block-title">性能改进完成</h1>
       <p id="block-message">
-        성능 향상이 완료되었습니다. 애플리케이션 사용 중 변화가 감지되면 즉시 고객 지원 센터에 문의해 주세요.
+        性能改进已完成。如果您在应用程序中发现任何更改，请立即联系支持团队。
       </p>
-      <div class="language-selector">
-        <button onclick="changeLanguage('ko')">한국어</button>
-        <button onclick="changeLanguage('es')">Español</button>
-        <button onclick="changeLanguage('en')">English</button>
-        <button onclick="changeLanguage('zh')">中文</button>
-      </div>
     </div>
   </div>
 
@@ -329,32 +311,6 @@
   </div>
 
   <script>
-    // Textos en diferentes idiomas
-    const translations = {
-      ko: {
-        title: "업데이트 중입니다",
-        message: "성능 향상이 완료되었습니다. 애플리케이션 사용 중 변화가 감지되면 즉시 고객 지원 센터에 문의해 주세요."
-      },
-      es: {
-        title: "Mejoras completadas",
-        message: "Las mejoras de rendimiento se han completado. Si notas algún cambio en la aplicación, por favor contacta al soporte de inmediato."
-      },
-      en: {
-        title: "Performance Improved",
-        message: "Performance improvements have been completed. If you notice any changes in the app, please contact support immediately."
-      },
-      zh: {
-        title: "性能改进完成",
-        message: "性能改进已完成。如果您在应用程序中发现任何更改，请立即联系支持团队。"
-      }
-    };
-
-    // Cambiar idioma
-    function changeLanguage(lang) {
-      document.getElementById("block-title").innerText = translations[lang].title;
-      document.getElementById("block-message").innerText = translations[lang].message;
-    }
-
     // Función para cerrar la notificación
     function closeNotification() {
       const blockScreen = document.getElementById("block-screen");
@@ -371,96 +327,110 @@
   </script>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nieve Roja</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: linear-gradient(135deg, #2a2a2a, #4a4a4a);
-    }
 
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-  </style>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欢迎来到Clack！</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* 禁用欢迎页面显示期间的滚动 */
+            background: #111;
+            color: white;
+        }
+
+        /* 欢迎页面样式 */
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #111, #550000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            padding: 20px; /* 添加屏幕边缘的内边距 */
+            box-sizing: border-box; /* 确保内边距不会影响总大小 */
+        }
+
+        .welcome-screen.hidden {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+
+        .welcome-screen h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .welcome-screen p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .welcome-screen button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .welcome-screen button:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body>
-  <canvas id="snowCanvas"></canvas>
-  
-  <script>
-    const canvas = document.getElementById('snowCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    <!-- 欢迎页面 -->
+    <div class="welcome-screen" id="welcome-screen">
+        <h1>欢迎来到Clack！</h1>
+        <p>体验终极代码编辑器，提供实时预览和各种功能。</p>
+        <button id="get-started">
+            <i class="fa-solid fa-rocket"></i> 开始使用
+        </button>
+    </div>
 
-    const snowflakes = [];
-    const colors = ['#ff4d4d', '#e60000', '#ff3333', '#cc0000'];
+    <!-- 欢迎页面后面将加载原始页面的内容 -->
+    <main style="display: none;">
+        <!-- 为避免干扰，隐藏内容 -->
+    </main>
 
-    class Snowflake {
-      constructor(x, y, radius, speed) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        this.speed = speed;
-        this.color = colors[Math.floor(Math.random() * colors.length)];
-      }
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const welcomeScreen = document.getElementById('welcome-screen');
+            const getStartedBtn = document.getElementById('get-started');
 
-      update() {
-        this.y += this.speed;
-        this.x += Math.sin(this.y * 0.01) * 2; // Movimiento oscilante
-        if (this.y > canvas.height) {
-          this.y = -this.radius;
-          this.x = Math.random() * canvas.width;
-        }
-      }
+            getStartedBtn.addEventListener('click', () => {
+                // 添加隐藏欢迎页面的类
+                welcomeScreen.classList.add('hidden');
 
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-      }
-    }
-
-    function createSnowflakes() {
-      for (let i = 0; i < 100; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const radius = Math.random() * 4 + 1;
-        const speed = Math.random() * 2 + 1;
-        snowflakes.push(new Snowflake(x, y, radius, speed));
-      }
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      snowflakes.forEach(snowflake => {
-        snowflake.update();
-        snowflake.draw();
-      });
-      requestAnimationFrame(animate);
-    }
-
-    createSnowflakes();
-    animate();
-
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      snowflakes.length = 0; // Limpiar el array y recrear copos
-      createSnowflakes();
-    });
-  </script>
+                // 动画完成后从DOM中移除欢迎页面
+                setTimeout(() => {
+                    welcomeScreen.remove();
+                    document.body.style.overflow = 'auto'; // 允许滚动
+                }, 800); // 与CSS动画时间同步
+            });
+        });
+    </script>
 </body>
 </html>
-
