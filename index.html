@@ -70,11 +70,6 @@
       transform: translateY(-50%) scale(1);
     }
 
-    .privacy-icon i {
-      color: #fff;
-      font-size: 24px;
-    }
-
     /* Modal Styles */
     .privacy-modal {
       position: fixed;
@@ -201,6 +196,23 @@
       if (e.target === privacyModal) {
         privacyModal.classList.remove('active');
       }
+    });
+
+    // Scroll Event to Detect Up and Down Scroll
+    let lastScrollTop = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.scrollY;
+
+      if (currentScroll > lastScrollTop) {
+        // User is scrolling down, hide arrow
+        privacyArrow.style.transform = 'translateY(-200%)';
+      } else {
+        // User is scrolling up, show arrow
+        privacyArrow.style.transform = 'translateY(-50%)';
+      }
+
+      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
     });
   </script>
 </body>
