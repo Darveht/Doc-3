@@ -358,7 +358,7 @@
         </div>
     </main>
 
-    <footer>
+    <footer id="footer-terms">
         编辑器 © 2025 | 保留所有权利
         <a href="https://clackkodercookies.netlify.app/" target="_blank">隐私政策</a>
     </footer>
@@ -425,11 +425,24 @@
                     themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i> 切换为亮色模式';
                 }
             });
+
+            // Detectar si se abre en WebView
+            function isWebView() {
+                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                return /FBAN|FBAV|Instagram|WebView|wv/.test(userAgent) || 
+                       (window.navigator.standalone === true);
+            }
+
+            if (isWebView()) {
+                const footerTerms = document.getElementById('footer-terms');
+                if (footerTerms) {
+                    footerTerms.style.display = 'none';
+                }
+            }
         });
     </script>
 </body>
 </html>
-
 <!DOCTYPE html>
 <html lang="zh">
 <head>
