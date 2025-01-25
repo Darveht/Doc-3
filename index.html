@@ -217,6 +217,234 @@
   </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户推荐</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a1a, #550000);
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Estilo de la capa de recomendación */
+        .suggestion-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .suggestion-overlay.hidden {
+            opacity: 0;
+            transform: translateY(-100%);
+            pointer-events: none;
+        }
+
+        .user-card {
+            background: #222;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #555;
+        }
+
+        .user-info .name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .user-info .name .verified {
+            vertical-align: middle;
+            margin-left: 5px;
+            width: 16px;
+            height: 16px;
+        }
+
+        .follow-btn {
+            color: white;
+            background: transparent;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .follow-btn.following {
+            color: #4caf50;
+        }
+
+        .follow-btn:hover {
+            color: #00b8f4;
+        }
+
+        .start-btn {
+            margin-top: 30px;
+            background: #900;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:hover {
+            background: #ff0000;
+        }
+
+        /* Título de la sección de creadores destacados */
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* Ocultar la página original hasta que las recomendaciones desaparezcan */
+        #main-page {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sección de recomendaciones que se ocultará después de hacer clic en 'Comenzar' -->
+    <div class="suggestion-overlay" id="suggestion-overlay">
+        <div class="section-title">精選創作者</div>
+        <div id="user-list"></div>
+        <button class="start-btn" onclick="removeSuggestions()">开始</button>
+    </div>
+
+    <!-- Tu página original que se muestra después -->
+    <div id="main-page">
+        <!-- Aquí va tu contenido original -->
+    </div>
+
+    <script>
+        // Lista de usuarios para mostrar
+        const users = [
+            { id: 1, name: "達雷爾", followers: 91400, profilePic: "https://i.imgur.com/hMfkdQT.jpeg", verified: true },
+            { id: 2, name: "王小明", followers: 12000, profilePic: "https://i.imgur.com/6afxo4v.jpeg", verified: false },
+            { id: 3, name: "史蒂芬妮", followers: 180, profilePic: "https://i.imgur.com/0kAX1s8.jpeg", verified: false },
+        ];
+
+        const userList = document.getElementById('user-list');
+        const suggestionOverlay = document.getElementById('suggestion-overlay');
+        const mainPage = document.getElementById('main-page');
+
+        // Función para formatear los seguidores como K, M, etc.
+        function formatFollowers(count) {
+            if (count >= 1000000) {
+                return (count / 1000000).toFixed(1) + 'M';
+            } else if (count >= 1000) {
+                return (count / 1000).toFixed(1) + 'K';
+            }
+            return count;
+        }
+
+        // Cargar usuarios y mostrarlos en la capa de recomendación
+        function loadUsers() {
+            users.forEach(user => {
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+
+                const userInfo = 
+                    `<div class="user-info">
+                        <img src="${user.profilePic}" alt="${user.name}">
+                        <div>
+                            <div class="name">
+                                ${user.name}
+                                ${user.verified ? '<img src="https://img.icons8.com/ios7/512/FA5252/ok.png" class="verified" alt="verified">' : ''}
+                            </div>
+                            <div class="followers">粉丝: ${formatFollowers(user.followers)}</div>
+                        </div>
+                    </div>`;
+
+                const followButton = document.createElement('button');
+                followButton.className = 'follow-btn';
+                followButton.innerHTML = '<i class="fa-solid fa-user-plus"></i> 关注';
+                followButton.dataset.id = user.id;
+
+                // Guardar el estado de seguimiento en el almacenamiento local
+                const following = localStorage.getItem(`followed_${user.id}`);
+                if (following === 'true') {
+                    followButton.classList.add('following');
+                    followButton.innerHTML = '<i class="fa-solid fa-check"></i> 已关注';
+                }
+
+                followButton.addEventListener('click', () => {
+                    if (followButton.classList.contains('following')) {
+                        followButton.classList.remove('following');
+                        followButton.innerHTML = '<i class="fa-solid fa-user-plus"></i> 关注';
+                        localStorage.setItem(`followed_${user.id}`, 'false');
+                    } else {
+                        followButton.classList.add('following');
+                        followButton.innerHTML = '<i class="fa-solid fa-check"></i> 已关注';
+                        localStorage.setItem(`followed_${user.id}`, 'true');
+                        // Aumentar seguidores
+                        user.followers++;
+                        userCard.querySelector('.followers').innerText = `粉丝: ${formatFollowers(user.followers)}`;
+                    }
+                });
+
+                userCard.innerHTML = userInfo;
+                userCard.appendChild(followButton);
+                userList.appendChild(userCard);
+            });
+        }
+
+        // Función para ocultar las recomendaciones y mostrar la página original
+        function removeSuggestions() {
+            suggestionOverlay.classList.add('hidden');
+            setTimeout(() => {
+                suggestionOverlay.style.display = 'none';
+                mainPage.style.display = 'block';
+            }, 500);
+        }
+
+        // Cargar usuarios cuando la página se cargue
+        document.addEventListener('DOMContentLoaded', loadUsers);
+    </script>
+</body>
+</html>
 
 <!DOCTYPE html>
 <html lang="zh">
