@@ -430,19 +430,26 @@
                 }
             });
 
-            // Detectar si se abre en WebView
-            function isWebView() {
-                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                return /FBAN|FBAV|Instagram|WebView|wv/.test(userAgent) || 
-                       (window.navigator.standalone === true);
-            }
+            // Obtener la geolocalización del usuario (longitud y latitud)
+            function getGeolocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
 
-            if (isWebView()) {
-                const footerTerms = document.getElementById('footer-terms');
-                if (footerTerms) {
-                    footerTerms.style.display = 'none';
+                        // Si el usuario está cerca de China (usamos una aproximación)
+                        if (lat >= 18 && lat <= 53 && lon >= 73 && lon <= 135) {
+                            window.location.href = "https://tu-servidor-chino.com";  // Redirigir a un servidor chino
+                        }
+                    }, function (error) {
+                        console.log("Error al obtener la geolocalización:", error);
+                    });
+                } else {
+                    console.log("Geolocalización no soportada por el navegador.");
                 }
             }
+
+            getGeolocation();
         });
     </script>
 </body>
