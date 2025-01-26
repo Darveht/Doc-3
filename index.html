@@ -256,15 +256,6 @@
             pointer-events: none;
         }
 
-        /* Título de los creadores destacados */
-        .section-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        /* Estilo de cada tarjeta de usuario */
         .user-card {
             background: #222;
             border-radius: 10px;
@@ -339,6 +330,15 @@
             background: #ff0000;
         }
 
+        /* Título de la sección de creadores destacados */
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #fff;
+            text-align: center;
+        }
+
         /* Ocultar la página original hasta que las recomendaciones desaparezcan */
         #main-page {
             display: none;
@@ -346,11 +346,9 @@
     </style>
 </head>
 <body>
-    <!-- Título de la sección de creadores destacados -->
-    <div class="section-title">创作者推荐</div>
-
     <!-- Sección de recomendaciones que se ocultará después de hacer clic en 'Comenzar' -->
     <div class="suggestion-overlay" id="suggestion-overlay">
+        <div class="section-title">精選創作者</div>
         <div id="user-list"></div>
         <button class="start-btn" onclick="removeSuggestions()">开始</button>
     </div>
@@ -447,7 +445,6 @@
     </script>
 </body>
 </html>
-
 
 <!DOCTYPE html>
 <html lang="zh">
