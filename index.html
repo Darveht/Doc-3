@@ -149,25 +149,25 @@
   </div>
 
   <!-- Modal -->
-  <div class="privacy-modal" id="privacyModal">
-    <div class="modal-content">
-      <button class="close-modal" id="closeModal">&times;</button>
-      <h2>隐私政策</h2>
-      <p>
-        欢迎使用 Clack Koder！这是一款专为程序员设计的应用程序，您可以粘贴代码并实时查看结果。我们非常重视您的隐私。
-      </p>
-      <p>
-        <strong>数据收集：</strong> 我们不收集任何用户数据，您无需注册即可使用该应用。
-      </p>
-      <p>
-        <strong>Cookie 使用：</strong> 我们不使用 Cookie，也不会跟踪用户的任何活动。
-      </p>
-      <p>
-        <strong>安全性：</strong> 尽管我们不存储用户数据，但我们会维持高标准的安全措施，以确保应用体验的可靠性。
-      </p>
-      <p style="text-align: center;">感谢您使用 Clack Koder！</p>
-    </div>
+<div class="privacy-modal" id="privacyModal">
+  <div class="modal-content">
+    <button class="close-modal" id="closeModal">&times;</button>
+    <h2>Privacy Policy</h2>
+    <p>
+      Welcome to Clack Koder! This is an application designed specifically for programmers, allowing you to paste code and view results in real time. We highly value your privacy.
+    </p>
+    <p>
+      <strong>Data Collection:</strong> We do not collect any user data, and you can use the application without registration.
+    </p>
+    <p>
+      <strong>Cookie Usage:</strong> We do not use cookies and do not track any user activity.
+    </p>
+    <p>
+      <strong>Security:</strong> Although we do not store user data, we maintain high security standards to ensure a reliable application experience.
+    </p>
+    <p style="text-align: center;">Thank you for using Clack Koder!</p>
   </div>
+</div>
 
   <script>
     // Variables
@@ -346,12 +346,12 @@
     </style>
 </head>
 <body>
-    <!-- Sección de recomendaciones que se ocultará después de hacer clic en 'Comenzar' -->
-    <div class="suggestion-overlay" id="suggestion-overlay">
-        <div class="section-title">精選創作者</div>
-        <div id="user-list"></div>
-        <button class="start-btn" onclick="removeSuggestions()">开始</button>
-    </div>
+    <!-- Recommendation section that will be hidden after clicking 'Start' -->
+<div class="suggestion-overlay" id="suggestion-overlay">
+    <div class="section-title">Featured Creators</div>
+    <div id="user-list"></div>
+    <button class="start-btn" onclick="removeSuggestions()">Start</button>
+</div>
 
     <!-- Tu página original que se muestra después -->
     <div id="main-page">
@@ -359,12 +359,12 @@
     </div>
 
     <script>
-        // Lista de usuarios para mostrar
-        const users = [
-            { id: 1, name: "達雷爾", followers: 91400, profilePic: "https://i.imgur.com/hMfkdQT.jpeg", verified: true },
-            { id: 2, name: "王小明", followers: 12000, profilePic: "https://i.imgur.com/6afxo4v.jpeg", verified: false },
-            { id: 3, name: "史蒂芬妮", followers: 180, profilePic: "https://i.imgur.com/0kAX1s8.jpeg", verified: false },
-        ];
+      // List of users to display
+const users = [
+    { id: 1, name: "Darel", followers: 91_400, profilePic: "https://i.imgur.com/hMfkdQT.jpeg", verified: true },
+    { id: 2, name: "Xiaoming Wang", followers: 12_000, profilePic: "https://i.imgur.com/6afxo4v.jpeg", verified: false },
+    { id: 3, name: "Stephanie", followers: 180, profilePic: "https://i.imgur.com/0kAX1s8.jpeg", verified: false },
+];
 
         const userList = document.getElementById('user-list');
         const suggestionOverlay = document.getElementById('suggestion-overlay');
@@ -455,7 +455,7 @@
     <meta name="geo.placename" content="China">
     <meta name="language" content="zh">
     <meta name="robots" content="index, follow">
-    <title>编辑器</title>
+    <title>Editor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         /* Estilo general */
@@ -563,27 +563,27 @@
 </head>
 <body>
     <header>
-        <h1><i class="fa-solid fa-code"></i> 编辑器</h1>
+        <h1><i class="fa-solid fa-code"></i> Editor</h1>
         <div class="controls">
-            <button id="theme-btn"><i class="fa-solid fa-moon"></i> 切换主题</button>
+            <button id="theme-btn"><i class="fa-solid fa-moon"></i> Cambia el tema</button>
         </div>
     </header>
 
     <main>
         <div class="editor-container">
-            <div>
-                <textarea id="html-editor" placeholder="输入 HTML..."></textarea>
-                <div id="html-counter" class="counter">字数: 0 | 字符数: 0 | 删除次数: 0</div>
-            </div>
-            <div>
-                <textarea id="css-editor" placeholder="输入 CSS..."></textarea>
-                <div id="css-counter" class="counter">字数: 0 | 字符数: 0 | 删除次数: 0</div>
-            </div>
-            <div>
-                <textarea id="js-editor" placeholder="输入 JavaScript..."></textarea>
-                <div id="js-counter" class="counter">字数: 0 | 字符数: 0 | 删除次数: 0</div>
-            </div>
-        </div>
+    <div>
+        <textarea id="html-editor" placeholder="Enter HTML..."></textarea>
+        <div id="html-counter" class="counter">Words: 0 | Characters: 0 | Deletions: 0</div>
+    </div>
+    <div>
+        <textarea id="css-editor" placeholder="Enter CSS..."></textarea>
+        <div id="css-counter" class="counter">Words: 0 | Characters: 0 | Deletions: 0</div>
+    </div>
+    <div>
+        <textarea id="js-editor" placeholder="Enter JavaScript..."></textarea>
+        <div id="js-counter" class="counter">Words: 0 | Characters: 0 | Deletions: 0</div>
+    </div>
+</div>
 
         <div id="preview-container">
             <iframe id="preview"></iframe>
@@ -591,9 +591,9 @@
     </main>
 
     <footer id="footer-terms">
-        编辑器 © 2025 | 保留所有权利
-        <a href="https://clackkodercookies.netlify.app/" target="_blank">隐私政策</a>
-    </footer>
+    Editor © 2025 | All rights reserved
+    <a href="https://clackkodercookies.netlify.app/" target="_blank">Privacy Policy</a>
+</footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -609,7 +609,7 @@
                 const text = editor.value;
                 const words = text.split(/\s+/).filter(Boolean).length;
                 const chars = text.length;
-                counterElement.textContent = `字数: ${words} | 字符数: ${chars} | 删除次数: ${deleteCount}`;
+                counterElement.textContent = `Words: ${words} | Characters: ${chars} | Deletions: ${deleteCount}`;
             }
 
             function detectDeletes(editor, lastValue, deleteCount) {
@@ -776,16 +776,16 @@
   </style>
 </head>
 <body>
-  <!-- Pantalla de notificación -->
-  <div class="block-screen" id="block-screen">
-    <i class="fas fa-times close-icon" onclick="closeNotification()"></i>
-    <div class="block-content">
-      <h1 id="block-title">性能改进完成</h1>
-      <p id="block-message">
-        性能改进已完成。如果您在应用程序中发现任何更改，请立即联系支持团队。
-      </p>
-    </div>
+  <!-- Notification Screen -->
+<div class="block-screen" id="block-screen">
+  <i class="fas fa-times close-icon" onclick="closeNotification()"></i>
+  <div class="block-content">
+    <h1 id="block-title">Performance Improvement Completed</h1>
+    <p id="block-message">
+      Performance improvements have been completed. If you notice any changes in the application, please contact the support team immediately.
+    </p>
   </div>
+</div>
 
   <!-- Página original -->
   <div id="original-page" style="display: none;">
@@ -883,19 +883,19 @@
     </style>
 </head>
 <body>
-    <!-- 欢迎页面 -->
-    <div class="welcome-screen" id="welcome-screen">
-        <h1>欢迎来到Clack！</h1>
-        <p>体验终极代码编辑器，提供实时预览和各种功能。</p>
-        <button id="get-started">
-            <i class="fa-solid fa-rocket"></i> 开始使用
-        </button>
-    </div>
+   <!-- Welcome Page -->
+<div class="welcome-screen" id="welcome-screen">
+    <h1>Welcome to Clack!</h1>
+    <p>Experience the ultimate code editor with real-time preview and various features.</p>
+    <button id="get-started">
+        <i class="fa-solid fa-rocket"></i> Get Started
+    </button>
+</div>
 
-    <!-- 欢迎页面后面将加载原始页面的内容 -->
-    <main style="display: none;">
-        <!-- 为避免干扰，隐藏内容 -->
-    </main>
+<!-- The original page content will load after the welcome screen -->
+<main style="display: none;">
+    <!-- Content hidden to avoid interference -->
+</main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
