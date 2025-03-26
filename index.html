@@ -1,918 +1,224 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>隐私政策</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <title>Editor Moderno</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* General Styles */
-    body {
-      font-family: Arial, sans-serif;
+    :root {
+      --primary-color: #00dc64;
+      --bg-color: #f8f9fa;
+      --text-color: #333;
+      --editor-bg: #fff;
+    }
+
+    .dark-mode {
+      --primary-color: #00b050;
+      --bg-color: #1a1a1a;
+      --text-color: #fff;
+      --editor-bg: #2d2d2d;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background: #121212;
-      color: #fff;
-      overflow-x: hidden;
     }
 
-    /* Arrow Button */
-    .privacy-arrow {
-      position: fixed;
-      top: 50%;
-      right: 0;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50px 0 0 50px;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 1000;
-      transform: translateY(-50%);
-      transition: transform 0.3s, background 0.3s;
-    }
-
-    .privacy-arrow:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .privacy-arrow i {
-      color: #fff;
-      font-size: 20px;
-    }
-
-    /* Floating Icon */
-    .privacy-icon {
-      position: fixed;
-      top: 50%;
-      right: 60px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-      cursor: pointer;
-      z-index: 1000;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-50%) scale(0);
-      transition: all 0.3s ease;
-    }
-
-    .privacy-icon.active {
-      opacity: 1;
-      pointer-events: all;
-      transform: translateY(-50%) scale(1);
-    }
-
-    /* Modal Styles */
-    .privacy-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1100;
-    }
-
-    .privacy-modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: #1f1f1f;
-      width: 90%;
-      max-width: 600px;
-      max-height: 80%;
-      border-radius: 10px;
-      overflow-y: auto;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-      padding: 20px;
-      position: relative;
-    }
-
-    .modal-content::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .modal-content::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 10px;
-    }
-
-    .modal-content h2 {
-      margin-top: 0;
-      font-size: 24px;
-      text-align: center;
-    }
-
-    .modal-content p {
-      font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 10px;
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 18px;
-      color: #fff;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .close-modal:hover {
-      color: #f00;
-    }
-  </style>
-</head>
-<body>
-  <!-- Arrow Button -->
-  <div class="privacy-arrow" id="privacyArrow">
-    <i class="fas fa-arrow-left"></i>
-  </div>
-
-  <!-- Privacy Icon -->
-  <div class="privacy-icon" id="privacyIcon">
-    <i class="fas fa-shield-alt"></i>
-  </div>
-
-  <!-- Modal -->
-<div class="privacy-modal" id="privacyModal">
-  <div class="modal-content">
-    <button class="close-modal" id="closeModal">&times;</button>
-    <h2>Privacy Policy</h2>
-    <p>
-      Welcome to Clack Koder! This is an application designed specifically for programmers, allowing you to paste code and view results in real time. We highly value your privacy.
-    </p>
-    <p>
-      <strong>Data Collection:</strong> We do not collect any user data, and you can use the application without registration.
-    </p>
-    <p>
-      <strong>Cookie Usage:</strong> We do not use cookies and do not track any user activity.
-    </p>
-    <p>
-      <strong>Security:</strong> Although we do not store user data, we maintain high security standards to ensure a reliable application experience.
-    </p>
-    <p style="text-align: center;">Thank you for using Clack Koder!</p>
-  </div>
-</div>
-
-  <script>
-    // Variables
-    const privacyArrow = document.getElementById('privacyArrow');
-    const privacyIcon = document.getElementById('privacyIcon');
-    const privacyModal = document.getElementById('privacyModal');
-    const closeModal = document.getElementById('closeModal');
-
-    // Show/Hide Privacy Icon
-    privacyArrow.addEventListener('click', () => {
-      privacyIcon.classList.toggle('active');
-    });
-
-    // Show Modal
-    privacyIcon.addEventListener('click', () => {
-      privacyModal.classList.add('active');
-    });
-
-    // Close Modal
-    closeModal.addEventListener('click', () => {
-      privacyModal.classList.remove('active');
-    });
-
-    // Close Modal by Clicking Outside
-    window.addEventListener('click', (e) => {
-      if (e.target === privacyModal) {
-        privacyModal.classList.remove('active');
-      }
-    });
-
-    // Scroll Event to Detect Up and Down Scroll
-    let lastScrollTop = 0;
-
-    window.addEventListener('scroll', () => {
-      const currentScroll = window.scrollY;
-
-      if (currentScroll > lastScrollTop) {
-        // User is scrolling down, hide arrow
-        privacyArrow.style.transform = 'translateY(-200%)';
-      } else {
-        // User is scrolling up, show arrow
-        privacyArrow.style.transform = 'translateY(-50%)';
-      }
-
-      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
-    });
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用户推荐</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #1a1a1a, #550000);
-            color: white;
-            overflow: hidden;
-        }
-
-        /* Estilo de la capa de recomendación */
-        .suggestion-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .suggestion-overlay.hidden {
-            opacity: 0;
-            transform: translateY(-100%);
-            pointer-events: none;
-        }
-
-        .user-card {
-            background: #222;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid #555;
-        }
-
-        .user-info .name {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .user-info .name .verified {
-            vertical-align: middle;
-            margin-left: 5px;
-            width: 16px;
-            height: 16px;
-        }
-
-        .follow-btn {
-            color: white;
-            background: transparent;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: color 0.3s ease;
-        }
-
-        .follow-btn.following {
-            color: #4caf50;
-        }
-
-        .follow-btn:hover {
-            color: #00b8f4;
-        }
-
-        .start-btn {
-            margin-top: 30px;
-            background: #900;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .start-btn:hover {
-            background: #ff0000;
-        }
-
-        /* Título de la sección de creadores destacados */
-        .section-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #fff;
-            text-align: center;
-        }
-
-        /* Ocultar la página original hasta que las recomendaciones desaparezcan */
-        #main-page {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <!-- Recommendation section that will be hidden after clicking 'Start' -->
-<div class="suggestion-overlay" id="suggestion-overlay">
-    <div class="section-title">Featured Creators</div>
-    <div id="user-list"></div>
-    <button class="start-btn" onclick="removeSuggestions()">Start</button>
-</div>
-
-    <!-- Tu página original que se muestra después -->
-    <div id="main-page">
-        <!-- Aquí va tu contenido original -->
-    </div>
-
-    <script>
-      // List of users to display
-const users = [
-    { id: 1, name: "Darel", followers: 91_400, profilePic: "https://i.imgur.com/hMfkdQT.jpeg", verified: true },
-    { id: 2, name: "Xiaoming Wang", followers: 12_000, profilePic: "https://i.imgur.com/6afxo4v.jpeg", verified: false },
-    { id: 3, name: "Stephanie", followers: 180, profilePic: "https://i.imgur.com/0kAX1s8.jpeg", verified: false },
-];
-
-        const userList = document.getElementById('user-list');
-        const suggestionOverlay = document.getElementById('suggestion-overlay');
-        const mainPage = document.getElementById('main-page');
-
-        // Función para formatear los seguidores como K, M, etc.
-        function formatFollowers(count) {
-            if (count >= 1000000) {
-                return (count / 1000000).toFixed(1) + 'M';
-            } else if (count >= 1000) {
-                return (count / 1000).toFixed(1) + 'K';
-            }
-            return count;
-        }
-
-        // Cargar usuarios y mostrarlos en la capa de recomendación
-        function loadUsers() {
-            users.forEach(user => {
-                const userCard = document.createElement('div');
-                userCard.className = 'user-card';
-
-                const userInfo = 
-                    `<div class="user-info">
-                        <img src="${user.profilePic}" alt="${user.name}">
-                        <div>
-                            <div class="name">
-                                ${user.name}
-                                ${user.verified ? '<img src="https://img.icons8.com/ios7/512/FA5252/ok.png" class="verified" alt="verified">' : ''}
-                            </div>
-                            <div class="followers">粉丝: ${formatFollowers(user.followers)}</div>
-                        </div>
-                    </div>`;
-
-                const followButton = document.createElement('button');
-                followButton.className = 'follow-btn';
-                followButton.innerHTML = '<i class="fa-solid fa-user-plus"></i> 关注';
-                followButton.dataset.id = user.id;
-
-                // Guardar el estado de seguimiento en el almacenamiento local
-                const following = localStorage.getItem(`followed_${user.id}`);
-                if (following === 'true') {
-                    followButton.classList.add('following');
-                    followButton.innerHTML = '<i class="fa-solid fa-check"></i> 已关注';
-                }
-
-                followButton.addEventListener('click', () => {
-                    if (followButton.classList.contains('following')) {
-                        followButton.classList.remove('following');
-                        followButton.innerHTML = '<i class="fa-solid fa-user-plus"></i> 关注';
-                        localStorage.setItem(`followed_${user.id}`, 'false');
-                    } else {
-                        followButton.classList.add('following');
-                        followButton.innerHTML = '<i class="fa-solid fa-check"></i> 已关注';
-                        localStorage.setItem(`followed_${user.id}`, 'true');
-                        // Aumentar seguidores
-                        user.followers++;
-                        userCard.querySelector('.followers').innerText = `粉丝: ${formatFollowers(user.followers)}`;
-                    }
-                });
-
-                userCard.innerHTML = userInfo;
-                userCard.appendChild(followButton);
-                userList.appendChild(userCard);
-            });
-        }
-
-        // Función para ocultar las recomendaciones y mostrar la página original
-        function removeSuggestions() {
-            suggestionOverlay.classList.add('hidden');
-            setTimeout(() => {
-                suggestionOverlay.style.display = 'none';
-                mainPage.style.display = 'block';
-            }, 500);
-        }
-
-        // Cargar usuarios cuando la página se cargue
-        document.addEventListener('DOMContentLoaded', loadUsers);
-    </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="geo.region" content="CN">
-    <meta name="geo.placename" content="China">
-    <meta name="language" content="zh">
-    <meta name="robots" content="index, follow">
-    <title>Editor</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        /* Estilo general */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #111, #550000);
-            color: white;
-            overflow-x: hidden;
-            transition: all 0.3s;
-        }
-
-        header {
-            background: #900;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-        }
-
-        header .controls button {
-            background: #333;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        header .controls button:hover {
-            background: #555;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        .editor-container {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        textarea {
-            width: calc(33.33% - 20px);
-            height: 40vh;
-            padding: 10px;
-            background: #222;
-            color: white;
-            border: 2px solid #444;
-            border-radius: 5px;
-            resize: none;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: #900;
-        }
-
-        .counter {
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        #preview-container {
-            margin-top: 20px;
-            border: 2px solid #444;
-            border-radius: 5px;
-            overflow: hidden;
-            height: 300px;
-            background: #000;
-        }
-
-        #preview {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background: #900;
-            color: white;
-            margin-top: 20px;
-        }
-
-        footer a {
-            color: #fff;
-            text-decoration: none;
-            margin-left: 10px;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1><i class="fa-solid fa-code"></i> Editor</h1>
-        <div class="controls">
-            <button id="theme-btn"><i class="fa-solid fa-moon"></i> Cambia el tema</button>
-        </div>
-    </header>
-
-    <main>
-        <div class="editor-container">
-    <div>
-        <textarea id="html-editor" placeholder="Enter HTML..."></textarea>
-        <div id="html-counter" class="counter">Words: 0 | Characters: 0 | Deletions: 0</div>
-    </div>
-    <div>
-        <textarea id="css-editor" placeholder="Enter CSS..."></textarea>
-        <div id="css-counter" class="counter">Words: 0 | Characters: 0 | Deletions: 0</div>
-    </div>
-    <div>
-        <textarea id="js-editor" placeholder="Enter JavaScript..."></textarea>
-        <div id="js-counter" class="counter">Words: 0 | Characters: 0 | Deletions: 0</div>
-    </div>
-</div>
-
-        <div id="preview-container">
-            <iframe id="preview"></iframe>
-        </div>
-    </main>
-
-    <footer id="footer-terms">
-    Editor © 2025 | All rights reserved
-    <a href="https://clackkodercookies.netlify.app/" target="_blank">Privacy Policy</a>
-</footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const htmlEditor = document.getElementById('html-editor');
-            const cssEditor = document.getElementById('css-editor');
-            const jsEditor = document.getElementById('js-editor');
-            const preview = document.getElementById('preview');
-            const themeBtn = document.getElementById('theme-btn');
-
-            let htmlDeletes = 0, cssDeletes = 0, jsDeletes = 0;
-
-            function updateCounters(editor, counterElement, deleteCount) {
-                const text = editor.value;
-                const words = text.split(/\s+/).filter(Boolean).length;
-                const chars = text.length;
-                counterElement.textContent = `Words: ${words} | Characters: ${chars} | Deletions: ${deleteCount}`;
-            }
-
-            function detectDeletes(editor, lastValue, deleteCount) {
-                if (editor.value.length < lastValue.length) {
-                    return deleteCount + 1;
-                }
-                return deleteCount;
-            }
-
-            function updatePreview() {
-                const htmlContent = htmlEditor.value;
-                const cssContent = `<style>${cssEditor.value}</style>`;
-                const jsContent = `<script>${jsEditor.value}<\/script>`;
-                preview.srcdoc = htmlContent + cssContent + jsContent;
-            }
-
-            htmlEditor.addEventListener('input', () => {
-                htmlDeletes = detectDeletes(htmlEditor, htmlEditor.dataset.lastValue || '', htmlDeletes);
-                updateCounters(htmlEditor, document.getElementById('html-counter'), htmlDeletes);
-                htmlEditor.dataset.lastValue = htmlEditor.value;
-                updatePreview();
-            });
-
-            cssEditor.addEventListener('input', () => {
-                cssDeletes = detectDeletes(cssEditor, cssEditor.dataset.lastValue || '', cssDeletes);
-                updateCounters(cssEditor, document.getElementById('css-counter'), cssDeletes);
-                cssEditor.dataset.lastValue = cssEditor.value;
-                updatePreview();
-            });
-
-            jsEditor.addEventListener('input', () => {
-                jsDeletes = detectDeletes(jsEditor, jsEditor.dataset.lastValue || '', jsDeletes);
-                updateCounters(jsEditor, document.getElementById('js-counter'), jsDeletes);
-                jsEditor.dataset.lastValue = jsEditor.value;
-                updatePreview();
-            });
-
-            themeBtn.addEventListener('click', () => {
-                document.body.classList.toggle('light-mode');
-                if (document.body.classList.contains('light-mode')) {
-                    document.body.style.background = 'linear-gradient(135deg, #fff, #aaa)';
-                    themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i> 切换为深色模式';
-                } else {
-                    document.body.style.background = 'linear-gradient(135deg, #111, #550000)';
-                    themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i> 切换为亮色模式';
-                }
-            });
-
-            // Obtener la geolocalización del usuario (longitud y latitud)
-            function getGeolocation() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
-
-                        // Si el usuario está cerca de China (usamos una aproximación)
-                        if (lat >= 18 && lat <= 53 && lon >= 73 && lon <= 135) {
-                            window.location.href = "https://tu-servidor-chino.com";  // Redirigir a un servidor chino
-                        }
-                    }, function (error) {
-                        console.log("Error al obtener la geolocalización:", error);
-                    });
-                } else {
-                    console.log("Geolocalización no soportada por el navegador.");
-                }
-            }
-
-            getGeolocation();
-        });
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>更新中</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <style>
     body {
       font-family: 'Poppins', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926');
+      background-size: cover;
+      background-attachment: fixed;
+      background-blend-mode: soft-light;
+    }
+
+    header {
+      background: var(--primary-color);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
       margin: 0;
-      padding: 0;
-      background-color: #111;
-      color: white;
+      color: #fff;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .controls button {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      color: var(--primary-color);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .controls button:hover {
+      background: #f0f0f0;
+      transform: translateY(-1px);
+    }
+
+    .editor-container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .editor-area {
+      background: var(--editor-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       overflow: hidden;
     }
 
-    .block-screen {
+    textarea {
+      width: 100%;
+      min-height: 300px;
+      padding: 20px;
+      border: none;
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      background: var(--editor-bg);
+      color: var(--text-color);
+    }
+
+    textarea:focus {
+      outline: none;
+    }
+
+    .preview-overlay {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #ff5864, #111);
+      background: var(--editor-bg);
+      z-index: 1000;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .preview-header {
+      background: var(--primary-color);
+      padding: 15px 20px;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      flex-direction: column;
-      z-index: 9999;
-      animation: fadeIn 1.5s ease;
-      padding: 20px;
-      box-sizing: border-box;
+      color: #fff;
     }
 
-    .block-content {
-      text-align: center;
-    }
-
-    .block-content h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
-    }
-
-    .block-content p {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      max-width: 600px;
-    }
-
-    .close-icon {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 2rem;
-      color: white;
+    .preview-header button {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
       cursor: pointer;
-      animation: pulse 1.5s infinite;
     }
 
-    .close-icon:hover {
-      color: #ff5864;
-      transform: scale(1.1);
-    }
-
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeOut {
-      0% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-      }
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.2);
-      }
+    #previewFrame {
+      width: 100%;
+      height: calc(100% - 60px);
+      border: none;
+      background: var(--editor-bg);
     }
   </style>
 </head>
 <body>
-  <!-- Notification Screen -->
-<div class="block-screen" id="block-screen">
-  <i class="fas fa-times close-icon" onclick="closeNotification()"></i>
-  <div class="block-content">
-    <h1 id="block-title">Performance Improvement Completed</h1>
-    <p id="block-message">
-      Performance improvements have been completed. If you notice any changes in the application, please contact the support team immediately.
-    </p>
-  </div>
-</div>
+  <header>
+    <h1><i class="fa-solid fa-code"></i> Editor Moderno</h1>
+    <div class="controls">
+      <button id="previewBtn"><i class="fa-solid fa-eye"></i> Vista Previa</button>
+      <button id="themeBtn"><i class="fa-solid fa-moon"></i></button>
+    </div>
+  </header>
 
-  <!-- Página original -->
-  <div id="original-page" style="display: none;">
-    <!-- Aquí puedes agregar tu contenido original -->
+  <div class="editor-container">
+    <div class="editor-area">
+      <textarea id="htmlEditor" placeholder="HTML..."></textarea>
+    </div>
+    <div class="editor-area">
+      <textarea id="cssEditor" placeholder="CSS..."></textarea>
+    </div>
+    <div class="editor-area">
+      <textarea id="jsEditor" placeholder="JavaScript..."></textarea>
+    </div>
+  </div>
+
+  <div id="previewOverlay" class="preview-overlay">
+    <div class="preview-header">
+      <h2>Vista Previa</h2>
+      <button id="closePreview"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <iframe id="previewFrame"></iframe>
   </div>
 
   <script>
-    // Función para cerrar la notificación
-    function closeNotification() {
-      const blockScreen = document.getElementById("block-screen");
-      const originalPage = document.getElementById("original-page");
+    document.addEventListener('DOMContentLoaded', () => {
+      const htmlEditor = document.getElementById('htmlEditor');
+      const cssEditor = document.getElementById('cssEditor');
+      const jsEditor = document.getElementById('jsEditor');
+      const previewBtn = document.getElementById('previewBtn');
+      const themeBtn = document.getElementById('themeBtn');
+      const previewOverlay = document.getElementById('previewOverlay');
+      const closePreview = document.getElementById('closePreview');
+      const previewFrame = document.getElementById('previewFrame');
 
-      // Animar la desaparición de la pantalla de bloqueo
-      blockScreen.style.animation = "fadeOut 1s ease";
-      setTimeout(() => {
-        blockScreen.style.display = "none"; // Ocultar después de la animación
-        originalPage.style.display = "block"; // Mostrar la página original
-        document.body.style.overflow = "auto"; // Permitir el scroll de la página
-      }, 1000); // Tiempo igual a la duración de la animación
-    }
+      // Theme toggling
+      themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+      });
+
+      // Preview functionality
+      previewBtn.addEventListener('click', () => {
+        previewOverlay.style.display = 'block';
+        const combinedCode = `
+          ${htmlEditor.value}
+          <style>${cssEditor.value}</style>
+          <script>${jsEditor.value}<\/script>
+        `;
+        previewFrame.srcdoc = combinedCode;
+      });
+
+      closePreview.addEventListener('click', () => {
+        previewOverlay.style.display = 'none';
+      });
+    });
   </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>欢迎来到Clack！</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* 禁用欢迎页面显示期间的滚动 */
-            background: #111;
-            color: white;
-        }
-
-        /* 欢迎页面样式 */
-        .welcome-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #111, #550000);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-            z-index: 9999;
-            opacity: 1;
-            transition: opacity 0.8s ease, transform 0.8s ease;
-            padding: 20px; /* 添加屏幕边缘的内边距 */
-            box-sizing: border-box; /* 确保内边距不会影响总大小 */
-        }
-
-        .welcome-screen.hidden {
-            opacity: 0;
-            transform: scale(1.1);
-            pointer-events: none;
-        }
-
-        .welcome-screen h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .welcome-screen p {
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-
-        .welcome-screen button {
-            background: #333;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .welcome-screen button:hover {
-            background: #555;
-        }
-    </style>
-</head>
-<body>
-   <!-- Welcome Page -->
-<div class="welcome-screen" id="welcome-screen">
-    <h1>Welcome to Clack!</h1>
-    <p>Experience the ultimate code editor with real-time preview and various features.</p>
-    <button id="get-started">
-        <i class="fa-solid fa-rocket"></i> Get Started
-    </button>
-</div>
-
-<!-- The original page content will load after the welcome screen -->
-<main style="display: none;">
-    <!-- Content hidden to avoid interference -->
-</main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const welcomeScreen = document.getElementById('welcome-screen');
-            const getStartedBtn = document.getElementById('get-started');
-
-            getStartedBtn.addEventListener('click', () => {
-                // 添加隐藏欢迎页面的类
-                welcomeScreen.classList.add('hidden');
-
-                // 动画完成后从DOM中移除欢迎页面
-                setTimeout(() => {
-                    welcomeScreen.remove();
-                    document.body.style.overflow = 'auto'; // 允许滚动
-                }, 800); // 与CSS动画时间同步
-            });
-        });
-    </script>
 </body>
 </html>
