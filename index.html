@@ -129,8 +129,7 @@
       font-size: 1.5rem;
       cursor: pointer;
     }
-    /* Modal de Registro / Inicio de sesión con Firebase OIDC (LINE)
-       El modal se expande a pantalla completa */
+    /* Modal de Registro / Inicio de sesión (Simulación de invitado) a pantalla completa */
     .modal {
       display: none;
       position: fixed;
@@ -172,6 +171,20 @@
     }
     #lineLoginBtn:hover {
       background: #f0f0f0;
+    }
+    /* Spinner */
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #fff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     /* Overlay de Selección de Idioma (Ajustes) */
     #settingsOverlay {
@@ -280,14 +293,13 @@
     <h1 class="logo">Clack</h1>
   </div>
 
-  <!-- Modal de Registro / Inicio de sesión con Firebase OIDC (LINE) a pantalla completa -->
+  <!-- Modal de Registro / Inicio de sesión (Simulación de invitado) -->
   <div id="loginModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" id="loginContent">
       <h2 id="modalTitle">Registro / Inicia sesión con LINE</h2>
-      <p id="modalDescription">Por favor, inicia sesión usando tu cuenta LINE.<br>
-         Necesitarás la app móvil para completar el proceso.</p>
+      <p id="modalDescription">Por ahora es una simulación. Inicia sesión como invitado.</p>
       <button id="lineLoginBtn">
-        <i class="fa-brands fa-line"></i> <span id="loginBtnText">Iniciar sesión con LINE</span>
+        <i class="fa-brands fa-line"></i> <span id="loginBtnText">Iniciar sesión con LINE como invitado</span>
       </button>
     </div>
   </div>
@@ -338,13 +350,16 @@
       const intro = document.querySelector('.intro');
       const codeEffect = document.querySelector('.code-effect');
       const loginModal = document.getElementById('loginModal');
+      const loginContent = document.getElementById('loginContent');
       const introSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/wAVlZWVlZWVlZWVlZWVlZWVlZWVlZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2v7+/v7+/v7+/v7+/v7+/v7+/v7//////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAGgAAAAEAAAMYAAQGAkNhAAAQJAADBhgAABUWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+
       const typeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA+UAVlZWVlZWVlZWVlZWVlZWVlZWVlZ8fHx8fHx8fHx8fHx8fHx8fHx8fHx8zMzMzMzMzMzMzMzMzMzMzMzMzMzM////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAAN4AAQIBAMDAAAABQ4AAAMGGAAAFhYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+
       const executeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/MAVlZWVlZWVlZWVlZWVlZWVlZWVlZ7e3t7e3t7e3t7e3t7e3t7e3t7e3t7ysrKysrKysrKysrKysrKysrKysrK////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAANyAAQGAwIAAAAACw4AAAMGGAAAFRYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
-      
+
       introSound.volume = 0.5;
       introSound.play().catch(e => console.log('Error playing sound:', e));
-      
+
       function generateRandomCode() {
         let code = '';
         const characters = '01';
@@ -354,13 +369,13 @@
         return code;
       }
       codeEffect.textContent = generateRandomCode();
-      
+
       // Al finalizar el intro, ocultamos el overlay y mostramos el modal de login
       setTimeout(() => {
         intro.style.animation = 'fadeOut 1s forwards';
         loginModal.style.display = 'block';
       }, 2500);
-      
+
       // Código original del editor
       const htmlEditor = document.getElementById('htmlEditor');
       const cssEditor = document.getElementById('cssEditor');
@@ -370,8 +385,8 @@
       const previewOverlay = document.getElementById('previewOverlay');
       const closePreview = document.getElementById('closePreview');
       const previewFrame = document.getElementById('previewFrame');
-      
-      // Sonido al escribir
+
+      // Sonido al escribir en los editores
       [htmlEditor, cssEditor, jsEditor].forEach(editor => {
         editor.addEventListener('keydown', () => {
           const newTypeSound = typeSound.cloneNode();
@@ -379,13 +394,13 @@
           newTypeSound.play().catch(e => console.log('Error playing sound:', e));
         });
       });
-      
+
       themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         themeBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
       });
-      
+
       previewBtn.addEventListener('click', () => {
         executeSound.play();
         previewOverlay.style.display = 'block';
@@ -404,83 +419,89 @@
         `;
         previewFrame.srcdoc = combinedCode;
       });
-      
+
       closePreview.addEventListener('click', () => {
         previewOverlay.style.display = 'none';
       });
-      
+
       // Configuración para el overlay de ajustes (selección de idioma)
       const settingsBtn = document.getElementById('settingsBtn');
       const settingsOverlay = document.getElementById('settingsOverlay');
-      
+
       settingsBtn.addEventListener('click', () => {
         settingsOverlay.style.display = 'block';
       });
-      
+
       // Diccionario de traducciones
       const translations = {
         en: {
           modalTitle: "Register / Sign in with LINE",
-          modalDescription: "Please sign in using your LINE account.<br>You will need the mobile app to complete the process.",
-          loginButton: "Sign in with LINE",
+          modalDescription: "For now it's a simulation. Sign in as a guest.",
+          loginButton: "Sign in with LINE as guest",
           previewButton: "Preview",
           htmlPlaceholder: "HTML...",
           cssPlaceholder: "CSS...",
           jsPlaceholder: "JavaScript...",
-          previewHeader: "Preview"
+          previewHeader: "Preview",
+          welcomeMessage: "Welcome to the application! Enjoy the software while applying your programming skills!"
         },
         es: {
           modalTitle: "Registro / Inicia sesión con LINE",
-          modalDescription: "Por favor, inicia sesión usando tu cuenta LINE.<br>Necesitarás la app móvil para completar el proceso.",
-          loginButton: "Iniciar sesión con LINE",
+          modalDescription: "Por ahora es una simulación. Inicia sesión como invitado.",
+          loginButton: "Iniciar sesión con LINE como invitado",
           previewButton: "Vista Previa",
           htmlPlaceholder: "HTML...",
           cssPlaceholder: "CSS...",
           jsPlaceholder: "JavaScript...",
-          previewHeader: "Vista Previa"
+          previewHeader: "Vista Previa",
+          welcomeMessage: "¡Bienvenido a la aplicación! Disfruta del software implementando tus conocimientos de Programación!"
         },
         ja: {
           modalTitle: "登録 / LINEでサインイン",
-          modalDescription: "LINEアカウントを使用してサインインしてください。<br>プロセスを完了するにはモバイルアプリが必要です。",
-          loginButton: "LINEでサインイン",
+          modalDescription: "これはシミュレーションです。ゲストとしてサインインしてください。",
+          loginButton: "ゲストとしてLINEでサインイン",
           previewButton: "プレビュー",
           htmlPlaceholder: "HTML...",
           cssPlaceholder: "CSS...",
           jsPlaceholder: "JavaScript...",
-          previewHeader: "プレビュー"
+          previewHeader: "プレビュー",
+          welcomeMessage: "アプリへようこそ！プログラミングスキルを活かしてソフトウェアをお楽しみください！"
         },
         ko: {
           modalTitle: "등록 / LINE으로 로그인",
-          modalDescription: "LINE 계정을 사용하여 로그인하세요.<br>과정을 완료하려면 모바일 앱이 필요합니다.",
-          loginButton: "LINE으로 로그인",
+          modalDescription: "현재는 시뮬레이션입니다. 게스트로 로그인하세요.",
+          loginButton: "게스트로 LINE으로 로그인",
           previewButton: "미리보기",
           htmlPlaceholder: "HTML...",
           cssPlaceholder: "CSS...",
           jsPlaceholder: "JavaScript...",
-          previewHeader: "미리보기"
+          previewHeader: "미리보기",
+          welcomeMessage: "애플리케이션에 오신 것을 환영합니다! 프로그래밍 지식을 활용하여 소프트웨어를 즐기세요!"
         },
         vi: {
           modalTitle: "Đăng ký / Đăng nhập bằng LINE",
-          modalDescription: "Vui lòng đăng nhập bằng tài khoản LINE của bạn.<br>Bạn sẽ cần ứng dụng di động để hoàn tất quá trình.",
-          loginButton: "Đăng nhập bằng LINE",
+          modalDescription: "Hiện tại đây là một mô phỏng. Đăng nhập với tư cách khách mời.",
+          loginButton: "Đăng nhập bằng LINE với tư cách khách mời",
           previewButton: "Xem trước",
           htmlPlaceholder: "HTML...",
           cssPlaceholder: "CSS...",
           jsPlaceholder: "JavaScript...",
-          previewHeader: "Xem trước"
+          previewHeader: "Xem trước",
+          welcomeMessage: "Chào mừng bạn đến với ứng dụng! Hãy tận hưởng phần mềm và áp dụng kiến thức lập trình của bạn!"
         },
         zh: {
           modalTitle: "注册 / 使用 LINE 登录",
-          modalDescription: "请使用您的 LINE 账户登录。<br>您需要移动应用程序来完成此过程。",
-          loginButton: "使用 LINE 登录",
+          modalDescription: "目前这是一个模拟。请以访客身份登录。",
+          loginButton: "以访客身份使用 LINE 登录",
           previewButton: "预览",
           htmlPlaceholder: "HTML...",
           cssPlaceholder: "CSS...",
           jsPlaceholder: "JavaScript...",
-          previewHeader: "预览"
+          previewHeader: "预览",
+          welcomeMessage: "欢迎使用本应用！尽情享受软件，并应用你的编程知识！"
         }
       };
-      
+
       // Función para actualizar la interfaz según el idioma seleccionado
       function updateLanguage(lang) {
         const t = translations[lang];
@@ -492,10 +513,9 @@
         htmlEditor.placeholder = t.htmlPlaceholder;
         cssEditor.placeholder = t.cssPlaceholder;
         jsEditor.placeholder = t.jsPlaceholder;
-        // Ocultamos el overlay de ajustes
         settingsOverlay.style.display = 'none';
       }
-      
+
       // Asignar evento a cada opción de idioma
       document.querySelectorAll('.lang-option').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -503,67 +523,37 @@
           updateLanguage(selectedLang);
         });
       });
-    });
-  </script>
-  
-  <!-- Firebase Authentication simulada con email y contraseña, mostrando usuario "como de LINE" -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
-    
-    // Configuración de Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyCFQ_geG0HIv2EZ-bfKc97TJNtf2sdqPzc",
-      authDomain: "clack-koder.firebaseapp.com",
-      databaseURL: "https://clack-koder-default-rtdb.firebaseio.com",
-      projectId: "clack-koder",
-      storageBucket: "clack-koder.firebasestorage.app",
-      messagingSenderId: "478151254938",
-      appId: "1:478151254938:web:e2c00e3a5426bd192b9023",
-      measurementId: "G-P29ME5Z3S1"
-    };
 
-    // Inicializar Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Función para simular inicio de sesión "con LINE" usando email y contraseña
-    function loginSimulated() {
-      // Definimos un correo y contraseña fijos para la simulación
-      const email = "lineuser@example.com";
-      const password = "123456";
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then((result) => {
-          updateProfile(result.user, { displayName: "Usuario de LINE" })
-            .then(() => {
-              console.log("Usuario autenticado como LINE:", result.user);
-              alert("Bienvenido " + result.user.displayName);
-              document.getElementById("loginModal").style.display = "none";
-            })
-            .catch((error) => console.error("Error al actualizar el perfil:", error));
-        })
-        .catch((error) => {
-          if (error.code === "auth/user-not-found") {
-            createUserWithEmailAndPassword(auth, email, password)
-              .then((result) => {
-                updateProfile(result.user, { displayName: "Usuario de LINE" })
-                  .then(() => {
-                    console.log("Usuario creado y autenticado como LINE:", result.user);
-                    alert("Bienvenido " + result.user.displayName);
-                    document.getElementById("loginModal").style.display = "none";
-                  })
-                  .catch((error) => console.error("Error al actualizar el perfil:", error));
-              })
-              .catch((err) => console.error("Error al crear el usuario:", err));
-          } else {
-            console.error("Error en la autenticación:", error);
+      // Función de inicio de sesión simulada
+      function loginSimulated() {
+        // Reemplazamos el contenido del modal con un spinner
+        loginContent.innerHTML = '<div class="spinner"></div><p>Iniciando sesión...</p>';
+        // Simulamos un retardo de 3 segundos
+        setTimeout(() => {
+          // Recuperamos el idioma actual para obtener el mensaje de bienvenida
+          let currentLang = 'es';
+          // Buscamos si se ha seleccionado otro idioma revisando el título del modal
+          if (document.getElementById('modalTitle').textContent.indexOf("Sign in") !== -1) {
+            currentLang = 'en';
+          } else if (document.getElementById('modalTitle').textContent.indexOf("サインイン") !== -1) {
+            currentLang = 'ja';
+          } else if (document.getElementById('modalTitle').textContent.indexOf("로그인") !== -1) {
+            currentLang = 'ko';
+          } else if (document.getElementById('modalTitle').textContent.indexOf("Đăng") !== -1) {
+            currentLang = 'vi';
+          } else if (document.getElementById('modalTitle').textContent.indexOf("登录") !== -1) {
+            currentLang = 'zh';
           }
-        });
-    }
+          const welcomeMsg = translations[currentLang].welcomeMessage;
+          // Actualizamos el modal con el mensaje de bienvenida
+          loginContent.innerHTML = `<h2>Bienvenido a la aplicación!</h2><p>${welcomeMsg}</p>`;
+        }, 3000);
+      }
 
-    const loginBtn = document.getElementById("lineLoginBtn");
-    loginBtn.addEventListener("click", loginSimulated);
+      // Asociar el evento al botón de inicio de sesión
+      const loginBtn = document.getElementById("lineLoginBtn");
+      loginBtn.addEventListener("click", loginSimulated);
+    });
   </script>
 </body>
 </html>
