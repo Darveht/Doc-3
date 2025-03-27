@@ -121,34 +121,36 @@
       background: #f0f0f0;
       transform: translateY(-1px);
     }
-    /* Modal de Registro / Inicio de sesión con Firebase OIDC (LINE) */
+    /* Modal de Registro / Inicio de sesión con Firebase OIDC (LINE)
+       El modal se expande a pantalla completa */
     .modal {
-      display: none; 
+      display: none;
       position: fixed;
       z-index: 10000;
-      left: 0;
       top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.5);
+      background: #00dc64; /* Fondo verde */
+      color: white;
     }
     .modal-content {
-      background-color: #00dc64; /* Fondo verde */
-      margin: 15% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      max-width: 400px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      border-radius: 10px;
-      color: white;
+      padding: 20px;
     }
     .modal-content h2 {
       margin-bottom: 10px;
+      font-size: 2rem;
     }
     .modal-content p {
       margin-bottom: 20px;
+      font-size: 1.2rem;
     }
     /* Botón de inicio de sesión */
     #lineLoginBtn {
@@ -159,6 +161,9 @@
       background: #fff;
       color: #00dc64;
       cursor: pointer;
+    }
+    #lineLoginBtn:hover {
+      background: #f0f0f0;
     }
     /* Resto del editor */
     .editor-container {
@@ -235,11 +240,12 @@
     <h1 class="logo">Clack</h1>
   </div>
 
-  <!-- Modal de Registro / Inicio de sesión con Firebase OIDC (LINE) -->
+  <!-- Modal de Registro / Inicio de sesión con Firebase OIDC (LINE) a pantalla completa -->
   <div id="loginModal" class="modal">
     <div class="modal-content">
       <h2>Registro / Inicia sesión con LINE</h2>
-      <p>Por favor, inicia sesión usando tu cuenta LINE. Necesitarás la app móvil para completar el proceso.</p>
+      <p>Por favor, inicia sesión usando tu cuenta LINE.<br>
+         Necesitarás la app móvil para completar el proceso.</p>
       <button id="lineLoginBtn">
         <i class="fa-brands fa-line"></i> Iniciar sesión con LINE
       </button>
@@ -279,7 +285,6 @@
       const intro = document.querySelector('.intro');
       const codeEffect = document.querySelector('.code-effect');
       const loginModal = document.getElementById('loginModal');
-      const lineLoginBtn = document.getElementById('lineLoginBtn');
       // Sound effects
       const introSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/wAVlZWVlZWVlZWVlZWVlZWVlZWVlZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2v7+/v7+/v7+/v7+/v7+/v7+/v7//////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAGgAAAAEAAAMYAAQGAkNhAAAQJAADBhgAABUWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
       const typeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA+UAVlZWVlZWVlZWVlZWVlZWVlZWVlZ8fHx8fHx8fHx8fHx8fHx8fHx8fHx8zMzMzMzMzMzMzMzMzMzMzMzMzMzM////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAAN4AAQIBAMDAAAABQ4AAAMGGAAAFhYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
@@ -298,7 +303,7 @@
       }
       codeEffect.textContent = generateRandomCode();
 
-      // Al finalizar el intro, ocultamos el overlay y mostramos el modal de login
+      // Al finalizar el intro, ocultamos el overlay y mostramos el modal de login a pantalla completa
       setTimeout(() => {
         intro.style.animation = 'fadeOut 1s forwards';
         loginModal.style.display = 'block';
@@ -354,13 +359,12 @@
     });
   </script>
   
-  <!-- Firebase Authentication con OpenID Connect (LINE) -->
+  <!-- Firebase Authentication con OpenID Connect (LINE) sin redirección -->
   <script type="module">
-    // Importar módulos de Firebase desde CDN
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
     import { getAuth, signInWithPopup, OAuthProvider } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
     
-    // Configuración de Firebase (ya la tienes en tu panel)
+    // Configuración de Firebase (ya la tienes configurada)
     const firebaseConfig = {
       apiKey: "AIzaSyCFQ_geG0HIv2EZ-bfKc97TJNtf2sdqPzc",
       authDomain: "clack-koder.firebaseapp.com",
@@ -376,15 +380,15 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Crear el proveedor OIDC con ID "oidc.glam" (nombre definido en Firebase)
+    // Crear el proveedor OIDC con ID "oidc.glam" definido en Firebase
     const provider = new OAuthProvider('oidc.glam');
 
-    // Puedes configurar scopes o parámetros adicionales si lo requieres
+    // (Opcional) Puedes establecer parámetros personalizados si es necesario
     provider.setCustomParameters({
-      // Ejemplo: prompt: 'consent'
+      // prompt: 'consent'
     });
 
-    // Función para iniciar sesión con Firebase usando el proveedor OIDC (LINE)
+    // Función para iniciar sesión sin redirección (utilizando pop-up)
     function loginWithFirebase() {
       signInWithPopup(auth, provider)
         .then((result) => {
@@ -398,7 +402,7 @@
         });
     }
 
-    // Asociar el evento de clic al botón de login
+    // Asociar el evento al botón de login
     const loginBtn = document.getElementById("lineLoginBtn");
     loginBtn.addEventListener("click", loginWithFirebase);
   </script>
