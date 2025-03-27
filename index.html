@@ -29,50 +29,49 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-    /* =======================
-       Secciones y navegación
-       ======================= */
-    .section {
-      display: none;
-      padding-top: 70px;
+    /* Intro Animation */
+    .intro {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #00dc64; display: flex; justify-content: center; align-items: center;
+      z-index: 9999; perspective: 1000px;
     }
-    .section.active {
-      display: block;
+    .logo {
+      font-size: 5rem; color: white; text-transform: uppercase; font-weight: bold;
+      opacity: 0; animation: logoReveal 2.5s forwards; transform-style: preserve-3d;
     }
+    .code-effect {
+      position: absolute; width: 100%; height: 100%;
+      font-family: monospace; font-size: 1.2rem; color: rgba(255,255,255,0.2);
+      overflow: hidden;
+    }
+    @keyframes logoReveal {
+      0% { transform: rotateX(90deg) translateZ(100px); opacity: 0; }
+      30% { transform: rotateX(0deg) translateZ(100px); opacity: 0.6; }
+      60% { transform: translateZ(100px) scale(1.2); opacity: 0.8; }
+      100% { transform: translateZ(0) scale(1); opacity: 1; }
+    }
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
     header {
       background: var(--primary-color); padding: 15px 20px;
       display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: fixed; top: 0; width: 100%;
-      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;
     }
-    .nav-links {
-      display: flex; gap: 15px; align-items: center;
-    }
-    .nav-links button {
-      background: transparent; border: none; color: #fff;
-      font-size: 1rem; cursor: pointer;
-    }
-    .controls {
-      display: flex; gap: 10px; align-items: center;
-    }
+    .controls { display: flex; gap: 10px; align-items: center; }
     .controls button {
       display: flex; align-items: center; gap: 6px; background: #fff;
       color: var(--primary-color); border: none; padding: 8px 16px; border-radius: 20px;
       cursor: pointer; font-weight: 600; transition: all 0.2s;
     }
     .controls button:hover { background: #f0f0f0; transform: translateY(-1px); }
-    /* Iconos de ajustes y notificaciones */
+    /* Botón de Ajustes y Notificaciones */
     #settingsBtn, #notificationBtn {
       background: transparent; border: none; color: #fff;
       font-size: 1.5rem; cursor: pointer;
-      margin-left: 10px;
     }
-    /* =======================
-       Modal y overlays
-       ======================= */
+    /* Modal de Inicio de Sesión (Invitado) */
     .modal {
       display: none; position: fixed; z-index: 10000; top: 0; left: 0;
-      width: 100%; height: 100%; background: var(--primary-color); color: white;
+      width: 100%; height: 100%; background: #00dc64; color: white;
     }
     .modal-content {
       width: 100%; height: 100%; display: flex; flex-direction: column;
@@ -80,19 +79,26 @@
     }
     .modal-content h2 { margin-bottom: 10px; font-size: 2rem; }
     .modal-content p { margin-bottom: 20px; font-size: 1.2rem; }
+    /* Botón de inicio de sesión */
     #lineLoginBtn {
       padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px;
       background: #fff; color: #00dc64; cursor: pointer;
     }
     #lineLoginBtn:hover { background: #f0f0f0; }
-    /* Spinner */
+    /* Botón para cambiar idioma en el modal de registro */
+    #changeLangBtn {
+      margin-top: 10px; padding: 8px 16px; font-size: 14px; border: none;
+      border-radius: 5px; background: #fff; color: #00dc64; cursor: pointer;
+    }
+    #changeLangBtn:hover { background: #f0f0f0; }
+    /* Spinner para inicio de sesión */
     .spinner {
       border: 8px solid #f3f3f3; border-top: 8px solid #fff;
       border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite;
       margin-bottom: 20px;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    /* Overlay transición de idioma */
+    /* Overlay para transición de idioma: dos bolitas giratorias */
     #langTransitionOverlay {
       display: none; position: fixed; z-index: 10500; top: 0; left: 0;
       width: 100%; height: 100%; background: rgba(0,0,0,0.6);
@@ -116,7 +122,42 @@
     }
     .animate-left { animation: ballLeftAnim 2s ease-in-out forwards; }
     .animate-right { animation: ballRightAnim 2s ease-in-out forwards; }
-    /* Panel de notificaciones a pantalla completa */
+    /* Overlay para animación de escaneo (vista previa) */
+    #scanOverlay {
+      display: none; position: fixed; z-index: 10500; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.8) 80%);
+      opacity: 0; animation: scanEffect 5s forwards;
+    }
+    @keyframes scanEffect {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    /* Overlay de Selección de Idioma (Ajustes) */
+    #settingsOverlay {
+      display: none; position: fixed; z-index: 11000; top: 0; left: 0;
+      width: 100%; height: 100%; background: var(--primary-color); color: white;
+      padding-top: 100px; text-align: center;
+    }
+    #settingsOverlay h2 { margin-bottom: 20px; font-size: 2rem; }
+    .lang-option {
+      background: #fff; color: var(--primary-color); border: none;
+      padding: 10px 20px; margin: 5px; font-size: 16px; border-radius: 5px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .lang-option:hover { background: #f0f0f0; }
+    /* Floating update popup (anuncio) */
+    #updatePopup {
+      position: fixed; bottom: 20px; right: 20px;
+      background: #fff; color: var(--primary-color);
+      border: 1px solid var(--primary-color); border-radius: 10px;
+      padding: 10px 15px; display: flex; align-items: center; gap: 10px;
+      cursor: pointer; z-index: 12000; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    #updatePopup.hidden { display: none; }
+    /* Panel de Notificaciones a pantalla completa */
     #notificationPanel {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: var(--bg-color); color: var(--text-color);
@@ -139,7 +180,7 @@
       background: transparent; border: none; color: #fff;
       font-size: 1.5rem; cursor: pointer;
     }
-    /* Editor y vista previa */
+    /* Resto del editor */
     .editor-container {
       max-width: 1200px; margin: 20px auto; padding: 0 20px;
       display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
@@ -174,103 +215,96 @@
   </style>
 </head>
 <body>
-  <!-- =======================
-       Header (navegación global)
-       ======================= -->
-  <header>
-    <div class="nav-links">
-      <button data-target="loginSection" class="nav-link">Registro</button>
-      <button data-target="editorSection" class="nav-link">Editor</button>
-    </div>
-    <div class="controls">
-      <button id="previewBtn"><i class="fa-solid fa-eye"></i> <span id="previewBtnText">Vista Previa</span></button>
-      <button id="themeBtn"><i class="fa-solid fa-moon"></i></button>
-      <!-- Iconos: Notificaciones y Ajustes -->
-      <button id="notificationBtn" title="Notificaciones"><i class="fa-solid fa-bell"></i></button>
-      <button id="settingsBtn" title="Ajustes"><i class="fa-solid fa-gear"></i></button>
-    </div>
-  </header>
+  <!-- Intro Animation -->
+  <div class="intro">
+    <div class="code-effect"></div>
+    <h1 class="logo">Clack</h1>
+  </div>
 
-  <!-- =======================
-       Sección de Registro (Login)
-       ======================= -->
-  <section id="loginSection" class="section active">
-    <div id="loginModal" class="modal" style="display: block;">
-      <div class="modal-content" id="loginContent">
-        <h2 id="modalTitle">Registro / Inicia sesión con LINE</h2>
-        <p id="modalDescription">Inicia sesión como invitado.</p>
-        <!-- También se incluye opción de cambio de idioma en esta sección -->
-        <div style="margin-bottom: 15px;">
-          <button class="lang-option" data-lang="ja">日本語</button>
-          <button class="lang-option" data-lang="es">Español</button>
-          <button class="lang-option" data-lang="en">English</button>
-          <button class="lang-option" data-lang="ko">한국어</button>
-          <button class="lang-option" data-lang="vi">Tiếng Việt</button>
-          <button class="lang-option" data-lang="zh">中文</button>
-        </div>
-        <button id="lineLoginBtn">
-          <i class="fa-brands fa-line"></i> <span id="loginBtnText">Iniciar sesión con LINE como invitado</span>
-        </button>
-      </div>
+  <!-- Modal de Inicio de Sesión (Invitado) -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content" id="loginContent">
+      <h2 id="modalTitle">Registro / Inicia sesión con LINE</h2>
+      <p id="modalDescription">Inicia sesión como invitado.</p>
+      <button id="lineLoginBtn">
+        <i class="fa-brands fa-line"></i> <span id="loginBtnText">Iniciar sesión con LINE como invitado</span>
+      </button>
+      <!-- Botón para cambiar idioma en la página de registro -->
+      <button id="changeLangBtn">Cambiar Idioma</button>
     </div>
-  </section>
+  </div>
 
-  <!-- =======================
-       Sección Principal (Editor y vista previa)
-       ======================= -->
-  <section id="editorSection" class="section">
-    <div class="editor-container">
-      <div class="editor-area">
-        <textarea id="htmlEditor" placeholder="HTML..."></textarea>
-      </div>
-      <div class="editor-area">
-        <textarea id="cssEditor" placeholder="CSS..."></textarea>
-      </div>
-      <div class="editor-area">
-        <textarea id="jsEditor" placeholder="JavaScript..."></textarea>
-      </div>
-    </div>
-    <div id="previewOverlay" class="preview-overlay">
-      <div class="preview-header">
-        <h2 id="previewHeaderText">Vista Previa</h2>
-        <button id="closePreview"><i class="fa-solid fa-times"></i></button>
-      </div>
-      <iframe id="previewFrame"></iframe>
-    </div>
-  </section>
-
-  <!-- =======================
-       Overlay de transición de idioma
-       ======================= -->
+  <!-- Overlay para transición de idioma -->
   <div id="langTransitionOverlay">
     <div class="lang-ball ball-left"></div>
     <div class="lang-ball ball-right"></div>
   </div>
 
-  <!-- =======================
-       Panel de Notificaciones (pantalla completa)
-       ======================= -->
+  <!-- Overlay para animación de escaneo (vista previa) -->
+  <div id="scanOverlay"></div>
+
+  <!-- Overlay de Selección de Idioma (Ajustes) -->
+  <div id="settingsOverlay">
+    <h2>Selecciona tu idioma</h2>
+    <button class="lang-option" data-lang="ja">日本語</button>
+    <button class="lang-option" data-lang="es">Español</button>
+    <button class="lang-option" data-lang="en">English</button>
+    <button class="lang-option" data-lang="ko">한국어</button>
+    <button class="lang-option" data-lang="vi">Tiếng Việt</button>
+    <button class="lang-option" data-lang="zh">中文</button>
+  </div>
+
+  <!-- Floating update popup (anuncio) -->
+  <div id="updatePopup" class="hidden">
+    <i class="fa-solid fa-flag"></i>
+    <span id="updateText">¡La aplicación se ha actualizado!</span>
+  </div>
+
+  <!-- Panel de Notificaciones a pantalla completa -->
   <div id="notificationPanel">
     <div class="notification-header">
       <h2 id="notificationPanelTitle">Notificaciones</h2>
       <button id="closeNotificationPanel"><i class="fa-solid fa-times"></i></button>
     </div>
     <div id="notificationList" class="notification-list">
-      <!-- Notificaciones almacenadas se muestran aquí -->
+      <!-- Aquí se cargarán las notificaciones -->
     </div>
   </div>
 
-  <!-- =======================
-       Overlays extras: animación de escaneo (vista previa)
-       ======================= -->
-  <div id="scanOverlay"></div>
+  <header>
+    <h1><i class="fa-solid fa-code"></i> Clack</h1>
+    <div class="controls">
+      <button id="previewBtn"><i class="fa-solid fa-eye"></i> <span id="previewBtnText">Vista Previa</span></button>
+      <button id="themeBtn"><i class="fa-solid fa-moon"></i></button>
+      <!-- Icono de Notificaciones junto al de Ajustes -->
+      <button id="notificationBtn" title="Notificaciones"><i class="fa-solid fa-bell"></i></button>
+      <button id="settingsBtn" title="Ajustes"><i class="fa-solid fa-gear"></i></button>
+    </div>
+  </header>
 
-  <!-- =======================
-       Scripts
-       ======================= -->
+  <div class="editor-container">
+    <div class="editor-area">
+      <textarea id="htmlEditor" placeholder="HTML..."></textarea>
+    </div>
+    <div class="editor-area">
+      <textarea id="cssEditor" placeholder="CSS..."></textarea>
+    </div>
+    <div class="editor-area">
+      <textarea id="jsEditor" placeholder="JavaScript..."></textarea>
+    </div>
+  </div>
+
+  <div id="previewOverlay" class="preview-overlay">
+    <div class="preview-header">
+      <h2 id="previewHeaderText">Vista Previa</h2>
+      <button id="closePreview"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <iframe id="previewFrame"></iframe>
+  </div>
+
   <script>
-    /* Variable global para idioma (por defecto "es") */
-    let currentLang = 'es';
+    /* Variable global para idioma actual (por defecto "es") */
+    let currentLang = localStorage.getItem('currentLang') || 'es';
 
     /* Diccionario de traducciones */
     const translations = {
@@ -354,26 +388,24 @@
       }
     };
 
-    /* Actualizar textos según idioma en toda la aplicación */
+    /* Actualizar textos según idioma y guardar la selección */
     function updateLanguage(lang) {
       currentLang = lang;
+      localStorage.setItem('currentLang', lang);
       const t = translations[lang];
-      // Actualizar sección de login
       document.getElementById('modalTitle').innerHTML = t.modalTitle;
       document.getElementById('modalDescription').innerHTML = t.modalDescription;
       document.getElementById('loginBtnText').textContent = t.loginButton;
-      // Actualizar placeholders de editores
+      document.getElementById('previewBtnText').textContent = t.previewButton;
+      document.getElementById('previewHeaderText').textContent = t.previewHeader;
       document.getElementById('htmlEditor').placeholder = t.htmlPlaceholder;
       document.getElementById('cssEditor').placeholder = t.cssPlaceholder;
       document.getElementById('jsEditor').placeholder = t.jsPlaceholder;
-      // Actualizar botón de vista previa y título del preview
-      document.getElementById('previewBtnText').textContent = t.previewButton;
-      document.getElementById('previewHeaderText').textContent = t.previewHeader;
-      // Actualizar notificaciones
-      document.getElementById('updateText') && (document.getElementById('updateText').innerHTML = t.notificationUpdate);
+      document.getElementById('updateText').innerHTML = t.notificationUpdate;
       document.getElementById('notificationPanelTitle').textContent = t.notificationPanelTitle;
+      // Si se desea actualizar otros textos de la página, se pueden agregar aquí.
       runLangTransitionAnimation();
-      document.getElementById('settingsOverlay') && (document.getElementById('settingsOverlay').style.display = 'none');
+      document.getElementById('settingsOverlay').style.display = 'none';
     }
 
     /* Animación de transición de idioma */
@@ -391,32 +423,38 @@
       }, 2000);
     }
 
-    /* Navegación entre secciones */
-    function setupNavigation() {
-      document.querySelectorAll('.nav-link').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const target = btn.getAttribute('data-target');
-          document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-          document.getElementById(target).classList.add('active');
-        });
+    /* Detección de swipe en overlay de ajustes */
+    function setupSwipeDetection() {
+      let touchstartX = 0;
+      let touchendX = 0;
+      const settingsOverlay = document.getElementById('settingsOverlay');
+      settingsOverlay.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+      });
+      settingsOverlay.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        if (touchstartX - touchendX > 100) {
+          settingsOverlay.style.display = 'none';
+        }
       });
     }
 
     /* Cargar notificaciones almacenadas en localStorage */
-    function loadStoredNotifications() {
+    function loadNotifications() {
       const stored = localStorage.getItem('notifications');
-      if (stored) {
-        return JSON.parse(stored);
-      }
-      return [];
+      return stored ? JSON.parse(stored) : [];
     }
+
+    /* Guardar notificaciones en localStorage */
     function saveNotifications(notifications) {
       localStorage.setItem('notifications', JSON.stringify(notifications));
     }
+
+    /* Renderizar la lista de notificaciones */
     function renderNotifications() {
+      const notifications = loadNotifications();
       const notificationList = document.getElementById('notificationList');
       notificationList.innerHTML = '';
-      const notifications = loadStoredNotifications();
       notifications.forEach(item => {
         const div = document.createElement('div');
         div.classList.add('notification-item');
@@ -425,35 +463,44 @@
       });
     }
 
-    /* Agregar notificación y guardarla en localStorage */
+    /* Agregar una notificación y actualizar almacenamiento */
     function addNotification(message) {
       const now = new Date();
-      const entry = {
-        message,
+      const notification = {
+        message: message,
         date: now.toLocaleDateString() + " " + now.toLocaleTimeString()
       };
-      const notifications = loadStoredNotifications();
-      notifications.unshift(entry);
+      const notifications = loadNotifications();
+      notifications.unshift(notification);
       saveNotifications(notifications);
       renderNotifications();
     }
 
-    /* Simulación de llegada de notificaciones en tiempo real */
+    /* Simulación de notificaciones en tiempo real */
     function simulateUpdateNotification() {
       setInterval(() => {
         const t = translations[currentLang];
+        const now = new Date();
+        document.getElementById('updateText').innerHTML = t.notificationUpdate + "<br><small>" + now.toLocaleDateString() + " " + now.toLocaleTimeString() + "</small>";
+        document.getElementById('updatePopup').classList.remove('hidden');
         addNotification(t.notificationUpdate);
-        // Si deseas, puedes actualizar un popup o similar aquí
       }, 30000);
     }
 
-    /* Mostrar/Ocultar panel de notificaciones */
+    /* Mostrar panel de notificaciones */
     function showNotificationPanel() {
-      renderNotifications();
       document.getElementById('notificationPanel').style.display = 'flex';
+      renderNotifications();
     }
     function hideNotificationPanel() {
       document.getElementById('notificationPanel').style.display = 'none';
+    }
+
+    /* Simular detección de sesión activa */
+    function checkSession() {
+      if(localStorage.getItem('loggedIn') === 'true') {
+        document.getElementById('loginModal').style.display = 'none';
+      }
     }
 
     /* Simulación de inicio de sesión */
@@ -465,9 +512,7 @@
                                   <p>${translations[currentLang].welcomeMessage}</p>`;
         localStorage.setItem('loggedIn', 'true');
         setTimeout(() => {
-          // Al iniciar sesión, se redirecciona a la sección del editor
-          document.getElementById('loginSection').classList.remove('active');
-          document.getElementById('editorSection').classList.add('active');
+          document.getElementById('loginModal').style.display = 'none';
         }, 2000);
       }, 3000);
     }
@@ -481,25 +526,51 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      setupNavigation();
+      // Aplicar idioma guardado
+      updateLanguage(currentLang);
+      checkSession();
+      setupSwipeDetection();
       simulateUpdateNotification();
       renderNotifications();
 
-      // Si ya hay sesión activa, se oculta el modal de login
-      if(localStorage.getItem('loggedIn') === 'true'){
-        document.getElementById('loginSection').classList.remove('active');
-        document.getElementById('editorSection').classList.add('active');
-      }
+      const intro = document.querySelector('.intro');
+      const codeEffect = document.querySelector('.code-effect');
+      const settingsBtn = document.getElementById('settingsBtn');
+      const settingsOverlay = document.getElementById('settingsOverlay');
+      const previewBtn = document.getElementById('previewBtn');
+      const themeBtn = document.getElementById('themeBtn');
+      const closePreview = document.getElementById('closePreview');
+      const previewFrame = document.getElementById('previewFrame');
+      const htmlEditor = document.getElementById('htmlEditor');
+      const cssEditor = document.getElementById('cssEditor');
+      const jsEditor = document.getElementById('jsEditor');
 
-      // Sonidos (código similar al ejemplo anterior)
+      // Sonidos
       const introSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/wAVlZWVlZWVlZWVlZWVlZWVlZWVlZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2v7+/v7+/v7+/v7+/v7+/v7+/v7//////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAGgAAAAEAAAMYAAQGAkNhAAAQJAADBhgAABUWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
       const typeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA+UAVlZWVlZWVlZWVlZWVlZWVlZWVlZ8fHx8fHx8fHx8fHx8fHx8fHx8fHx8zMzMzMzMzMzMzMzMzMzMzMzMzMzM////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAAN4AAQIBAMDAAAABQ4AAAMGGAAAFhYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
       const executeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/MAVlZWVlZWVlZWVlZWVlZWVlZWVlZ7e3t7e3t7e3t7e3t7e3t7e3t7e3t7ysrKysrKysrKysrKysrKysrKysrK////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAANyAAQGAwIAAAAACw4AAAMGGAAAFRYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+
       introSound.volume = 0.5;
       introSound.play().catch(e => console.log('Error playing sound:', e));
 
-      // Detectar tecla para reproducir sonido al escribir en editores
-      [document.getElementById('htmlEditor'), document.getElementById('cssEditor'), document.getElementById('jsEditor')].forEach(editor => {
+      function generateRandomCode() {
+        let code = '';
+        const characters = '01';
+        for (let i = 0; i < 1000; i++) {
+          code += characters[Math.floor(Math.random() * characters.length)];
+        }
+        return code;
+      }
+      codeEffect.textContent = generateRandomCode();
+
+      // Al finalizar el intro, ocultar overlay y mostrar modal de inicio
+      setTimeout(() => {
+        document.querySelector('.intro').style.animation = 'fadeOut 1s forwards';
+        document.getElementById('loginModal').style.display = 'block';
+      }, 2500);
+
+      // Sonido al escribir en los editores
+      [htmlEditor, cssEditor, jsEditor].forEach(editor => {
         editor.addEventListener('keydown', () => {
           const newTypeSound = typeSound.cloneNode();
           newTypeSound.volume = 0.3;
@@ -507,14 +578,14 @@
         });
       });
 
-      document.getElementById('themeBtn').addEventListener('click', () => {
+      themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
-        document.getElementById('themeBtn').innerHTML = document.body.classList.contains('dark-mode')
+        themeBtn.innerHTML = document.body.classList.contains('dark-mode')
           ? '<i class="fa-solid fa-sun"></i>'
           : '<i class="fa-solid fa-moon"></i>';
       });
 
-      document.getElementById('previewBtn').addEventListener('click', () => {
+      previewBtn.addEventListener('click', () => {
         executeSound.play();
         runScanAnimation();
         setTimeout(() => {
@@ -524,43 +595,47 @@
             <html>
               <head>
                 <meta charset="UTF-8">
-                <style>${document.getElementById('cssEditor').value}</style>
+                <style>${cssEditor.value}</style>
               </head>
               <body>
-                ${document.getElementById('htmlEditor').value}
-                <script>${document.getElementById('jsEditor').value}<\/script>
+                ${htmlEditor.value}
+                <script>${jsEditor.value}<\/script>
               </body>
             </html>
           `;
-          document.getElementById('previewFrame').srcdoc = combinedCode;
+          previewFrame.srcdoc = combinedCode;
         }, 5000);
       });
 
-      document.getElementById('closePreview').addEventListener('click', () => {
+      closePreview.addEventListener('click', () => {
         document.getElementById('previewOverlay').style.display = 'none';
       });
 
-      // Abrir overlay de ajustes (para cambio de idioma) al pulsar el botón de ajustes
-      document.getElementById('settingsBtn').addEventListener('click', () => {
-        // Por simplicidad, se puede usar un prompt o redirigir a otra sección.
-        // Aquí se muestra un simple overlay con opciones (se reutilizan los botones de idioma del login).
-        const newLang = prompt("Ingrese el código del idioma (es, en, ja, ko, vi, zh):", currentLang);
-        if(newLang && translations[newLang]) updateLanguage(newLang);
+      settingsBtn.addEventListener('click', () => {
+        settingsOverlay.style.display = 'block';
       });
 
-      // Inicio de sesión simulado
-      document.getElementById("lineLoginBtn").addEventListener("click", loginSimulated);
-
-      // Mostrar panel de notificaciones al pulsar el icono
+      // Botón de notificaciones en el header
       document.getElementById('notificationBtn').addEventListener('click', showNotificationPanel);
-      document.getElementById('closeNotificationPanel').addEventListener('click', hideNotificationPanel);
 
-      // Asignar eventos a todas las opciones de idioma (tanto en login como en otros lugares)
+      // Botón para cambiar idioma en el modal de registro
+      document.getElementById('changeLangBtn').addEventListener('click', () => {
+        settingsOverlay.style.display = 'block';
+      });
+
+      // Asignar eventos a las opciones de idioma
       document.querySelectorAll('.lang-option').forEach(btn => {
         btn.addEventListener('click', (e) => {
           updateLanguage(e.target.getAttribute('data-lang'));
         });
       });
+
+      // Iniciar sesión simulada
+      document.getElementById("lineLoginBtn").addEventListener("click", loginSimulated);
+
+      // Al pulsar el updatePopup se muestra el panel de notificaciones
+      document.getElementById('updatePopup').addEventListener('click', showNotificationPanel);
+      document.getElementById('closeNotificationPanel').addEventListener('click', hideNotificationPanel);
     });
   </script>
 </body>
