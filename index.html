@@ -121,6 +121,14 @@
       background: #f0f0f0;
       transform: translateY(-1px);
     }
+    /* Botón de Ajustes */
+    #settingsBtn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
     /* Modal de Registro / Inicio de sesión con Firebase OIDC (LINE)
        El modal se expande a pantalla completa */
     .modal {
@@ -163,6 +171,38 @@
       cursor: pointer;
     }
     #lineLoginBtn:hover {
+      background: #f0f0f0;
+    }
+    /* Overlay de Selección de Idioma (Ajustes) */
+    #settingsOverlay {
+      display: none;
+      position: fixed;
+      z-index: 11000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--primary-color);
+      color: white;
+      padding-top: 100px;
+      text-align: center;
+    }
+    #settingsOverlay h2 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+    .lang-option {
+      background: #fff;
+      color: var(--primary-color);
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .lang-option:hover {
       background: #f0f0f0;
     }
     /* Resto del editor */
@@ -243,20 +283,32 @@
   <!-- Modal de Registro / Inicio de sesión con Firebase OIDC (LINE) a pantalla completa -->
   <div id="loginModal" class="modal">
     <div class="modal-content">
-      <h2>Registro / Inicia sesión con LINE</h2>
-      <p>Por favor, inicia sesión usando tu cuenta LINE.<br>
+      <h2 id="modalTitle">Registro / Inicia sesión con LINE</h2>
+      <p id="modalDescription">Por favor, inicia sesión usando tu cuenta LINE.<br>
          Necesitarás la app móvil para completar el proceso.</p>
       <button id="lineLoginBtn">
-        <i class="fa-brands fa-line"></i> Iniciar sesión con LINE
+        <i class="fa-brands fa-line"></i> <span id="loginBtnText">Iniciar sesión con LINE</span>
       </button>
     </div>
+  </div>
+
+  <!-- Overlay de Selección de Idioma (Ajustes) -->
+  <div id="settingsOverlay">
+    <h2>Selecciona tu idioma</h2>
+    <button class="lang-option" data-lang="ja">日本語</button>
+    <button class="lang-option" data-lang="es">Español</button>
+    <button class="lang-option" data-lang="en">English</button>
+    <button class="lang-option" data-lang="ko">한국어</button>
+    <button class="lang-option" data-lang="vi">Tiếng Việt</button>
+    <button class="lang-option" data-lang="zh">中文</button>
   </div>
 
   <header>
     <h1><i class="fa-solid fa-code"></i> Clack</h1>
     <div class="controls">
-      <button id="previewBtn"><i class="fa-solid fa-eye"></i> Vista Previa</button>
+      <button id="previewBtn"><i class="fa-solid fa-eye"></i> <span id="previewBtnText">Vista Previa</span></button>
       <button id="themeBtn"><i class="fa-solid fa-moon"></i></button>
+      <button id="settingsBtn" title="Ajustes"><i class="fa-solid fa-gear"></i></button>
     </div>
   </header>
 
@@ -274,7 +326,7 @@
 
   <div id="previewOverlay" class="preview-overlay">
     <div class="preview-header">
-      <h2>Vista Previa</h2>
+      <h2 id="previewHeaderText">Vista Previa</h2>
       <button id="closePreview"><i class="fa-solid fa-times"></i></button>
     </div>
     <iframe id="previewFrame"></iframe>
@@ -282,17 +334,17 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Sonidos y animación intro
       const intro = document.querySelector('.intro');
       const codeEffect = document.querySelector('.code-effect');
       const loginModal = document.getElementById('loginModal');
-      // Sound effects
-      const introSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/wAVlZWVlZWVlZWVlZWVlZWVlZWVlZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2v7+/v7+/v7+/v7+/v7+/v7+/v7//////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAGgAAAAEAAAMYAAQGAkNhAAAQJAADBhgAABUWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
-      const typeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA+UAVlZWVlZWVlZWVlZWVlZWVlZWVlZ8fHx8fHx8fHx8fHx8fHx8fHx8fHx8zMzMzMzMzMzMzMzMzMzMzMzMzMzM////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAAN4AAQIBAMDAAAABQ4AAAMGGAAAFhYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+      const introSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/wAVlZWVlZWVlZWVlZWVlZWVlZWVlZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2v7+/v7+/v7+/v7+/v7+/v7+/v7//////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAGgAAAAEAAAMYAAQGAkNhAAAQJAADBhgAABUWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+      const typeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA+UAVlZWVlZWVlZWVlZWVlZWVlZWVlZ8fHx8fHx8fHx8fHx8fHx8fHx8fHx8zMzMzMzMzMzMzMzMzMzMzMzMzMzM////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAAN4AAQIBAMDAAAABQ4AAAMGGAAAFhYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
       const executeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/MAVlZWVlZWVlZWVlZWVlZWVlZWVlZ7e3t7e3t7e3t7e3t7e3t7e3t7e3t7ysrKysrKysrKysrKysrKysrKysrK////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAANyAAQGAwIAAAAACw4AAAMGGAAAFRYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
       
       introSound.volume = 0.5;
       introSound.play().catch(e => console.log('Error playing sound:', e));
-
+      
       function generateRandomCode() {
         let code = '';
         const characters = '01';
@@ -302,14 +354,14 @@
         return code;
       }
       codeEffect.textContent = generateRandomCode();
-
-      // Al finalizar el intro, ocultamos el overlay y mostramos el modal de login a pantalla completa
+      
+      // Al finalizar el intro, ocultamos el overlay y mostramos el modal de login
       setTimeout(() => {
         intro.style.animation = 'fadeOut 1s forwards';
         loginModal.style.display = 'block';
       }, 2500);
-
-      // Resto del código original para el editor
+      
+      // Código original del editor
       const htmlEditor = document.getElementById('htmlEditor');
       const cssEditor = document.getElementById('cssEditor');
       const jsEditor = document.getElementById('jsEditor');
@@ -318,8 +370,8 @@
       const previewOverlay = document.getElementById('previewOverlay');
       const closePreview = document.getElementById('closePreview');
       const previewFrame = document.getElementById('previewFrame');
-
-      // Agregar sonido de tipeo a los editores
+      
+      // Sonido al escribir
       [htmlEditor, cssEditor, jsEditor].forEach(editor => {
         editor.addEventListener('keydown', () => {
           const newTypeSound = typeSound.cloneNode();
@@ -327,13 +379,13 @@
           newTypeSound.play().catch(e => console.log('Error playing sound:', e));
         });
       });
-
+      
       themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         themeBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
       });
-
+      
       previewBtn.addEventListener('click', () => {
         executeSound.play();
         previewOverlay.style.display = 'block';
@@ -352,19 +404,114 @@
         `;
         previewFrame.srcdoc = combinedCode;
       });
-
+      
       closePreview.addEventListener('click', () => {
         previewOverlay.style.display = 'none';
+      });
+      
+      // Configuración para el overlay de ajustes (selección de idioma)
+      const settingsBtn = document.getElementById('settingsBtn');
+      const settingsOverlay = document.getElementById('settingsOverlay');
+      
+      settingsBtn.addEventListener('click', () => {
+        settingsOverlay.style.display = 'block';
+      });
+      
+      // Diccionario de traducciones
+      const translations = {
+        en: {
+          modalTitle: "Register / Sign in with LINE",
+          modalDescription: "Please sign in using your LINE account.<br>You will need the mobile app to complete the process.",
+          loginButton: "Sign in with LINE",
+          previewButton: "Preview",
+          htmlPlaceholder: "HTML...",
+          cssPlaceholder: "CSS...",
+          jsPlaceholder: "JavaScript...",
+          previewHeader: "Preview"
+        },
+        es: {
+          modalTitle: "Registro / Inicia sesión con LINE",
+          modalDescription: "Por favor, inicia sesión usando tu cuenta LINE.<br>Necesitarás la app móvil para completar el proceso.",
+          loginButton: "Iniciar sesión con LINE",
+          previewButton: "Vista Previa",
+          htmlPlaceholder: "HTML...",
+          cssPlaceholder: "CSS...",
+          jsPlaceholder: "JavaScript...",
+          previewHeader: "Vista Previa"
+        },
+        ja: {
+          modalTitle: "登録 / LINEでサインイン",
+          modalDescription: "LINEアカウントを使用してサインインしてください。<br>プロセスを完了するにはモバイルアプリが必要です。",
+          loginButton: "LINEでサインイン",
+          previewButton: "プレビュー",
+          htmlPlaceholder: "HTML...",
+          cssPlaceholder: "CSS...",
+          jsPlaceholder: "JavaScript...",
+          previewHeader: "プレビュー"
+        },
+        ko: {
+          modalTitle: "등록 / LINE으로 로그인",
+          modalDescription: "LINE 계정을 사용하여 로그인하세요.<br>과정을 완료하려면 모바일 앱이 필요합니다.",
+          loginButton: "LINE으로 로그인",
+          previewButton: "미리보기",
+          htmlPlaceholder: "HTML...",
+          cssPlaceholder: "CSS...",
+          jsPlaceholder: "JavaScript...",
+          previewHeader: "미리보기"
+        },
+        vi: {
+          modalTitle: "Đăng ký / Đăng nhập bằng LINE",
+          modalDescription: "Vui lòng đăng nhập bằng tài khoản LINE của bạn.<br>Bạn sẽ cần ứng dụng di động để hoàn tất quá trình.",
+          loginButton: "Đăng nhập bằng LINE",
+          previewButton: "Xem trước",
+          htmlPlaceholder: "HTML...",
+          cssPlaceholder: "CSS...",
+          jsPlaceholder: "JavaScript...",
+          previewHeader: "Xem trước"
+        },
+        zh: {
+          modalTitle: "注册 / 使用 LINE 登录",
+          modalDescription: "请使用您的 LINE 账户登录。<br>您需要移动应用程序来完成此过程。",
+          loginButton: "使用 LINE 登录",
+          previewButton: "预览",
+          htmlPlaceholder: "HTML...",
+          cssPlaceholder: "CSS...",
+          jsPlaceholder: "JavaScript...",
+          previewHeader: "预览"
+        }
+      };
+      
+      // Función para actualizar la interfaz según el idioma seleccionado
+      function updateLanguage(lang) {
+        const t = translations[lang];
+        document.getElementById('modalTitle').innerHTML = t.modalTitle;
+        document.getElementById('modalDescription').innerHTML = t.modalDescription;
+        document.getElementById('loginBtnText').textContent = t.loginButton;
+        document.getElementById('previewBtnText').textContent = t.previewButton;
+        document.getElementById('previewHeaderText').textContent = t.previewHeader;
+        htmlEditor.placeholder = t.htmlPlaceholder;
+        cssEditor.placeholder = t.cssPlaceholder;
+        jsEditor.placeholder = t.jsPlaceholder;
+        // Ocultamos el overlay de ajustes
+        settingsOverlay.style.display = 'none';
+      }
+      
+      // Asignar evento a cada opción de idioma
+      document.querySelectorAll('.lang-option').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const selectedLang = e.target.getAttribute('data-lang');
+          updateLanguage(selectedLang);
+        });
       });
     });
   </script>
   
-  <!-- Firebase Authentication con OpenID Connect (LINE) sin redirección -->
+  <!-- Firebase Authentication simulada con email y contraseña, mostrando usuario "como de LINE" -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-    import { getAuth, signInWithPopup, OAuthProvider } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
     
-    // Configuración de Firebase (ya la tienes configurada)
+    // Configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCFQ_geG0HIv2EZ-bfKc97TJNtf2sdqPzc",
       authDomain: "clack-koder.firebaseapp.com",
@@ -380,31 +527,43 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Crear el proveedor OIDC con ID "oidc.glam" definido en Firebase
-    const provider = new OAuthProvider('oidc.glam');
+    // Función para simular inicio de sesión "con LINE" usando email y contraseña
+    function loginSimulated() {
+      // Definimos un correo y contraseña fijos para la simulación
+      const email = "lineuser@example.com";
+      const password = "123456";
 
-    // (Opcional) Puedes establecer parámetros personalizados si es necesario
-    provider.setCustomParameters({
-      // prompt: 'consent'
-    });
-
-    // Función para iniciar sesión sin redirección (utilizando pop-up)
-    function loginWithFirebase() {
-      signInWithPopup(auth, provider)
+      signInWithEmailAndPassword(auth, email, password)
         .then((result) => {
-          console.log("Usuario autenticado:", result.user);
-          alert("Bienvenido " + (result.user.displayName || result.user.email));
-          // Oculta el modal al iniciar sesión correctamente
-          document.getElementById("loginModal").style.display = "none";
+          updateProfile(result.user, { displayName: "Usuario de LINE" })
+            .then(() => {
+              console.log("Usuario autenticado como LINE:", result.user);
+              alert("Bienvenido " + result.user.displayName);
+              document.getElementById("loginModal").style.display = "none";
+            })
+            .catch((error) => console.error("Error al actualizar el perfil:", error));
         })
         .catch((error) => {
-          console.error("Error en la autenticación:", error);
+          if (error.code === "auth/user-not-found") {
+            createUserWithEmailAndPassword(auth, email, password)
+              .then((result) => {
+                updateProfile(result.user, { displayName: "Usuario de LINE" })
+                  .then(() => {
+                    console.log("Usuario creado y autenticado como LINE:", result.user);
+                    alert("Bienvenido " + result.user.displayName);
+                    document.getElementById("loginModal").style.display = "none";
+                  })
+                  .catch((error) => console.error("Error al actualizar el perfil:", error));
+              })
+              .catch((err) => console.error("Error al crear el usuario:", err));
+          } else {
+            console.error("Error en la autenticación:", error);
+          }
         });
     }
 
-    // Asociar el evento al botón de login
     const loginBtn = document.getElementById("lineLoginBtn");
-    loginBtn.addEventListener("click", loginWithFirebase);
+    loginBtn.addEventListener("click", loginSimulated);
   </script>
 </body>
 </html>
