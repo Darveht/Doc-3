@@ -21,268 +21,157 @@
       --text-color: #fff;
       --editor-bg: #2d2d2d;
     }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Poppins', sans-serif;
       background: #00dc64;
       color: var(--text-color);
       min-height: 100vh;
+      overflow-x: hidden;
     }
     /* Intro Animation */
     .intro {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #00dc64;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      perspective: 1000px;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #00dc64; display: flex; justify-content: center; align-items: center;
+      z-index: 9999; perspective: 1000px;
     }
     .logo {
-      font-size: 5rem;
-      color: white;
-      text-transform: uppercase;
-      font-weight: bold;
-      opacity: 0;
-      animation: logoReveal 2.5s forwards;
-      transform-style: preserve-3d;
+      font-size: 5rem; color: white; text-transform: uppercase; font-weight: bold;
+      opacity: 0; animation: logoReveal 2.5s forwards; transform-style: preserve-3d;
     }
     .code-effect {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      font-family: monospace;
-      font-size: 1.2rem;
-      color: rgba(255, 255, 255, 0.2);
+      position: absolute; width: 100%; height: 100%;
+      font-family: monospace; font-size: 1.2rem; color: rgba(255,255,255,0.2);
       overflow: hidden;
     }
     @keyframes logoReveal {
-      0% {
-        transform: rotateX(90deg) translateZ(100px);
-        opacity: 0;
-      }
-      30% {
-        transform: rotateX(0deg) translateZ(100px);
-        opacity: 0.6;
-      }
-      60% {
-        transform: translateZ(100px) scale(1.2);
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateZ(0) scale(1);
-        opacity: 1;
-      }
+      0% { transform: rotateX(90deg) translateZ(100px); opacity: 0; }
+      30% { transform: rotateX(0deg) translateZ(100px); opacity: 0.6; }
+      60% { transform: translateZ(100px) scale(1.2); opacity: 0.8; }
+      100% { transform: translateZ(0) scale(1); opacity: 1; }
     }
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
     header {
-      background: var(--primary-color);
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background: var(--primary-color); padding: 15px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;
     }
-    .controls {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
+    .controls { display: flex; gap: 10px; align-items: center; }
     .controls button {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #fff;
-      color: var(--primary-color);
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px; background: #fff;
+      color: var(--primary-color); border: none; padding: 8px 16px; border-radius: 20px;
+      cursor: pointer; font-weight: 600; transition: all 0.2s;
     }
-    .controls button:hover {
-      background: #f0f0f0;
-      transform: translateY(-1px);
-    }
+    .controls button:hover { background: #f0f0f0; transform: translateY(-1px); }
     /* Botón de Ajustes */
     #settingsBtn {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
+      background: transparent; border: none; color: #fff;
+      font-size: 1.5rem; cursor: pointer;
     }
-    /* Modal de Registro / Inicio de sesión (Simulación de invitado) a pantalla completa */
+    /* Modal de Inicio de Sesión (Invitado) */
     .modal {
-      display: none;
-      position: fixed;
-      z-index: 10000;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #00dc64; /* Fondo verde */
-      color: white;
+      display: none; position: fixed; z-index: 10000; top: 0; left: 0;
+      width: 100%; height: 100%; background: #00dc64; color: white;
     }
     .modal-content {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; text-align: center; padding: 20px;
     }
-    .modal-content h2 {
-      margin-bottom: 10px;
-      font-size: 2rem;
-    }
-    .modal-content p {
-      margin-bottom: 20px;
-      font-size: 1.2rem;
-    }
+    .modal-content h2 { margin-bottom: 10px; font-size: 2rem; }
+    .modal-content p { margin-bottom: 20px; font-size: 1.2rem; }
     /* Botón de inicio de sesión */
     #lineLoginBtn {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      background: #fff;
-      color: #00dc64;
-      cursor: pointer;
+      padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px;
+      background: #fff; color: #00dc64; cursor: pointer;
     }
-    #lineLoginBtn:hover {
-      background: #f0f0f0;
-    }
-    /* Spinner */
+    #lineLoginBtn:hover { background: #f0f0f0; }
+    /* Spinner para inicio de sesión */
     .spinner {
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid #fff;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
+      border: 8px solid #f3f3f3; border-top: 8px solid #fff;
+      border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite;
       margin-bottom: 20px;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    /* Overlay para transición de idioma */
+    #langTransitionOverlay {
+      display: none; position: fixed; z-index: 10500; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.6);
+      overflow: hidden;
+    }
+    .lang-ball {
+      position: absolute; background: #fff; width: 40px; height: 40px;
+      border-radius: 50%; opacity: 0.9;
+    }
+    /* Animación para las bolitas */
+    @keyframes ballMoveLeft {
+      0% { left: -50px; top: 50%; transform: rotate(0deg); }
+      50% { left: 50%; top: 50%; transform: rotate(360deg); }
+      100% { left: 120%; top: 50%; transform: rotate(720deg); }
+    }
+    .animate-balls .ball-left {
+      animation: ballMoveLeft 2s ease-in-out forwards;
+    }
+    .animate-balls .ball-right {
+      animation: ballMoveLeft 2s ease-in-out forwards;
+      animation-direction: reverse;
+    }
+    /* Overlay para animación de escaneo (vista previa) */
+    #scanOverlay {
+      display: none; position: fixed; z-index: 10500; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.8) 80%);
+      opacity: 0; animation: scanEffect 5s forwards;
+    }
+    @keyframes scanEffect {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
     }
     /* Overlay de Selección de Idioma (Ajustes) */
     #settingsOverlay {
-      display: none;
-      position: fixed;
-      z-index: 11000;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--primary-color);
-      color: white;
-      padding-top: 100px;
-      text-align: center;
+      display: none; position: fixed; z-index: 11000; top: 0; left: 0;
+      width: 100%; height: 100%; background: var(--primary-color); color: white;
+      padding-top: 100px; text-align: center;
     }
-    #settingsOverlay h2 {
-      margin-bottom: 20px;
-      font-size: 2rem;
-    }
+    #settingsOverlay h2 { margin-bottom: 20px; font-size: 2rem; }
     .lang-option {
-      background: #fff;
-      color: var(--primary-color);
-      border: none;
-      padding: 10px 20px;
-      margin: 5px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.2s;
+      background: #fff; color: var(--primary-color); border: none;
+      padding: 10px 20px; margin: 5px; font-size: 16px; border-radius: 5px;
+      cursor: pointer; transition: background 0.2s;
     }
-    .lang-option:hover {
-      background: #f0f0f0;
-    }
+    .lang-option:hover { background: #f0f0f0; }
     /* Resto del editor */
     .editor-container {
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
+      max-width: 1200px; margin: 20px auto; padding: 0 20px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
     }
     .editor-area {
-      background: var(--editor-bg);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      overflow: hidden;
+      background: var(--editor-bg); border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden;
     }
     textarea {
-      width: 100%;
-      min-height: 300px;
-      padding: 20px;
-      border: none;
-      font-family: monospace;
-      font-size: 14px;
-      line-height: 1.6;
-      resize: vertical;
-      background: var(--editor-bg);
-      color: var(--text-color);
+      width: 100%; min-height: 300px; padding: 20px; border: none;
+      font-family: monospace; font-size: 14px; line-height: 1.6; resize: vertical;
+      background: var(--editor-bg); color: var(--text-color);
     }
-    textarea:focus {
-      outline: none;
-    }
+    textarea:focus { outline: none; }
     .preview-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--editor-bg);
-      z-index: 1000;
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; background: var(--editor-bg); z-index: 1000;
       animation: slideUp 0.3s ease;
     }
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     .preview-header {
-      background: var(--primary-color);
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #fff;
+      background: var(--primary-color); padding: 15px 20px;
+      display: flex; justify-content: space-between; align-items: center; color: #fff;
     }
     .preview-header button {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
+      background: transparent; border: none; color: #fff;
+      font-size: 1.5rem; cursor: pointer;
     }
     #previewFrame {
-      width: 100%;
-      height: calc(100% - 60px);
-      border: none;
-      background: var(--editor-bg);
+      width: 100%; height: calc(100% - 60px); border: none; background: var(--editor-bg);
     }
   </style>
 </head>
@@ -293,16 +182,25 @@
     <h1 class="logo">Clack</h1>
   </div>
 
-  <!-- Modal de Registro / Inicio de sesión (Simulación de invitado) -->
+  <!-- Modal de Inicio de Sesión (Invitado) -->
   <div id="loginModal" class="modal">
     <div class="modal-content" id="loginContent">
       <h2 id="modalTitle">Registro / Inicia sesión con LINE</h2>
-      <p id="modalDescription">Por ahora es una simulación. Inicia sesión como invitado.</p>
+      <p id="modalDescription">Inicia sesión como invitado.</p>
       <button id="lineLoginBtn">
         <i class="fa-brands fa-line"></i> <span id="loginBtnText">Iniciar sesión con LINE como invitado</span>
       </button>
     </div>
   </div>
+
+  <!-- Overlay para animación de transición de idioma -->
+  <div id="langTransitionOverlay">
+    <div class="lang-ball ball-left"></div>
+    <div class="lang-ball ball-right"></div>
+  </div>
+
+  <!-- Overlay para animación de escaneo (vista previa) -->
+  <div id="scanOverlay"></div>
 
   <!-- Overlay de Selección de Idioma (Ajustes) -->
   <div id="settingsOverlay">
@@ -345,12 +243,130 @@
   </div>
 
   <script>
+    // Variable global para almacenar el idioma actual (por defecto "es")
+    let currentLang = 'es';
+
+    // Diccionario de traducciones
+    const translations = {
+      en: {
+        modalTitle: "Register / Sign in with LINE",
+        modalDescription: "Sign in as a guest.",
+        loginButton: "Sign in with LINE as guest",
+        previewButton: "Preview",
+        htmlPlaceholder: "HTML...",
+        cssPlaceholder: "CSS...",
+        jsPlaceholder: "JavaScript...",
+        previewHeader: "Preview",
+        welcomeMessage: "Welcome to the application! Enjoy the software while applying your programming skills!"
+      },
+      es: {
+        modalTitle: "Registro / Inicia sesión con LINE",
+        modalDescription: "Inicia sesión como invitado.",
+        loginButton: "Iniciar sesión con LINE como invitado",
+        previewButton: "Vista Previa",
+        htmlPlaceholder: "HTML...",
+        cssPlaceholder: "CSS...",
+        jsPlaceholder: "JavaScript...",
+        previewHeader: "Vista Previa",
+        welcomeMessage: "¡Bienvenido a la aplicación! Disfruta del software implementando tus conocimientos de Programación!"
+      },
+      ja: {
+        modalTitle: "登録 / LINEでサインイン",
+        modalDescription: "ゲストとしてサインインしてください。",
+        loginButton: "ゲストとしてLINEでサインイン",
+        previewButton: "プレビュー",
+        htmlPlaceholder: "HTML...",
+        cssPlaceholder: "CSS...",
+        jsPlaceholder: "JavaScript...",
+        previewHeader: "プレビュー",
+        welcomeMessage: "アプリへようこそ！プログラミングスキルを活かしてソフトウェアをお楽しみください！"
+      },
+      ko: {
+        modalTitle: "등록 / LINE으로 로그인",
+        modalDescription: "게스트로 로그인하세요.",
+        loginButton: "게스트로 LINE으로 로그인",
+        previewButton: "미리보기",
+        htmlPlaceholder: "HTML...",
+        cssPlaceholder: "CSS...",
+        jsPlaceholder: "JavaScript...",
+        previewHeader: "미리보기",
+        welcomeMessage: "애플리케이션에 오신 것을 환영합니다! 프로그래밍 지식을 활용하여 소프트웨어를 즐기세요!"
+      },
+      vi: {
+        modalTitle: "Đăng ký / Đăng nhập bằng LINE",
+        modalDescription: "Đăng nhập với tư cách khách mời.",
+        loginButton: "Đăng nhập bằng LINE với tư cách khách mời",
+        previewButton: "Xem trước",
+        htmlPlaceholder: "HTML...",
+        cssPlaceholder: "CSS...",
+        jsPlaceholder: "JavaScript...",
+        previewHeader: "Xem trước",
+        welcomeMessage: "Chào mừng bạn đến với ứng dụng! Hãy tận hưởng phần mềm và áp dụng kiến thức lập trình của bạn!"
+      },
+      zh: {
+        modalTitle: "注册 / 使用 LINE 登录",
+        modalDescription: "以访客身份登录。",
+        loginButton: "以访客身份使用 LINE 登录",
+        previewButton: "预览",
+        htmlPlaceholder: "HTML...",
+        cssPlaceholder: "CSS...",
+        jsPlaceholder: "JavaScript...",
+        previewHeader: "预览",
+        welcomeMessage: "欢迎使用本应用！尽情享受软件，并应用你的编程知识！"
+      }
+    };
+
+    // Función para actualizar los textos de la interfaz según el idioma seleccionado
+    function updateLanguage(lang) {
+      currentLang = lang;
+      const t = translations[lang];
+      document.getElementById('modalTitle').innerHTML = t.modalTitle;
+      document.getElementById('modalDescription').innerHTML = t.modalDescription;
+      document.getElementById('loginBtnText').textContent = t.loginButton;
+      document.getElementById('previewBtnText').textContent = t.previewButton;
+      document.getElementById('previewHeaderText').textContent = t.previewHeader;
+      document.getElementById('htmlEditor').placeholder = t.htmlPlaceholder;
+      document.getElementById('cssEditor').placeholder = t.cssPlaceholder;
+      document.getElementById('jsEditor').placeholder = t.jsPlaceholder;
+      // Ejecutamos la animación de transición de idioma
+      runLangTransitionAnimation();
+      document.getElementById('settingsOverlay').style.display = 'none';
+    }
+
+    // Función para la animación de transición de idioma (dos bolitas giratorias)
+    function runLangTransitionAnimation() {
+      const overlay = document.getElementById('langTransitionOverlay');
+      overlay.style.display = 'block';
+      overlay.classList.add('animate-balls');
+      // Agregar clase para animar cada bolita
+      const balls = overlay.querySelectorAll('.lang-ball');
+      balls.forEach(ball => ball.classList.add(ball.classList.contains('ball-left') ? 'animate-balls' : 'animate-balls'));
+      // Finaliza la animación después de 2 segundos
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        overlay.classList.remove('animate-balls');
+        balls.forEach(ball => ball.classList.remove('animate-balls'));
+      }, 2000);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      // Sonidos y animación intro
+      // Elementos básicos e intro
       const intro = document.querySelector('.intro');
       const codeEffect = document.querySelector('.code-effect');
       const loginModal = document.getElementById('loginModal');
       const loginContent = document.getElementById('loginContent');
+      const settingsBtn = document.getElementById('settingsBtn');
+      const settingsOverlay = document.getElementById('settingsOverlay');
+      const previewBtn = document.getElementById('previewBtn');
+      const themeBtn = document.getElementById('themeBtn');
+      const closePreview = document.getElementById('closePreview');
+      const previewFrame = document.getElementById('previewFrame');
+      const htmlEditor = document.getElementById('htmlEditor');
+      const cssEditor = document.getElementById('cssEditor');
+      const jsEditor = document.getElementById('jsEditor');
+      const scanOverlay = document.getElementById('scanOverlay');
+
+      // Sonidos (intro, tipeo, etc.)
       const introSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/wAVlZWVlZWVlZWVlZWVlZWVlZWVlZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2v7+/v7+/v7+/v7+/v7+/v7+/v7//////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAGgAAAAEAAAMYAAQGAkNhAAAQJAADBhgAABUWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
 
       const typeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA+UAVlZWVlZWVlZWVlZWVlZWVlZWVlZ8fHx8fHx8fHx8fHx8fHx8fHx8fHx8zMzMzMzMzMzMzMzMzMzMzMzMzMzM////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAAN4AAQIBAMDAAAABQ4AAAMGGAAAFhYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
@@ -363,28 +379,18 @@
       function generateRandomCode() {
         let code = '';
         const characters = '01';
-        for(let i = 0; i < 1000; i++) {
+        for (let i = 0; i < 1000; i++) {
           code += characters[Math.floor(Math.random() * characters.length)];
         }
         return code;
       }
       codeEffect.textContent = generateRandomCode();
 
-      // Al finalizar el intro, ocultamos el overlay y mostramos el modal de login
+      // Al finalizar el intro, ocultamos el overlay de intro y mostramos el modal de inicio
       setTimeout(() => {
         intro.style.animation = 'fadeOut 1s forwards';
         loginModal.style.display = 'block';
       }, 2500);
-
-      // Código original del editor
-      const htmlEditor = document.getElementById('htmlEditor');
-      const cssEditor = document.getElementById('cssEditor');
-      const jsEditor = document.getElementById('jsEditor');
-      const previewBtn = document.getElementById('previewBtn');
-      const themeBtn = document.getElementById('themeBtn');
-      const previewOverlay = document.getElementById('previewOverlay');
-      const closePreview = document.getElementById('closePreview');
-      const previewFrame = document.getElementById('previewFrame');
 
       // Sonido al escribir en los editores
       [htmlEditor, cssEditor, jsEditor].forEach(editor => {
@@ -397,162 +403,69 @@
 
       themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        themeBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        themeBtn.innerHTML = document.body.classList.contains('dark-mode')
+          ? '<i class="fa-solid fa-sun"></i>'
+          : '<i class="fa-solid fa-moon"></i>';
       });
 
       previewBtn.addEventListener('click', () => {
+        // Activamos la animación de escaneo
+        scanOverlay.style.display = 'block';
         executeSound.play();
-        previewOverlay.style.display = 'block';
-        const combinedCode = `
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="UTF-8">
-              <style>${cssEditor.value}</style>
-            </head>
-            <body>
-              ${htmlEditor.value}
-              <script>${jsEditor.value}<\/script>
-            </body>
-          </html>
-        `;
-        previewFrame.srcdoc = combinedCode;
+        // Después de 5 segundos, ocultamos el overlay de escaneo y mostramos la vista previa
+        setTimeout(() => {
+          scanOverlay.style.display = 'none';
+          document.getElementById('previewOverlay').style.display = 'block';
+          const combinedCode = `
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <meta charset="UTF-8">
+                <style>${cssEditor.value}</style>
+              </head>
+              <body>
+                ${htmlEditor.value}
+                <script>${jsEditor.value}<\/script>
+              </body>
+            </html>
+          `;
+          previewFrame.srcdoc = combinedCode;
+        }, 5000);
       });
 
       closePreview.addEventListener('click', () => {
-        previewOverlay.style.display = 'none';
+        document.getElementById('previewOverlay').style.display = 'none';
       });
 
-      // Configuración para el overlay de ajustes (selección de idioma)
-      const settingsBtn = document.getElementById('settingsBtn');
-      const settingsOverlay = document.getElementById('settingsOverlay');
-
+      // Mostrar overlay de ajustes al hacer clic en el botón de ajustes
       settingsBtn.addEventListener('click', () => {
         settingsOverlay.style.display = 'block';
       });
 
-      // Diccionario de traducciones
-      const translations = {
-        en: {
-          modalTitle: "Register / Sign in with LINE",
-          modalDescription: "For now it's a simulation. Sign in as a guest.",
-          loginButton: "Sign in with LINE as guest",
-          previewButton: "Preview",
-          htmlPlaceholder: "HTML...",
-          cssPlaceholder: "CSS...",
-          jsPlaceholder: "JavaScript...",
-          previewHeader: "Preview",
-          welcomeMessage: "Welcome to the application! Enjoy the software while applying your programming skills!"
-        },
-        es: {
-          modalTitle: "Registro / Inicia sesión con LINE",
-          modalDescription: "Por ahora es una simulación. Inicia sesión como invitado.",
-          loginButton: "Iniciar sesión con LINE como invitado",
-          previewButton: "Vista Previa",
-          htmlPlaceholder: "HTML...",
-          cssPlaceholder: "CSS...",
-          jsPlaceholder: "JavaScript...",
-          previewHeader: "Vista Previa",
-          welcomeMessage: "¡Bienvenido a la aplicación! Disfruta del software implementando tus conocimientos de Programación!"
-        },
-        ja: {
-          modalTitle: "登録 / LINEでサインイン",
-          modalDescription: "これはシミュレーションです。ゲストとしてサインインしてください。",
-          loginButton: "ゲストとしてLINEでサインイン",
-          previewButton: "プレビュー",
-          htmlPlaceholder: "HTML...",
-          cssPlaceholder: "CSS...",
-          jsPlaceholder: "JavaScript...",
-          previewHeader: "プレビュー",
-          welcomeMessage: "アプリへようこそ！プログラミングスキルを活かしてソフトウェアをお楽しみください！"
-        },
-        ko: {
-          modalTitle: "등록 / LINE으로 로그인",
-          modalDescription: "현재는 시뮬레이션입니다. 게스트로 로그인하세요.",
-          loginButton: "게스트로 LINE으로 로그인",
-          previewButton: "미리보기",
-          htmlPlaceholder: "HTML...",
-          cssPlaceholder: "CSS...",
-          jsPlaceholder: "JavaScript...",
-          previewHeader: "미리보기",
-          welcomeMessage: "애플리케이션에 오신 것을 환영합니다! 프로그래밍 지식을 활용하여 소프트웨어를 즐기세요!"
-        },
-        vi: {
-          modalTitle: "Đăng ký / Đăng nhập bằng LINE",
-          modalDescription: "Hiện tại đây là một mô phỏng. Đăng nhập với tư cách khách mời.",
-          loginButton: "Đăng nhập bằng LINE với tư cách khách mời",
-          previewButton: "Xem trước",
-          htmlPlaceholder: "HTML...",
-          cssPlaceholder: "CSS...",
-          jsPlaceholder: "JavaScript...",
-          previewHeader: "Xem trước",
-          welcomeMessage: "Chào mừng bạn đến với ứng dụng! Hãy tận hưởng phần mềm và áp dụng kiến thức lập trình của bạn!"
-        },
-        zh: {
-          modalTitle: "注册 / 使用 LINE 登录",
-          modalDescription: "目前这是一个模拟。请以访客身份登录。",
-          loginButton: "以访客身份使用 LINE 登录",
-          previewButton: "预览",
-          htmlPlaceholder: "HTML...",
-          cssPlaceholder: "CSS...",
-          jsPlaceholder: "JavaScript...",
-          previewHeader: "预览",
-          welcomeMessage: "欢迎使用本应用！尽情享受软件，并应用你的编程知识！"
-        }
-      };
-
-      // Función para actualizar la interfaz según el idioma seleccionado
-      function updateLanguage(lang) {
-        const t = translations[lang];
-        document.getElementById('modalTitle').innerHTML = t.modalTitle;
-        document.getElementById('modalDescription').innerHTML = t.modalDescription;
-        document.getElementById('loginBtnText').textContent = t.loginButton;
-        document.getElementById('previewBtnText').textContent = t.previewButton;
-        document.getElementById('previewHeaderText').textContent = t.previewHeader;
-        htmlEditor.placeholder = t.htmlPlaceholder;
-        cssEditor.placeholder = t.cssPlaceholder;
-        jsEditor.placeholder = t.jsPlaceholder;
-        settingsOverlay.style.display = 'none';
-      }
-
       // Asignar evento a cada opción de idioma
       document.querySelectorAll('.lang-option').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          const selectedLang = e.target.getAttribute('data-lang');
-          updateLanguage(selectedLang);
+          updateLanguage(e.target.getAttribute('data-lang'));
         });
       });
 
       // Función de inicio de sesión simulada
       function loginSimulated() {
-        // Reemplazamos el contenido del modal con un spinner
+        // Reemplazamos el contenido del modal por el spinner y mensaje
         loginContent.innerHTML = '<div class="spinner"></div><p>Iniciando sesión...</p>';
-        // Simulamos un retardo de 3 segundos
+        // Después de 3 segundos, actualizamos el contenido con el mensaje de bienvenida
         setTimeout(() => {
-          // Recuperamos el idioma actual para obtener el mensaje de bienvenida
-          let currentLang = 'es';
-          // Buscamos si se ha seleccionado otro idioma revisando el título del modal
-          if (document.getElementById('modalTitle').textContent.indexOf("Sign in") !== -1) {
-            currentLang = 'en';
-          } else if (document.getElementById('modalTitle').textContent.indexOf("サインイン") !== -1) {
-            currentLang = 'ja';
-          } else if (document.getElementById('modalTitle').textContent.indexOf("로그인") !== -1) {
-            currentLang = 'ko';
-          } else if (document.getElementById('modalTitle').textContent.indexOf("Đăng") !== -1) {
-            currentLang = 'vi';
-          } else if (document.getElementById('modalTitle').textContent.indexOf("登录") !== -1) {
-            currentLang = 'zh';
-          }
-          const welcomeMsg = translations[currentLang].welcomeMessage;
-          // Actualizamos el modal con el mensaje de bienvenida
-          loginContent.innerHTML = `<h2>Bienvenido a la aplicación!</h2><p>${welcomeMsg}</p>`;
+          loginContent.innerHTML = `<h2>${translations[currentLang].welcomeMessage.split("!")[0]}!</h2>
+                                    <p>${translations[currentLang].welcomeMessage}</p>`;
+          // Después de 2 segundos, ocultamos el modal para desbloquear la interfaz
+          setTimeout(() => {
+            loginModal.style.display = 'none';
+          }, 2000);
         }, 3000);
       }
 
       // Asociar el evento al botón de inicio de sesión
-      const loginBtn = document.getElementById("lineLoginBtn");
-      loginBtn.addEventListener("click", loginSimulated);
+      document.getElementById("lineLoginBtn").addEventListener("click", loginSimulated);
     });
   </script>
 </body>
