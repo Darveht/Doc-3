@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clack</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Fuentes e íconos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
+    /* Variables y reset */
     :root {
       --primary-color: #00dc64;
       --bg-color: #f8f9fa;
@@ -24,19 +27,28 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Poppins', sans-serif;
-      background: #00dc64;
+      background: var(--primary-color);
       color: var(--text-color);
       min-height: 100vh;
       overflow-x: hidden;
+      max-width: 100%;
     }
-    /* Intro Animation */
+    /* Responsividad */
+    @media (max-width: 768px) {
+      .editor-container {
+        grid-template-columns: 1fr;
+        padding: 0 10px;
+      }
+    }
+    /* Intro y animaciones */
     .intro {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: #00dc64; display: flex; justify-content: center; align-items: center;
+      background: var(--primary-color);
+      display: flex; justify-content: center; align-items: center;
       z-index: 9999; perspective: 1000px;
     }
     .logo {
-      font-size: 5rem; color: white; text-transform: uppercase; font-weight: bold;
+      font-size: 5rem; color: #fff; text-transform: uppercase; font-weight: bold;
       opacity: 0; animation: logoReveal 2.5s forwards; transform-style: preserve-3d;
     }
     .code-effect {
@@ -51,27 +63,60 @@
       100% { transform: translateZ(0) scale(1); opacity: 1; }
     }
     @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+    /* Header y controles */
     header {
-      background: var(--primary-color); padding: 15px 20px;
-      display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;
+      background: var(--primary-color);
+      padding: 5px 20px; /* Se reduce el padding vertical para que la barra no esté tan expandida */
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+      position: sticky; top: 0; 
+      z-index: 100;
     }
-    .controls { display: flex; gap: 10px; align-items: center; }
+    header h1 {
+      margin: 0;
+      line-height: 1;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .controls { 
+      display: flex; 
+      gap: 10px; 
+      align-items: center; 
+    }
     .controls button {
-      display: flex; align-items: center; gap: 6px; background: #fff;
-      color: var(--primary-color); border: none; padding: 8px 16px; border-radius: 20px;
-      cursor: pointer; font-weight: 600; transition: all 0.2s;
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+      background: #fff;
+      color: var(--primary-color); 
+      border: none; 
+      padding: 6px 16px; /* Se reduce el padding para mayor compactación */
+      border-radius: 20px;
+      cursor: pointer; 
+      font-weight: 600; 
+      transition: all 0.2s;
     }
-    .controls button:hover { background: #f0f0f0; transform: translateY(-1px); }
-    /* Botón de Ajustes y Notificaciones */
-    #settingsBtn, #notificationBtn {
-      background: transparent; border: none; color: #fff;
-      font-size: 1.5rem; cursor: pointer;
+    .controls button:hover { 
+      background: #f0f0f0; 
+      transform: translateY(-1px); 
     }
-    /* Modal de Inicio de Sesión (Invitado) */
+    /* Ajuste específico para los íconos en el header */
+    #settingsBtn, #notificationBtn, #searchBtn {
+      background: transparent; 
+      border: none; 
+      color: #fff; 
+      font-size: 1.5rem; 
+      cursor: pointer;
+      padding: 0; /* Se elimina el padding extra en estos botones */
+    }
+    /* Modal de login */
     .modal {
       display: none; position: fixed; z-index: 10000; top: 0; left: 0;
-      width: 100%; height: 100%; background: #00dc64; color: white;
+      width: 100%; height: 100%; background: var(--primary-color); color: #fff;
     }
     .modal-content {
       width: 100%; height: 100%; display: flex; flex-direction: column;
@@ -79,34 +124,26 @@
     }
     .modal-content h2 { margin-bottom: 10px; font-size: 2rem; }
     .modal-content p { margin-bottom: 20px; font-size: 1.2rem; }
-    /* Botón de inicio de sesión */
-    #lineLoginBtn {
+    #lineLoginBtn, #changeLangBtn {
       padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px;
-      background: #fff; color: #00dc64; cursor: pointer;
+      background: #fff; color: var(--primary-color); cursor: pointer;
+      margin-top: 10px;
     }
-    #lineLoginBtn:hover { background: #f0f0f0; }
-    /* Botón para cambiar idioma en el modal de registro */
-    #changeLangBtn {
-      margin-top: 10px; padding: 8px 16px; font-size: 14px; border: none;
-      border-radius: 5px; background: #fff; color: #00dc64; cursor: pointer;
-    }
-    #changeLangBtn:hover { background: #f0f0f0; }
-    /* Spinner para inicio de sesión */
+    #lineLoginBtn:hover, #changeLangBtn:hover { background: #f0f0f0; }
+    /* Spinner */
     .spinner {
       border: 8px solid #f3f3f3; border-top: 8px solid #fff;
       border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite;
       margin-bottom: 20px;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    /* Overlay para transición de idioma: dos bolitas giratorias */
+    /* Overlay transición idioma */
     #langTransitionOverlay {
       display: none; position: fixed; z-index: 10500; top: 0; left: 0;
-      width: 100%; height: 100%; background: rgba(0,0,0,0.6);
-      overflow: hidden;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.6); overflow: hidden;
     }
     .lang-ball {
-      position: absolute; background: #fff; width: 40px; height: 40px;
-      border-radius: 50%; opacity: 0.9;
+      position: absolute; background: #fff; width: 40px; height: 40px; border-radius: 50%; opacity: 0.9;
     }
     .ball-left { top: 50%; left: -50px; }
     .ball-right { top: 50%; right: -50px; }
@@ -122,7 +159,7 @@
     }
     .animate-left { animation: ballLeftAnim 2s ease-in-out forwards; }
     .animate-right { animation: ballRightAnim 2s ease-in-out forwards; }
-    /* Overlay para animación de escaneo (vista previa) */
+    /* Overlay scan (vista previa) */
     #scanOverlay {
       display: none; position: fixed; z-index: 10500; top: 0; left: 0;
       width: 100%; height: 100%;
@@ -130,25 +167,22 @@
       opacity: 0; animation: scanEffect 5s forwards;
     }
     @keyframes scanEffect {
-      0% { opacity: 0; }
-      20% { opacity: 1; }
-      80% { opacity: 1; }
-      100% { opacity: 0; }
+      0% { opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; }
     }
-    /* Overlay de Selección de Idioma (Ajustes) */
+    /* Overlay Ajustes (Idiomas) */
     #settingsOverlay {
       display: none; position: fixed; z-index: 11000; top: 0; left: 0;
-      width: 100%; height: 100%; background: var(--primary-color); color: white;
+      width: 100%; height: 100%; background: var(--primary-color); color: #fff;
       padding-top: 100px; text-align: center;
     }
     #settingsOverlay h2 { margin-bottom: 20px; font-size: 2rem; }
     .lang-option {
       background: #fff; color: var(--primary-color); border: none;
-      padding: 10px 20px; margin: 5px; font-size: 16px; border-radius: 5px;
-      cursor: pointer; transition: background 0.2s;
+      padding: 10px 20px; margin: 5px; font-size: 16px; border-radius: 5px; cursor: pointer;
+      transition: background 0.2s;
     }
     .lang-option:hover { background: #f0f0f0; }
-    /* Floating update popup (anuncio) */
+    /* Floating update popup */
     #updatePopup {
       position: fixed; bottom: 20px; right: 20px;
       background: #fff; color: var(--primary-color);
@@ -157,30 +191,25 @@
       cursor: pointer; z-index: 12000; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
     #updatePopup.hidden { display: none; }
-    /* Panel de Notificaciones a pantalla completa */
+    /* Panel de Notificaciones */
     #notificationPanel {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: var(--bg-color); color: var(--text-color);
-      z-index: 13000; display: none; flex-direction: column;
-      overflow-y: auto;
+      z-index: 13000; display: none; flex-direction: column; overflow-y: auto;
     }
     .notification-header {
       background: var(--primary-color); padding: 15px 20px;
-      display: flex; justify-content: space-between; align-items: center;
-      color: #fff;
+      display: flex; justify-content: space-between; align-items: center; color: #fff;
     }
-    .notification-list {
-      padding: 20px;
-    }
+    .notification-list { padding: 20px; }
     .notification-item {
       background: #fff; border: 1px solid var(--primary-color);
       border-radius: 5px; padding: 10px; margin-bottom: 10px;
     }
     #closeNotificationPanel {
-      background: transparent; border: none; color: #fff;
-      font-size: 1.5rem; cursor: pointer;
+      background: transparent; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;
     }
-    /* Resto del editor */
+    /* Editor */
     .editor-container {
       max-width: 1200px; margin: 20px auto; padding: 0 20px;
       display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
@@ -206,11 +235,126 @@
       display: flex; justify-content: space-between; align-items: center; color: #fff;
     }
     .preview-header button {
-      background: transparent; border: none; color: #fff;
-      font-size: 1.5rem; cursor: pointer;
+      background: transparent; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;
     }
     #previewFrame {
       width: 100%; height: calc(100% - 60px); border: none; background: var(--editor-bg);
+    }
+    /* Validación HTML */
+    .html-error { border: 2px solid yellow; }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+    .shake { animation: shake 0.5s; }
+    /* BUSQUEDA: Estilo moderno (inspirado en TikTok) */
+    #searchOverlay {
+      display: none; position: fixed; z-index: 14000; top: 0; left: 0;
+      width: 100%; height: 100%; background: var(--bg-color); color: var(--text-color);
+      overflow-y: auto; padding: 20px;
+    }
+    .search-top-bar {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    }
+    .search-top-bar i { font-size: 1.5rem; cursor: pointer; }
+    .search-top-bar input {
+      flex: 1; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;
+      background: var(--editor-bg); color: var(--text-color);
+    }
+    .search-top-bar button {
+      background: var(--primary-color); color: #fff; border: none; padding: 10px 20px;
+      border-radius: 5px; cursor: pointer; font-weight: 600;
+    }
+    /* Recientes y Tendencias */
+    .recent-searches { margin-bottom: 20px; }
+    .recent-searches h3 { font-size: 1.2rem; margin-bottom: 10px; }
+    .recent-searches ul { list-style: none; padding-left: 0; }
+    .recent-searches li {
+      cursor: pointer; padding: 5px; border-bottom: 1px solid #ddd;
+    }
+    .trending { margin-bottom: 20px; }
+    .trending h3 { font-size: 1.2rem; margin-bottom: 10px; }
+    .trending ul { list-style: none; padding-left: 0; }
+    .trending li {
+      cursor: pointer; padding: 5px; border-bottom: 1px solid #ddd;
+    }
+    /* Resultados de búsqueda */
+    .search-results {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;
+    }
+    .video-card {
+      background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid #ccc;
+      display: flex; flex-direction: column;
+    }
+    .video-card img { width: 100%; height: auto; }
+    .video-info { padding: 10px; }
+    .video-info h3 { font-size: 1rem; margin: 0 0 5px 0; color: #333; }
+    .video-actions {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px; border-top: 1px solid #ccc;
+    }
+    .video-actions button {
+      background: var(--primary-color); color: #fff; border: none; padding: 5px 10px;
+      border-radius: 5px; cursor: pointer; font-size: 0.9rem;
+    }
+    /* Alternador Videos / Artículos */
+    .search-toggle { display: flex; gap: 10px; margin-bottom: 20px; }
+    .search-toggle button {
+      flex: 1; padding: 10px; border: 1px solid var(--primary-color);
+      border-radius: 5px; background: #fff; color: var(--primary-color); cursor: pointer;
+      font-weight: 600;
+    }
+    .search-toggle button.active {
+      background: var(--primary-color); color: #fff;
+    }
+    /* Reproductor de video a pantalla completa */
+    #videoPlayerOverlay {
+      display: none; position: fixed; z-index: 15000; top: 0; left: 0;
+      width: 100%; height: 100%; background: #fff; flex-direction: column;
+      padding: 20px;
+    }
+    #videoPlayerOverlay iframe {
+      width: 100%; max-width: 1000px; height: 60vh; margin: 0 auto;
+    }
+    .video-player-actions {
+      margin-top: 20px; display: flex; gap: 10px; justify-content: center; align-items: center;
+    }
+    .video-player-actions button {
+      background: var(--primary-color); border: none; padding: 10px 20px;
+      border-radius: 5px; cursor: pointer; font-size: 1rem; color: #fff;
+    }
+    /* Animación Like */
+    .like-animation {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); font-size: 5rem; color: red;
+      opacity: 0; animation: likePop 0.8s forwards; pointer-events: none;
+    }
+    @keyframes likePop {
+      0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+    }
+    /* Modal Reportar Video */
+    #reportModal {
+      display: none; position: fixed; z-index: 16000; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.8);
+      justify-content: center; align-items: center; color: #fff; padding: 20px;
+    }
+    #reportModal .modal-content {
+      background: #fff; color: #333; width: 100%; max-width: 500px; padding: 20px;
+      border-radius: 8px;
+    }
+    #reportModal h3 { margin-bottom: 10px; }
+    #reportModal label { display: block; margin: 10px 0 5px; }
+    #reportModal textarea {
+      width: 100%; min-height: 80px; padding: 10px; resize: vertical;
+    }
+    #reportModal button {
+      background: var(--primary-color); color: #fff; border: none;
+      padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;
     }
   </style>
 </head>
@@ -221,29 +365,29 @@
     <h1 class="logo">Clack</h1>
   </div>
 
-  <!-- Modal de Inicio de Sesión (Invitado) -->
+  <!-- Modal Login -->
   <div id="loginModal" class="modal">
     <div class="modal-content" id="loginContent">
       <h2 id="modalTitle">Registro / Inicia sesión con LINE</h2>
       <p id="modalDescription">Inicia sesión como invitado.</p>
       <button id="lineLoginBtn">
-        <i class="fa-brands fa-line"></i> <span id="loginBtnText">Iniciar sesión con LINE como invitado</span>
+        <i class="fa-brands fa-line"></i>
+        <span id="loginBtnText">Iniciar sesión con LINE como invitado</span>
       </button>
-      <!-- Botón para cambiar idioma en la página de registro -->
       <button id="changeLangBtn">Cambiar Idioma</button>
     </div>
   </div>
 
-  <!-- Overlay para transición de idioma -->
+  <!-- Overlay transición idioma -->
   <div id="langTransitionOverlay">
     <div class="lang-ball ball-left"></div>
     <div class="lang-ball ball-right"></div>
   </div>
 
-  <!-- Overlay para animación de escaneo (vista previa) -->
+  <!-- Overlay Scan (Vista Previa) -->
   <div id="scanOverlay"></div>
 
-  <!-- Overlay de Selección de Idioma (Ajustes) -->
+  <!-- Overlay Ajustes (Idiomas) -->
   <div id="settingsOverlay">
     <h2>Selecciona tu idioma</h2>
     <button class="lang-option" data-lang="ja">日本語</button>
@@ -254,34 +398,34 @@
     <button class="lang-option" data-lang="zh">中文</button>
   </div>
 
-  <!-- Floating update popup (anuncio) -->
+  <!-- Floating Update Popup -->
   <div id="updatePopup" class="hidden">
     <i class="fa-solid fa-flag"></i>
     <span id="updateText">¡La aplicación se ha actualizado!</span>
   </div>
 
-  <!-- Panel de Notificaciones a pantalla completa -->
+  <!-- Panel de Notificaciones -->
   <div id="notificationPanel">
     <div class="notification-header">
       <h2 id="notificationPanelTitle">Notificaciones</h2>
       <button id="closeNotificationPanel"><i class="fa-solid fa-times"></i></button>
     </div>
-    <div id="notificationList" class="notification-list">
-      <!-- Aquí se cargarán las notificaciones -->
-    </div>
+    <div id="notificationList" class="notification-list"></div>
   </div>
 
+  <!-- Header -->
   <header>
     <h1><i class="fa-solid fa-code"></i> Clack</h1>
     <div class="controls">
       <button id="previewBtn"><i class="fa-solid fa-eye"></i> <span id="previewBtnText">Vista Previa</span></button>
       <button id="themeBtn"><i class="fa-solid fa-moon"></i></button>
-      <!-- Icono de Notificaciones junto al de Ajustes -->
+      <button id="searchBtn" title="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
       <button id="notificationBtn" title="Notificaciones"><i class="fa-solid fa-bell"></i></button>
       <button id="settingsBtn" title="Ajustes"><i class="fa-solid fa-gear"></i></button>
     </div>
   </header>
 
+  <!-- Editor -->
   <div class="editor-container">
     <div class="editor-area">
       <textarea id="htmlEditor" placeholder="HTML..."></textarea>
@@ -294,6 +438,7 @@
     </div>
   </div>
 
+  <!-- Vista Previa -->
   <div id="previewOverlay" class="preview-overlay">
     <div class="preview-header">
       <h2 id="previewHeaderText">Vista Previa</h2>
@@ -302,97 +447,122 @@
     <iframe id="previewFrame"></iframe>
   </div>
 
-  <script>
-    /* Variable global para idioma actual (por defecto "es") */
-    let currentLang = localStorage.getItem('currentLang') || 'es';
+  <!-- Overlay de Búsqueda (Estilo TikTok) -->
+  <div id="searchOverlay">
+    <div class="search-top-bar">
+      <i class="fa-solid fa-arrow-left" id="closeSearchOverlay"></i>
+      <input type="text" id="searchInput" placeholder="Buscar videos o artículos..." />
+      <button id="searchExecuteBtn"></button>
+    </div>
+    <!-- Alternador entre Videos y Artículos -->
+    <div class="search-toggle">
+      <button id="toggleVideos" class="active">Videos</button>
+      <button id="toggleArticles">Artículos</button>
+    </div>
+    <!-- Sección de búsquedas recientes -->
+    <div class="recent-searches">
+      <h3>Búsquedas recientes</h3>
+      <ul id="recentList"></ul>
+    </div>
+    <!-- Sección de tendencias -->
+    <div class="trending">
+      <h3>Tendencias</h3>
+      <ul id="trendingList"></ul>
+    </div>
+    <!-- Resultados -->
+    <div id="searchSpinner" class="search-spinner" style="display:none;"></div>
+    <div id="searchResults" class="search-results"></div>
+  </div>
 
-    /* Diccionario de traducciones */
-    const translations = {
-      en: {
-        modalTitle: "Register / Sign in with LINE",
-        modalDescription: "Sign in as a guest.",
-        loginButton: "Sign in with LINE as guest",
-        previewButton: "Preview",
-        htmlPlaceholder: "HTML...",
-        cssPlaceholder: "CSS...",
-        jsPlaceholder: "JavaScript...",
-        previewHeader: "Preview",
-        welcomeMessage: "Welcome to the application! Enjoy the software while applying your programming skills!",
-        notificationUpdate: "The application has been updated!",
-        notificationPanelTitle: "Notifications"
-      },
-      es: {
-        modalTitle: "Registro / Inicia sesión con LINE",
-        modalDescription: "Inicia sesión como invitado.",
-        loginButton: "Iniciar sesión con LINE como invitado",
-        previewButton: "Vista Previa",
-        htmlPlaceholder: "HTML...",
-        cssPlaceholder: "CSS...",
-        jsPlaceholder: "JavaScript...",
-        previewHeader: "Vista Previa",
-        welcomeMessage: "¡Bienvenido a la aplicación! Disfruta del software implementando tus conocimientos de Programación!",
-        notificationUpdate: "¡La aplicación se ha actualizado!",
-        notificationPanelTitle: "Notificaciones"
-      },
-      ja: {
-        modalTitle: "登録 / LINEでサインイン",
-        modalDescription: "ゲストとしてサインインしてください。",
-        loginButton: "ゲストとしてLINEでサインイン",
-        previewButton: "プレビュー",
-        htmlPlaceholder: "HTML...",
-        cssPlaceholder: "CSS...",
-        jsPlaceholder: "JavaScript...",
-        previewHeader: "プレビュー",
-        welcomeMessage: "アプリへようこそ！プログラミングスキルを活かしてソフトウェアをお楽しみください！",
-        notificationUpdate: "アプリが更新されました！",
-        notificationPanelTitle: "通知"
-      },
-      ko: {
-        modalTitle: "등록 / LINE으로 로그인",
-        modalDescription: "게스트로 로그인하세요.",
-        loginButton: "게스트로 LINE으로 로그인",
-        previewButton: "미리보기",
-        htmlPlaceholder: "HTML...",
-        cssPlaceholder: "CSS...",
-        jsPlaceholder: "JavaScript...",
-        previewHeader: "미리보기",
-        welcomeMessage: "애플리케이션에 오신 것을 환영합니다! 프로그래밍 지식을 활용하여 소프트웨어를 즐기세요!",
-        notificationUpdate: "애플리케이션이 업데이트되었습니다!",
-        notificationPanelTitle: "알림"
-      },
-      vi: {
-        modalTitle: "Đăng ký / Đăng nhập bằng LINE",
-        modalDescription: "Đăng nhập với tư cách khách mời.",
-        loginButton: "Đăng nhập bằng LINE với tư cách khách mời",
-        previewButton: "Xem trước",
-        htmlPlaceholder: "HTML...",
-        cssPlaceholder: "CSS...",
-        jsPlaceholder: "JavaScript...",
-        previewHeader: "Xem trước",
-        welcomeMessage: "Chào mừng bạn đến với ứng dụng! Hãy tận hưởng phần mềm và áp dụng kiến thức lập trình của bạn!",
-        notificationUpdate: "Ứng dụng đã được cập nhật!",
-        notificationPanelTitle: "Thông báo"
-      },
-      zh: {
-        modalTitle: "注册 / 使用 LINE 登录",
-        modalDescription: "以访客身份登录。",
-        loginButton: "以访客身份使用 LINE 登录",
-        previewButton: "预览",
-        htmlPlaceholder: "HTML...",
-        cssPlaceholder: "CSS...",
-        jsPlaceholder: "JavaScript...",
-        previewHeader: "预览",
-        welcomeMessage: "欢迎使用本应用！尽情享受软件，并应用你的编程知识！",
-        notificationUpdate: "应用已更新！",
-        notificationPanelTitle: "通知"
-      }
+  <!-- Overlay Reproductor de Video -->
+  <div id="videoPlayerOverlay">
+    <!-- Contenedor superior (fondo blanco) para el video -->
+    <div style="background:#fff; padding:20px; width:100%;">
+      <iframe id="videoPlayerFrame" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <!-- Acciones: Like y Reportar -->
+    <div class="video-player-actions">
+      <button id="likeVideoBtn"><i class="fa-solid fa-heart"></i></button>
+      <button id="reportVideoBtn"><i class="fa-solid fa-flag"></i> Reportar</button>
+      <button id="closeVideoBtn"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <!-- Animación de Like -->
+    <div id="likeAnimation" class="like-animation">
+      <i class="fa-solid fa-heart"></i>
+    </div>
+  </div>
+
+  <!-- Modal Reportar Video -->
+  <div id="reportModal">
+    <div class="modal-content">
+      <h3>Reportar Video</h3>
+      <label>Motivo:</label>
+      <select id="reportReason">
+        <option value="acoso">Acoso</option>
+        <option value="inapropiado">Contenido Inapropiado</option>
+        <option value="no_me_gusta">No me gusta</option>
+      </select>
+      <label>Comentarios (opcional):</label>
+      <textarea id="reportComments" placeholder="Escribe tus comentarios aquí..."></textarea>
+      <button id="submitReport">Enviar Reporte</button>
+    </div>
+  </div>
+
+  <script>
+    /*************************************************
+     *       CONFIGURACIÓN DE CLAVES API (EJEMPLO)
+     *************************************************/
+    const CHATGPT_API_KEY = "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";
+    const YOUTUBE_API_KEY = "AIzaSyDUzRmn9mQ4RL5EwzgExD3CfIzULos76NQ";
+
+    // Si el idioma seleccionado no está definido, usar 'es'
+    if (!localStorage.getItem('currentLang')) {
+      localStorage.setItem('currentLang', 'es');
+    }
+    let currentLang = localStorage.getItem('currentLang');
+
+    // Se definen las traducciones para cada idioma; para idiomas no definidos se replican los textos en español.
+    const defaultTranslations = {
+      modalTitle: "Registro / Inicia sesión con LINE",
+      modalDescription: "Inicia sesión como invitado.",
+      loginButton: "Iniciar sesión con LINE como invitado",
+      previewButton: "Vista Previa",
+      htmlPlaceholder: "HTML...",
+      cssPlaceholder: "CSS...",
+      jsPlaceholder: "JavaScript...",
+      previewHeader: "Vista Previa",
+      welcomeMessage: "¡Bienvenido a la aplicación! Disfruta del software implementando tus conocimientos de Programación!",
+      notificationUpdate: "¡La aplicación se ha actualizado!",
+      notificationPanelTitle: "Notificaciones",
+      analyzing: "Analizando...",
+      noErrorsFound: "¡No se encontraron errores en tu HTML!",
+      commonErrorsFound: "Errores comunes encontrados:",
+      searchButton: "Buscar",
+      searchNoResults: "No se encontraron videos o artículos.",
+      like: "Like",
+      close: "Cerrar"
     };
 
-    /* Actualizar textos según idioma y guardar la selección */
+    const translations = {
+      es: { ...defaultTranslations },
+      en: { ...defaultTranslations },
+      ja: { ...defaultTranslations },
+      ko: { ...defaultTranslations },
+      vi: { ...defaultTranslations },
+      zh: { ...defaultTranslations }
+    };
+
+    // Función para obtener traducción con fallback a español
+    function getTranslation(key) {
+      return translations[currentLang] && translations[currentLang][key] !== undefined 
+             ? translations[currentLang][key] 
+             : translations["es"][key];
+    }
+
     function updateLanguage(lang) {
       currentLang = lang;
       localStorage.setItem('currentLang', lang);
-      const t = translations[lang];
+      const t = translations[currentLang] || translations["es"];
       document.getElementById('modalTitle').innerHTML = t.modalTitle;
       document.getElementById('modalDescription').innerHTML = t.modalDescription;
       document.getElementById('loginBtnText').textContent = t.loginButton;
@@ -403,12 +573,11 @@
       document.getElementById('jsEditor').placeholder = t.jsPlaceholder;
       document.getElementById('updateText').innerHTML = t.notificationUpdate;
       document.getElementById('notificationPanelTitle').textContent = t.notificationPanelTitle;
-      // Si se desea actualizar otros textos de la página, se pueden agregar aquí.
+      document.getElementById('searchExecuteBtn').textContent = t.searchButton;
       runLangTransitionAnimation();
       document.getElementById('settingsOverlay').style.display = 'none';
     }
 
-    /* Animación de transición de idioma */
     function runLangTransitionAnimation() {
       const overlay = document.getElementById('langTransitionOverlay');
       overlay.style.display = 'block';
@@ -423,38 +592,28 @@
       }, 2000);
     }
 
-    /* Detección de swipe en overlay de ajustes */
     function setupSwipeDetection() {
-      let touchstartX = 0;
-      let touchendX = 0;
+      let touchstartX = 0, touchendX = 0;
       const settingsOverlay = document.getElementById('settingsOverlay');
-      settingsOverlay.addEventListener('touchstart', e => {
-        touchstartX = e.changedTouches[0].screenX;
-      });
+      settingsOverlay.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; });
       settingsOverlay.addEventListener('touchend', e => {
         touchendX = e.changedTouches[0].screenX;
-        if (touchstartX - touchendX > 100) {
-          settingsOverlay.style.display = 'none';
-        }
+        if (touchstartX - touchendX > 100) settingsOverlay.style.display = 'none';
       });
     }
 
-    /* Cargar notificaciones almacenadas en localStorage */
+    /* Notificaciones */
     function loadNotifications() {
       const stored = localStorage.getItem('notifications');
       return stored ? JSON.parse(stored) : [];
     }
-
-    /* Guardar notificaciones en localStorage */
     function saveNotifications(notifications) {
       localStorage.setItem('notifications', JSON.stringify(notifications));
     }
-
-    /* Renderizar la lista de notificaciones */
     function renderNotifications() {
       const notifications = loadNotifications();
       const notificationList = document.getElementById('notificationList');
-      notificationList.innerHTML = '';
+      notificationList.innerHTML = "";
       notifications.forEach(item => {
         const div = document.createElement('div');
         div.classList.add('notification-item');
@@ -462,62 +621,39 @@
         notificationList.appendChild(div);
       });
     }
-
-    /* Agregar una notificación y actualizar almacenamiento */
     function addNotification(message) {
       const now = new Date();
-      const notification = {
-        message: message,
-        date: now.toLocaleDateString() + " " + now.toLocaleTimeString()
-      };
-      const notifications = loadNotifications();
+      const notification = { message, date: now.toLocaleDateString() + " " + now.toLocaleTimeString() };
+      let notifications = loadNotifications();
       notifications.unshift(notification);
       saveNotifications(notifications);
       renderNotifications();
     }
-
-    /* Simulación de notificaciones en tiempo real */
     function simulateUpdateNotification() {
       setInterval(() => {
-        const t = translations[currentLang];
+        const t = translations[currentLang] || translations["es"];
         const now = new Date();
         document.getElementById('updateText').innerHTML = t.notificationUpdate + "<br><small>" + now.toLocaleDateString() + " " + now.toLocaleTimeString() + "</small>";
         document.getElementById('updatePopup').classList.remove('hidden');
         addNotification(t.notificationUpdate);
       }, 30000);
     }
+    function showNotificationPanel() { document.getElementById('notificationPanel').style.display = 'flex'; renderNotifications(); }
+    function hideNotificationPanel() { document.getElementById('notificationPanel').style.display = 'none'; }
 
-    /* Mostrar panel de notificaciones */
-    function showNotificationPanel() {
-      document.getElementById('notificationPanel').style.display = 'flex';
-      renderNotifications();
-    }
-    function hideNotificationPanel() {
-      document.getElementById('notificationPanel').style.display = 'none';
-    }
-
-    /* Simular detección de sesión activa */
-    function checkSession() {
-      if(localStorage.getItem('loggedIn') === 'true') {
-        document.getElementById('loginModal').style.display = 'none';
-      }
-    }
-
-    /* Simulación de inicio de sesión */
+    /* Sesión */
+    function checkSession() { if(localStorage.getItem('loggedIn') === 'true') document.getElementById('loginModal').style.display = 'none'; }
     function loginSimulated() {
       const loginContent = document.getElementById('loginContent');
       loginContent.innerHTML = '<div class="spinner"></div><p>Iniciando sesión...</p>';
       setTimeout(() => {
-        loginContent.innerHTML = `<h2>${translations[currentLang].welcomeMessage.split("!")[0]}!</h2>
-                                  <p>${translations[currentLang].welcomeMessage}</p>`;
+        loginContent.innerHTML = `<h2>${getTranslation("welcomeMessage").split("!")[0]}!</h2><p>${getTranslation("welcomeMessage")}</p>`;
         localStorage.setItem('loggedIn', 'true');
-        setTimeout(() => {
-          document.getElementById('loginModal').style.display = 'none';
-        }, 2000);
+        setTimeout(() => { document.getElementById('loginModal').style.display = 'none'; }, 2000);
       }, 3000);
     }
 
-    /* Animación de escaneo en vista previa */
+    /* Vista Previa */
     function runScanAnimation() {
       const scanOverlay = document.getElementById('scanOverlay');
       scanOverlay.style.display = 'block';
@@ -525,18 +661,214 @@
       setTimeout(() => { scanOverlay.style.display = 'none'; }, 5000);
     }
 
+    /* Validación HTML con ChatGPT */
+    let debounceTimeout;
+    async function validateHTML() {
+      const htmlEditor = document.getElementById('htmlEditor');
+      const htmlCode = htmlEditor.value.trim();
+      const t = translations[currentLang] || translations["es"];
+      const localErrors = [];
+      if (!htmlCode.toLowerCase().startsWith('<!doctype html>')) localErrors.push(`${t.commonErrorsFound} <!DOCTYPE html>`);
+      if (!/<html[\s>]/i.test(htmlCode)) localErrors.push(`${t.commonErrorsFound} <html>`);
+      if (!/<\/html>/i.test(htmlCode)) localErrors.push(`${t.commonErrorsFound} </html>`);
+      if (!/<head[\s>]/i.test(htmlCode)) localErrors.push(`${t.commonErrorsFound} <head>`);
+      if (!/<body[\s>]/i.test(htmlCode)) localErrors.push(`${t.commonErrorsFound} <body>`);
+      if (!/<\/body>/i.test(htmlCode)) localErrors.push(`${t.commonErrorsFound} </body>`);
+      let errorDiv = document.getElementById('htmlErrorMessages');
+      if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'htmlErrorMessages';
+        errorDiv.style.backgroundColor = 'rgba(255,255,0,0.3)';
+        errorDiv.style.padding = '10px';
+        errorDiv.style.marginTop = '5px';
+        errorDiv.style.borderRadius = '5px';
+        htmlEditor.parentNode.appendChild(errorDiv);
+      }
+      htmlEditor.classList.add('html-error');
+      errorDiv.classList.add('shake');
+      setTimeout(() => { errorDiv.classList.remove('shake'); }, 500);
+      errorDiv.innerHTML = `<strong>${t.analyzing}</strong>`;
+      const chatGPTresponse = await analyzeHTMLWithChatGPT(htmlCode);
+      let finalMessage = "";
+      if (localErrors.length === 0) { finalMessage += `<strong>${t.noErrorsFound}</strong><br>`; htmlEditor.classList.remove('html-error'); }
+      else { finalMessage += localErrors.join('<br>') + '<br>'; }
+      if (chatGPTresponse) finalMessage += `<br><strong>ChatGPT:</strong> ${chatGPTresponse}`;
+      errorDiv.innerHTML = finalMessage;
+    }
+    async function analyzeHTMLWithChatGPT(htmlCode) {
+      try {
+        const prompt = `Analiza el siguiente HTML y di qué errores tiene y sugerencias de mejora. Responde brevemente:\n${htmlCode}`;
+        const response = await fetch("https://api.openai.com/v1/completions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${CHATGPT_API_KEY}` },
+          body: JSON.stringify({ model: "text-davinci-003", prompt, max_tokens: 100, temperature: 0.2 })
+        });
+        const data = await response.json();
+        if (data.choices && data.choices.length > 0) return data.choices[0].text.trim();
+        return null;
+      } catch (error) { console.error("Error al llamar a ChatGPT:", error); return null; }
+    }
+
+    /* Búsqueda: YouTube y Wikipedia */
+    function toggleSearchOverlay(show) { document.getElementById('searchOverlay').style.display = show ? 'block' : 'none'; }
+    function toggleVideoPlayerOverlay(show, videoId = "") {
+      const playerOverlay = document.getElementById('videoPlayerOverlay');
+      if (show) {
+        playerOverlay.style.display = 'flex';
+        document.getElementById('videoPlayerFrame').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      } else {
+        playerOverlay.style.display = 'none';
+        document.getElementById('videoPlayerFrame').src = "";
+      }
+    }
+    async function searchYouTube() {
+      const searchInput = document.getElementById('searchInput').value.trim();
+      if (!searchInput) return;
+      const t = translations[currentLang] || translations["es"];
+      document.getElementById('searchSpinner').style.display = 'block';
+      document.getElementById('searchResults').innerHTML = "";
+      addRecentSearch(searchInput);
+      const query = encodeURIComponent(searchInput + " programming");
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=video&maxResults=6&key=${YOUTUBE_API_KEY}`;
+      try {
+        const resp = await fetch(url);
+        const data = await resp.json();
+        document.getElementById('searchSpinner').style.display = 'none';
+        if (data.items && data.items.length > 0) {
+          const resultsDiv = document.getElementById('searchResults');
+          resultsDiv.innerHTML = "";
+          data.items.forEach(item => {
+            const videoId = item.id.videoId;
+            const title = item.snippet.title;
+            const thumbnail = item.snippet.thumbnails.medium.url;
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.innerHTML = `<img src="${thumbnail}" alt="${title}" />
+              <div class="video-info"><h3>${title}</h3></div>
+              <div class="video-actions">
+                <button data-videoid="${videoId}" class="playVideoBtn">${t.previewButton}</button>
+              </div>`;
+            resultsDiv.appendChild(card);
+          });
+          document.querySelectorAll('.playVideoBtn').forEach(btn => {
+            btn.addEventListener('click', e => {
+              const vid = e.target.getAttribute('data-videoid');
+              toggleVideoPlayerOverlay(true, vid);
+            });
+          });
+        } else {
+          document.getElementById('searchResults').innerHTML = `<p>${t.searchNoResults}</p>`;
+        }
+      } catch (err) { console.error("Error buscando en YouTube:", err); document.getElementById('searchSpinner').style.display = 'none'; }
+    }
+    async function searchWikipedia() {
+      const searchInput = document.getElementById('searchInput').value.trim();
+      if (!searchInput) return;
+      addRecentSearch(searchInput);
+      document.getElementById('searchSpinner').style.display = 'block';
+      document.getElementById('searchResults').innerHTML = "";
+      const url = `https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchInput)}&format=json&origin=*`;
+      try {
+        const resp = await fetch(url);
+        const data = await resp.json();
+        document.getElementById('searchSpinner').style.display = 'none';
+        if (data.query && data.query.search && data.query.search.length > 0) {
+          const resultsDiv = document.getElementById('searchResults');
+          resultsDiv.innerHTML = "";
+          data.query.search.forEach(item => {
+            const title = item.title;
+            const snippet = item.snippet;
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.innerHTML = `<div class="video-info">
+              <h3>${title}</h3>
+              <p>${snippet}</p>
+              </div>
+              <div class="video-actions">
+                <button class="openArticleBtn" data-title="${title}">Abrir Artículo</button>
+              </div>`;
+            resultsDiv.appendChild(card);
+          });
+          document.querySelectorAll('.openArticleBtn').forEach(btn => {
+            btn.addEventListener('click', e => {
+              const title = e.target.getAttribute('data-title');
+              window.open(`https://es.wikipedia.org/wiki/${encodeURIComponent(title)}`, '_blank');
+            });
+          });
+        } else {
+          document.getElementById('searchResults').innerHTML = `<p>${getTranslation("searchNoResults")}</p>`;
+        }
+      } catch (err) { console.error("Error buscando en Wikipedia:", err); document.getElementById('searchSpinner').style.display = 'none'; }
+    }
+    function executeSearch() {
+      const active = document.querySelector('.search-toggle button.active');
+      if (active && active.id === "toggleVideos") searchYouTube();
+      else searchWikipedia();
+    }
+
+    /* Búsquedas Recientes y Tendencias */
+    function loadRecentSearches() {
+      const recent = localStorage.getItem('recentSearches');
+      return recent ? JSON.parse(recent) : [];
+    }
+    function saveRecentSearches(searches) {
+      localStorage.setItem('recentSearches', JSON.stringify(searches));
+    }
+    function addRecentSearch(term) {
+      let recent = loadRecentSearches();
+      if (!recent.includes(term)) { recent.unshift(term); if(recent.length > 10) recent = recent.slice(0,10); }
+      saveRecentSearches(recent);
+      renderRecentSearches();
+    }
+    function renderRecentSearches() {
+      const recent = loadRecentSearches();
+      const list = document.getElementById('recentList');
+      list.innerHTML = "";
+      recent.forEach(term => {
+        const li = document.createElement('li');
+        li.textContent = term;
+        li.addEventListener('click', () => { document.getElementById('searchInput').value = term; executeSearch(); });
+        list.appendChild(li);
+      });
+    }
+    function loadTrending() {
+      // Simulación: se pueden cargar de una API real
+      return ["React Hooks", "Node.js Streams", "Python Async", "Docker Compose", "Kubernetes"];
+    }
+    function renderTrending() {
+      const trending = loadTrending();
+      const list = document.getElementById('trendingList');
+      list.innerHTML = "";
+      trending.forEach(term => {
+        const li = document.createElement('li');
+        li.textContent = term;
+        li.addEventListener('click', () => { document.getElementById('searchInput').value = term; executeSearch(); });
+        list.appendChild(li);
+      });
+    }
+
+    /* Reporte de Video */
+    function openReportModal() { document.getElementById('reportModal').style.display = 'flex'; }
+    function closeReportModal() { document.getElementById('reportModal').style.display = 'none'; }
+    function submitReport() {
+      alert("Reporte enviado. Pronto se revisará el reporte.");
+      closeReportModal();
+    }
+
+    /*************************************************
+     *    EVENTOS AL CARGAR LA PÁGINA
+     *************************************************/
     document.addEventListener('DOMContentLoaded', () => {
-      // Aplicar idioma guardado
       updateLanguage(currentLang);
       checkSession();
       setupSwipeDetection();
       simulateUpdateNotification();
       renderNotifications();
+      renderRecentSearches();
+      renderTrending();
 
-      const intro = document.querySelector('.intro');
       const codeEffect = document.querySelector('.code-effect');
       const settingsBtn = document.getElementById('settingsBtn');
-      const settingsOverlay = document.getElementById('settingsOverlay');
       const previewBtn = document.getElementById('previewBtn');
       const themeBtn = document.getElementById('themeBtn');
       const closePreview = document.getElementById('closePreview');
@@ -544,15 +876,23 @@
       const htmlEditor = document.getElementById('htmlEditor');
       const cssEditor = document.getElementById('cssEditor');
       const jsEditor = document.getElementById('jsEditor');
+      const searchBtn = document.getElementById('searchBtn');
+      const closeSearchOverlay = document.getElementById('closeSearchOverlay');
+      const searchExecuteBtn = document.getElementById('searchExecuteBtn');
+      const toggleVideos = document.getElementById('toggleVideos');
+      const toggleArticles = document.getElementById('toggleArticles');
+      const likeVideoBtn = document.getElementById('likeVideoBtn');
+      const reportVideoBtn = document.getElementById('reportVideoBtn');
+      const closeVideoBtn = document.getElementById('closeVideoBtn');
+      const likeAnimation = document.getElementById('likeAnimation');
+      const submitReportBtn = document.getElementById('submitReport');
 
-      // Sonidos
-      const introSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/wAVlZWVlZWVlZWVlZWVlZWVlZWVlZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2v7+/v7+/v7+/v7+/v7+/v7+/v7//////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAGgAAAAEAAAMYAAQGAkNhAAAQJAADBhgAABUWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+      const introSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/wAVlZWVlZWVlZWVlZWVlZWVlZWVlZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2v7+/v7+/v7+/v7+/v7+/v7+/v7//////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAGgAAAAEAAAMYAAQGAkNhAAAQJAADBhgAABUWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
       const typeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA+UAVlZWVlZWVlZWVlZWVlZWVlZWVlZ8fHx8fHx8fHx8fHx8fHx8fHx8fHx8zMzMzMzMzMzMzMzMzMzMzMzMzMzM////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAAN4AAQIBAMDAAAABQ4AAAMGGAAAFhYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
       const executeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/MAVlZWVlZWVlZWVlZWVlZWVlZWVlZ7e3t7e3t7e3t7e3t7e3t7e3t7e3t7ysrKysrKysrKysrKysrKysrKysrK////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAANyAAQGAwIAAAAACw4AAAMGGAAAFRYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
-
+      
       introSound.volume = 0.5;
       introSound.play().catch(e => console.log('Error playing sound:', e));
-
       function generateRandomCode() {
         let code = '';
         const characters = '01';
@@ -562,14 +902,10 @@
         return code;
       }
       codeEffect.textContent = generateRandomCode();
-
-      // Al finalizar el intro, ocultar overlay y mostrar modal de inicio
       setTimeout(() => {
         document.querySelector('.intro').style.animation = 'fadeOut 1s forwards';
         document.getElementById('loginModal').style.display = 'block';
       }, 2500);
-
-      // Sonido al escribir en los editores
       [htmlEditor, cssEditor, jsEditor].forEach(editor => {
         editor.addEventListener('keydown', () => {
           const newTypeSound = typeSound.cloneNode();
@@ -577,14 +913,11 @@
           newTypeSound.play().catch(e => console.log('Error playing sound:', e));
         });
       });
-
       themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         themeBtn.innerHTML = document.body.classList.contains('dark-mode')
-          ? '<i class="fa-solid fa-sun"></i>'
-          : '<i class="fa-solid fa-moon"></i>';
+          ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
       });
-
       previewBtn.addEventListener('click', () => {
         executeSound.play();
         runScanAnimation();
@@ -606,36 +939,44 @@
           previewFrame.srcdoc = combinedCode;
         }, 5000);
       });
-
-      closePreview.addEventListener('click', () => {
-        document.getElementById('previewOverlay').style.display = 'none';
-      });
-
-      settingsBtn.addEventListener('click', () => {
-        settingsOverlay.style.display = 'block';
-      });
-
-      // Botón de notificaciones en el header
+      closePreview.addEventListener('click', () => { document.getElementById('previewOverlay').style.display = 'none'; });
+      settingsBtn.addEventListener('click', () => { document.getElementById('settingsOverlay').style.display = 'block'; });
       document.getElementById('notificationBtn').addEventListener('click', showNotificationPanel);
-
-      // Botón para cambiar idioma en el modal de registro
-      document.getElementById('changeLangBtn').addEventListener('click', () => {
-        settingsOverlay.style.display = 'block';
-      });
-
-      // Asignar eventos a las opciones de idioma
+      document.getElementById('changeLangBtn').addEventListener('click', () => { document.getElementById('settingsOverlay').style.display = 'block'; });
       document.querySelectorAll('.lang-option').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          updateLanguage(e.target.getAttribute('data-lang'));
-        });
+        btn.addEventListener('click', e => { updateLanguage(e.target.getAttribute('data-lang')); });
       });
-
-      // Iniciar sesión simulada
       document.getElementById("lineLoginBtn").addEventListener("click", loginSimulated);
-
-      // Al pulsar el updatePopup se muestra el panel de notificaciones
       document.getElementById('updatePopup').addEventListener('click', showNotificationPanel);
       document.getElementById('closeNotificationPanel').addEventListener('click', hideNotificationPanel);
+      htmlEditor.addEventListener('input', function() {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(validateHTML, 1000);
+      });
+      searchBtn.addEventListener('click', () => { toggleSearchOverlay(true); });
+      closeSearchOverlay.addEventListener('click', () => { toggleSearchOverlay(false); });
+      searchExecuteBtn.addEventListener('click', executeSearch);
+      toggleVideos.addEventListener('click', () => {
+        toggleVideos.classList.add('active');
+        toggleArticles.classList.remove('active');
+        executeSearch();
+      });
+      toggleArticles.addEventListener('click', () => {
+        toggleArticles.classList.add('active');
+        toggleVideos.classList.remove('active');
+        executeSearch();
+      });
+      likeVideoBtn.addEventListener('click', () => {
+        likeAnimation.style.opacity = "1";
+        likeAnimation.style.animation = "likePop 0.8s forwards";
+        setTimeout(() => {
+          likeAnimation.style.opacity = "0";
+          likeAnimation.style.animation = "none";
+        }, 900);
+      });
+      reportVideoBtn.addEventListener('click', openReportModal);
+      closeVideoBtn.addEventListener('click', () => { toggleVideoPlayerOverlay(false); });
+      submitReportBtn.addEventListener('click', submitReport);
     });
   </script>
 </body>
