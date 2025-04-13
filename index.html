@@ -747,7 +747,7 @@
   <div id="supportOverlay">
     <div class="chat-container">
       <div class="chat-header">
-        <h2>💬 Support Chat</h2>
+        <h2>💬 지원 채팅</h2>
         <button id="closeSupportOverlay">X</button>
       </div>
       <div class="chat-messages" id="chat-messages">
@@ -756,28 +756,28 @@
             <i class="fas fa-robot"></i>
           </div>
           <div class="message-content">
-            ¡Hola! ¿En qué puedo ayudarte hoy? Por favor, selecciona una opción:
+          안녕하세요! 무엇을 도와드릴까요? 아래에서 옵션을 선택해주세요:
           </div>
         </div>
       </div>
       <div class="options-container" id="options-container">
-        <button class="option-button">Problemas con Clack Koder</button>
-        <button class="option-button">El código no se ejecuta correctamente</button>
-        <button class="option-button">Problemas con la aplicación</button>
-        <button class="option-button">Abrir una incidencia</button>
+        <button class="option-button">Clack Koder issues</button>
+        <button class="option-button">코드가 제대로 실행되지 않습니다.</button>
+        <button class="option-button">애플리케이션 문제</button>
+        <button class="option-button">인시던트를 열기</button>
       </div>
       <div class="ticket-form" id="ticket-form">
-        <h3>Nueva Incidencia</h3>
+        <h3>New Incidence</h3>
         <div class="file-inputs">
           <div class="file-input">
             <label class="file-input-label">
-              <i class="fas fa-image"></i> Subir imagen
+              <i class="fas fa-image"></i> 이미지 업로드
               <input type="file" accept="image/*" id="imageInput">
             </label>
           </div>
           <div class="file-input">
             <label class="file-input-label">
-              <i class="fas fa-video"></i> Subir video (máx. 12s)
+              <i class="fas fa-video"></i> 비디오 업로드 (최대 12초)
               <input type="file" accept="video/*" id="videoInput">
             </label>
           </div>
@@ -785,7 +785,7 @@
         </div>
         <textarea maxlength="200" placeholder="Describe tu problema (máximo 200 caracteres)"></textarea>
         <div class="spinner" id="spinner"></div>
-        <button onclick="submitTicket()">Enviar Incidencia</button>
+        <button onclick="submitTicket()">인시던트 보내기</button>
       </div>
       <div class="chat-input">
         <input type="text" id="message-input" placeholder="Escribe tu mensaje...">
@@ -826,9 +826,9 @@
       notificationUpdate: "¡La aplicación se ha actualizado!",
       notificationPanelTitle: "Notificaciones",
       analyzing: "Analizando...",
-      noErrorsFound: "¡No se encontraron errores en tu HTML!",
-      commonErrorsFound: "Errores comunes encontrados:",
-      searchButton: "Buscar",
+      noErrorsFound: "HTML에서 오류가 발견되지 않았습니다!",
+      commonErrorsFound: "발견된 일반적인 오류:",
+      searchButton: "검색하다",
       searchNoResults: "No se encontraron videos o artículos.",
       like: "Like",
       close: "Cerrar"
