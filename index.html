@@ -1310,9 +1310,9 @@
       const supportTicketForm = document.getElementById('ticket-form');
       const supportSpinner = document.getElementById('spinner');
       const supportBotResponses = {
-        "Problemas con Clack Koder": "Para resolver problemas con Clack Koder, prueba estos pasos:\n1. Limpia el caché del navegador\n2. Verifica tu conexión a internet\n3. Actualiza la página",
-        "El código no se ejecuta correctamente": "Para problemas de ejecución:\n1. Revisa la sintaxis del código\n2. Verifica los errores en la consola\n3. Asegúrate de tener todas las dependencias instaladas",
-        "Problemas con la aplicación": "Si tienes problemas con la aplicación:\n1. Actualiza a la última versión\n2. Reinicia la aplicación\n3. Verifica los permisos"
+        "클랙 코더와 문제": "클랙 코더와의 문제를 해결하려면, 다음 단계를 시도해 보세요.:\n1. 브라우저 캐시를 삭제하세요\n2. 인터넷 연결을 확인하세요\n3. 페이지를 새로 고치세요",
+        "코드가 제대로 실행되지 않습니다.": "실행 문제의 경우:\n1.코드의 문법을 확인하세요.\n2. 코드의 문법을 확인하세요.\n3. 모든 의존성이 설치되어 있는지 확인하세요.",
+        "애플리케이션 문제": "애플리케이션에 문제가 있으면:\n1. 최신 버전으로 업데이트하세요.\n2. 애플리케이션을 재시작하세요.\n3.권한을 확인하세요."
       };
       function supportAddMessage(message, isUser = false) {
         const msgDiv = document.createElement('div');
@@ -1338,7 +1338,7 @@
             supportTicketForm.classList.add('active');
             return;
           }
-          const response = supportBotResponses[option] || "Lo siento, no puedo ayudarte con eso. ¿Deseas abrir una incidencia?";
+          const response = supportBotResponses[option] || "죄송하지만, 그 부분은 도와드릴 수 없습니다.Would you like to open a support ticket?";
           setTimeout(() => supportAddMessage(response), 1000);
         }
       });
@@ -1348,7 +1348,7 @@
           supportAddMessage(msg, true);
           supportMessageInput.value = "";
           setTimeout(() => {
-            supportAddMessage("Por favor, selecciona una de las opciones disponibles arriba para ayudarte mejor.");
+            supportAddMessage("위에 있는 옵션 중 하나를 선택해주세요, 더 나은 도움을 드리겠습니다.");
           }, 1000);
         }
       });
