@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clack</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4653147807800151" crossorigin="anonymous"></script>
   <!-- Fuentes e íconos -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -202,20 +203,56 @@
     }
     /* Editor */
     .editor-container {
-      max-width: 1200px; margin: 20px auto; padding: 0 20px;
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      max-width: 100%; 
+      margin: 0 auto; 
+      padding: 20px;
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
       gap: 20px;
+      height: calc(100vh - 60px);
     }
     .editor-area {
-      background: var(--editor-bg); border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden;
+      background: var(--editor-bg); 
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .editor-area::before {
+      content: attr(data-language);
+      padding: 8px 16px;
+      background: rgba(0,0,0,0.1);
+      color: var(--text-color);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
     }
     textarea {
-      width: 100%; min-height: 300px; padding: 20px; border: none;
-      font-family: monospace; font-size: 14px; line-height: 1.6;
-      resize: vertical; background: var(--editor-bg); color: var(--text-color);
+      width: 100%; 
+      height: 100%;
+      padding: 16px; 
+      border: none;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+      font-size: 14px; 
+      line-height: 1.5;
+      tab-size: 2;
+      resize: none; 
+      background: var(--editor-bg); 
+      color: var(--text-color);
     }
-    textarea:focus { outline: none; }
+    textarea:focus { 
+      outline: none;
+      background: var(--editor-bg);
+    }
+    .dark-mode .editor-area {
+      background: #1e1e1e;
+    }
+    .dark-mode textarea {
+      background: #1e1e1e;
+      color: #d4d4d4;
+    }
     /* Vista Previa */
     .preview-overlay {
       display: none; position: fixed; top: 0; left: 0;
@@ -666,14 +703,14 @@
 
   <!-- ===== Editor ===== -->
   <div class="editor-container">
-    <div class="editor-area">
-      <textarea id="htmlEditor" placeholder="HTML..."></textarea>
+    <div class="editor-area" data-language="html">
+      <textarea id="htmlEditor" placeholder="Escribe tu código HTML aquí..." spellcheck="false"></textarea>
     </div>
-    <div class="editor-area">
-      <textarea id="cssEditor" placeholder="CSS..."></textarea>
+    <div class="editor-area" data-language="css">
+      <textarea id="cssEditor" placeholder="Escribe tu código CSS aquí..." spellcheck="false"></textarea>
     </div>
-    <div class="editor-area">
-      <textarea id="jsEditor" placeholder="JavaScript..."></textarea>
+    <div class="editor-area" data-language="javascript">
+      <textarea id="jsEditor" placeholder="Escribe tu código JavaScript aquí..." spellcheck="false"></textarea>
     </div>
   </div>
 
