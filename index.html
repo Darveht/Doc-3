@@ -43,6 +43,12 @@
         padding: 0 10px;
       }
     }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(24, 119, 242, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(24, 119, 242, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(24, 119, 242, 0); }
+    }
+    
     /* Intro y animaciones */
     .intro {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -873,11 +879,18 @@
             const card = document.createElement('div');
             card.className = 'video-card';
             card.innerHTML = `<div class="video-info">
-              <h3>${title}</h3>
+              <h3 style="display: flex; align-items: center; gap: 8px;">
+                ${title}
+                <i class="fas fa-check-circle" style="color: #1877f2; font-size: 0.9em;"></i>
+                <span style="font-size: 0.7em; color: #666;">Wikipedia</span>
+              </h3>
               <p>${snippet}</p>
               </div>
               <div class="video-actions">
-                <button class="openArticleBtn" data-title="${title}">Abrir Artículo</button>
+                <button class="openArticleBtn" data-title="${title}">
+                  <i class="fas fa-book-reader" style="margin-right: 5px;"></i>
+                  Abrir Artículo
+                </button>
               </div>`;
             resultsDiv.appendChild(card);
           });
@@ -978,18 +991,147 @@
       });
     }
     function loadTrending() {
-      return ["React Hooks", "Node.js Streams", "Python Async", "Docker Compose", "Kubernetes"];
+      const trendingTopics = [
+        { topic: "React Hooks", views: 1200, trending: true },
+        { topic: "Node.js Streams", views: 980, trending: true },
+        { topic: "Python Async", views: 850, trending: false },
+        { topic: "Docker Compose", views: 750, trending: true },
+        { topic: "Kubernetes", views: 600, trending: false }
+      ];
+      return trendingTopics;
     }
     function renderTrending() {
       const trending = loadTrending();
       const list = document.getElementById('trendingList');
       list.innerHTML = "";
-      trending.forEach(term => {
+      trending.forEach(item => {
         const li = document.createElement('li');
-        li.textContent = term;
-        li.addEventListener('click', () => { document.getElementById('searchInput').value = term; executeSearch(); });
+        li.style.cssText = `
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 15px;
+          margin-bottom: 10px;
+          background: rgba(255,255,255,0.05);
+          border-radius: 12px;
+          backdrop-filter: blur(10px);
+          transition: all 0.3s ease;
+          cursor: pointer;
+          border: 1px solid rgba(255,255,255,0.1);
+        `;
+        
+        li.addEventListener('mouseover', () => {
+          li.style.transform = 'translateX(5px)';
+          li.style.background = 'rgba(255,255,255,0.1)';
+        });
+        
+        li.addEventListener('mouseout', () => {
+          li.style.transform = 'translateX(0)';
+          li.style.background = 'rgba(255,255,255,0.05)';
+        });
+        
+        const leftContent = document.createElement('div');
+        leftContent.style.cssText = `
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        `;
+        
+        // Punto de tendencia con animación
+        const trendDot = document.createElement('div');
+        trendDot.style.cssText = `
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: ${item.trending ? '#1877f2' : '#666'};
+          position: relative;
+          ${item.trending ? 'animation: pulse 2s infinite;' : ''}
+        `;
+        
+        const topicText = document.createElement('span');
+        topicText.style.cssText = `
+          font-size: 1.1em;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        `;
+        
+        const topicSpan = document.createElement('span');
+        topicSpan.textContent = item.topic;
+        topicText.appendChild(topicSpan);
+        
+        // Agregar ícono de verificado si tiene muchas vistas
+        if (item.views >= 800) {
+          const verifiedIcon = document.createElement('i');
+          verifiedIcon.className = 'fas fa-check-circle';
+          verifiedIcon.style.cssText = `
+            color: #1877f2;
+            font-size: 0.9em;
+          `;
+          const wikiLabel = document.createElement('span');
+          wikiLabel.textContent = 'Wikipedia';
+          wikiLabel.style.cssText = `
+            font-size: 0.7em;
+            color: #666;
+          `;
+          topicText.appendChild(verifiedIcon);
+          topicText.appendChild(wikiLabel);
+        }
+        
+        leftContent.appendChild(trendDot);
+        leftContent.appendChild(topicText);
+        
+        // Estadísticas con iconos y animación
+        const stats = document.createElement('div');
+        stats.style.cssText = `
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #888;
+          font-size: 0.9em;
+        `;
+        
+        // Icono de estadísticas
+        const statsIcon = document.createElement('i');
+        statsIcon.className = 'fas fa-chart-line';
+        statsIcon.style.color = item.trending ? '#1877f2' : '#666';
+        
+        const viewsText = document.createElement('span');
+        viewsText.textContent = `${item.views.toLocaleString()}`;
+        
+        const viewsIcon = document.createElement('i');
+        viewsIcon.className = 'fas fa-eye';
+        viewsIcon.style.marginLeft = '5px';
+        
+        stats.appendChild(statsIcon);
+        stats.appendChild(viewsText);
+        stats.appendChild(viewsIcon);
+        
+        li.appendChild(leftContent);
+        li.appendChild(stats);
+        
+        li.addEventListener('click', () => {
+          document.getElementById('searchInput').value = item.topic;
+          executeSearch();
+        });
+        
         list.appendChild(li);
       });
+      
+      // Actualizar tendencias cada 30 segundos
+      setTimeout(() => {
+        updateTrendingStats();
+      }, 30000);
+    }
+    
+    function updateTrendingStats() {
+      const trending = loadTrending();
+      trending.forEach(item => {
+        // Simular cambios en tiempo real
+        item.views += Math.floor(Math.random() * 50);
+        item.trending = Math.random() > 0.3;
+      });
+      renderTrending();
     }
 
     /* ========================
