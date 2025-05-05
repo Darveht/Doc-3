@@ -13,19 +13,19 @@
 
   <style>
     /* ================================
-       Estilos Generales de Clack (Original)
+       Estilos Generales de Clack (Facebook)
        ================================ */
     :root {
-      --primary-color: #00dc64;
-      --bg-color: #f8f9fa;
-      --text-color: #333;
-      --editor-bg: #fff;
+      --primary-color: #1877f2;
+      --bg-color: #f0f2f5;
+      --text-color: #050505;
+      --editor-bg: #ffffff;
     }
     .dark-mode {
-      --primary-color: #00b050;
-      --bg-color: #1a1a1a;
-      --text-color: #fff;
-      --editor-bg: #2d2d2d;
+      --primary-color: #2374e1;
+      --bg-color: #18191a;
+      --text-color: #e4e6eb;
+      --editor-bg: #242526;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -84,12 +84,12 @@
     .controls { display: flex; gap: 10px; align-items: center; }
     .controls button {
       display: flex; align-items: center; gap: 6px;
-      background: #fff; color: var(--primary-color);
-      border: none; padding: 6px 16px;
-      border-radius: 20px; cursor: pointer; font-weight: 600;
+      background: var(--primary-color); color: #fff;
+      border: none; padding: 8px 20px;
+      border-radius: 6px; cursor: pointer; font-weight: 600;
       transition: all 0.2s;
     }
-    .controls button:hover { background: #f0f0f0; transform: translateY(-1px); }
+    .controls button:hover { background: #166fe5; }
     #settingsBtn, #notificationBtn, #searchBtn {
       background: transparent; border: none; color: #fff;
       font-size: 1.5rem; cursor: pointer; padding: 0;
@@ -288,6 +288,16 @@
       display: none; position: fixed; z-index: 14000; top: 0; left: 0;
       width: 100%; height: 100%; background: var(--bg-color);
       color: var(--text-color); overflow-y: auto; padding: 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
     .search-top-bar {
       display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
@@ -306,7 +316,33 @@
     .recent-searches h3 { font-size: 1.2rem; margin-bottom: 10px; }
     .recent-searches ul { list-style: none; padding-left: 0; }
     .recent-searches li {
-      cursor: pointer; padding: 5px; border-bottom: 1px solid #ddd;
+      cursor: pointer;
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+      touch-action: pan-y;
+      transition: transform 0.3s ease;
+      background: white;
+    }
+    .recent-searches li.swiping {
+      transition: none;
+    }
+    .recent-searches li .delete-action {
+      position: absolute;
+      right: -100px;
+      top: 0;
+      height: 100%;
+      width: 100px;
+      background: #ff4444;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+      opacity: 0;
+    }
+    .recent-searches li.show-delete .delete-action {
+      opacity: 1;
     }
     .trending { margin-bottom: 20px; }
     .trending h3 { font-size: 1.2rem; margin-bottom: 10px; }
@@ -352,7 +388,13 @@
       padding: 20px;
     }
     #videoPlayerOverlay iframe {
-      width: 100%; max-width: 1000px; height: 60vh; margin: 0 auto;
+      width: 100%; 
+      height: 100vh;
+      margin: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 15001;
     }
     .video-player-actions {
       margin-top: 20px; display: flex; gap: 10px;
@@ -730,10 +772,7 @@
       <input type="text" id="searchInput" placeholder="Buscar videos o artículos..." />
       <button id="searchExecuteBtn"></button>
     </div>
-    <div class="search-toggle">
-      <button id="toggleVideos" class="active">Videos</button>
-      <button id="toggleArticles">Artículos</button>
-    </div>
+    <!-- Search toggle removed -->
     <div class="recent-searches">
       <h3>Búsquedas recientes</h3>
       <ul id="recentList"></ul>
@@ -746,36 +785,7 @@
     <div id="searchResults" class="search-results"></div>
   </div>
 
-  <!-- ===== Overlay Reproductor de Video ===== -->
-  <div id="videoPlayerOverlay">
-    <div style="background:#fff; padding:20px; width:100%;">
-      <iframe id="videoPlayerFrame" src="" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <div class="video-player-actions">
-      <button id="likeVideoBtn"><i class="fa-solid fa-heart"></i></button>
-      <button id="reportVideoBtn"><i class="fa-solid fa-flag"></i> Reportar</button>
-      <button id="closeVideoBtn"><i class="fa-solid fa-times"></i></button>
-    </div>
-    <div id="likeAnimation" class="like-animation">
-      <i class="fa-solid fa-heart"></i>
-    </div>
-  </div>
-
-  <!-- ===== Modal Reportar Video ===== -->
-  <div id="reportModal">
-    <div class="modal-content">
-      <h3>Reportar Video</h3>
-      <label>Motivo:</label>
-      <select id="reportReason">
-        <option value="acoso">Acoso</option>
-        <option value="inapropiado">Contenido Inapropiado</option>
-        <option value="no_me_gusta">No me gusta</option>
-      </select>
-      <label>Comentarios (opcional):</label>
-      <textarea id="reportComments" placeholder="Escribe tus comentarios aquí..."></textarea>
-      <button id="submitReport">Enviar Reporte</button>
-    </div>
-  </div>
+  <!-- Video player and report modal removed -->
 
   <!-- =====================================================
        Overlay de Soporte (Chat de Asistencia)
@@ -1061,6 +1071,44 @@
     async function searchYouTube() {
       const searchInput = document.getElementById('searchInput').value.trim();
       if (!searchInput) return;
+      
+      // Desactivar búsqueda y mostrar mensaje de acceso limitado
+      document.getElementById('searchResults').innerHTML = "";
+      const limitedAccessModal = document.createElement('div');
+      limitedAccessModal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 20000;
+        animation: fadeIn 0.3s ease;
+      `;
+      
+      const modalContent = document.createElement('div');
+      modalContent.style.cssText = `
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        max-width: 90%;
+        width: 400px;
+        animation: slideUp 0.4s ease;
+      `;
+      
+      modalContent.innerHTML = `
+        <h2 style="margin-bottom: 20px; color: #1877f2;">Querido usuario</h2>
+        <p style="margin-bottom: 20px; line-height: 1.5;">Esta función es limitada y ciertos usuarios tienen acceso a esto. ¡Gracias por tu comprensión! Trabajaremos para mejorar más.</p>
+        <button style="background: #1877f2; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;" onclick="this.parentElement.parentElement.remove()">Entendido</button>
+      `;
+      
+      limitedAccessModal.appendChild(modalContent);
+      document.body.appendChild(limitedAccessModal);
+      
       const t = translations[currentLang] || translations["es"];
       document.getElementById('searchSpinner').style.display = 'block';
       document.getElementById('searchResults').innerHTML = "";
@@ -1138,9 +1186,7 @@
       } catch (err) { console.error("Error buscando en Wikipedia:", err); document.getElementById('searchSpinner').style.display = 'none'; }
     }
     function executeSearch() {
-      const active = document.querySelector('.search-toggle button.active');
-      if (active && active.id === "toggleVideos") searchYouTube();
-      else searchWikipedia();
+      searchWikipedia();
     }
 
     /* ========================
@@ -1166,7 +1212,61 @@
       recent.forEach(term => {
         const li = document.createElement('li');
         li.textContent = term;
-        li.addEventListener('click', () => { document.getElementById('searchInput').value = term; executeSearch(); });
+        
+        // Agregar botón de eliminar
+        const deleteAction = document.createElement('div');
+        deleteAction.className = 'delete-action';
+        deleteAction.innerHTML = '<i class="fas fa-trash"></i>';
+        li.appendChild(deleteAction);
+
+        // Variables para el deslizamiento
+        let startX = 0;
+        let currentX = 0;
+
+        li.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          li.classList.add('swiping');
+        });
+
+        li.addEventListener('touchmove', (e) => {
+          currentX = e.touches[0].clientX;
+          const diff = currentX - startX;
+          if (diff < 0) { // Solo permitir deslizar hacia la izquierda
+            li.style.transform = `translateX(${diff}px)`;
+            if (diff < -50) {
+              li.classList.add('show-delete');
+            } else {
+              li.classList.remove('show-delete');
+            }
+          }
+        });
+
+        li.addEventListener('touchend', () => {
+          li.classList.remove('swiping');
+          const diff = currentX - startX;
+          if (diff < -50) {
+            // Eliminar la búsqueda
+            const searches = loadRecentSearches();
+            const newSearches = searches.filter(s => s !== term);
+            saveRecentSearches(newSearches);
+            li.style.transform = 'translateX(-100%)';
+            li.style.opacity = '0';
+            setTimeout(() => {
+              renderRecentSearches();
+            }, 300);
+          } else {
+            li.style.transform = '';
+            li.classList.remove('show-delete');
+          }
+        });
+
+        li.addEventListener('click', () => { 
+          if (!li.classList.contains('show-delete')) {
+            document.getElementById('searchInput').value = term; 
+            executeSearch(); 
+          }
+        });
+        
         list.appendChild(li);
       });
     }
