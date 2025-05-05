@@ -48,7 +48,7 @@
       70% { box-shadow: 0 0 0 10px rgba(24, 119, 242, 0); }
       100% { box-shadow: 0 0 0 0 rgba(24, 119, 242, 0); }
     }
-    
+
     /* Intro y animaciones */
     .intro {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -441,8 +441,57 @@
       background: var(--primary-color); color: #fff; border: none;
       padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;
     }
+    /* Search Spinner Animation */
+    #searchSpinner {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      z-index: 1000;
+    }
 
-    
+    #searchSpinner::before,
+    #searchSpinner::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #1877f2;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: circle-dance 1.5s infinite ease-in-out;
+    }
+
+    #searchSpinner::after {
+      animation-delay: -0.5s;
+      background: #00f2ea;
+    }
+
+    @keyframes circle-dance {
+      0%, 100% {
+        transform: translate(-50%, -50%) rotate(0deg) translateX(30px);
+      }
+      50% {
+        transform: translate(-50%, -50%) rotate(180deg) translateX(30px);
+      }
+    }
+
+    .article-stats {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+      font-size: 0.9em;
+      color: #666;
+    }
+    .article-stats i {
+      margin-right: 5px;
+    }
+
   </style>
 </head>
 <body>
@@ -483,7 +532,7 @@
     <button class="lang-option" data-lang="ko">한국어</button>
     <button class="lang-option" data-lang="vi">Tiếng Việt</button>
     <button class="lang-option" data-lang="zh">中文</button>
-    
+
   </div>
 
   <!-- ===== Floating Update Popup ===== -->
@@ -557,7 +606,7 @@
 
   <!-- Video player and report modal removed -->
 
-  
+
 
   <!-- ===== Script Principal ===== -->
   <script>
@@ -598,8 +647,7 @@
       es: { ...defaultTranslations },
       en: { ...defaultTranslations },
       ja: { ...defaultTranslations },
-      ko: { ...defaultTranslations },
-      vi: { ...defaultTranslations },
+      ko: { ...defaultTranslations },      vi: { ...defaultTranslations },
       zh: { ...defaultTranslations }
     };
 
@@ -784,7 +832,7 @@
     async function searchYouTube() {
       const searchInput = document.getElementById('searchInput').value.trim();
       if (!searchInput) return;
-      
+
       // Desactivar búsqueda y mostrar mensaje de acceso limitado
       document.getElementById('searchResults').innerHTML = "";
       const limitedAccessModal = document.createElement('div');
@@ -801,7 +849,7 @@
         z-index: 20000;
         animation: fadeIn 0.3s ease;
       `;
-      
+
       const modalContent = document.createElement('div');
       modalContent.style.cssText = `
         background: white;
@@ -812,16 +860,16 @@
         width: 400px;
         animation: slideUp 0.4s ease;
       `;
-      
+
       modalContent.innerHTML = `
         <h2 style="margin-bottom: 20px; color: #1877f2;">Querido usuario</h2>
         <p style="margin-bottom: 20px; line-height: 1.5;">Esta función es limitada y ciertos usuarios tienen acceso a esto. ¡Gracias por tu comprensión! Trabajaremos para mejorar más.</p>
         <button style="background: #1877f2; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;" onclick="this.parentElement.parentElement.remove()">Entendido</button>
       `;
-      
+
       limitedAccessModal.appendChild(modalContent);
       document.body.appendChild(limitedAccessModal);
-      
+
       const t = translations[currentLang] || translations["es"];
       document.getElementById('searchSpinner').style.display = 'block';
       document.getElementById('searchResults').innerHTML = "";
@@ -879,11 +927,12 @@
             const card = document.createElement('div');
             card.className = 'video-card';
             card.innerHTML = `<div class="video-info">
-              <h3 style="display: flex; align-items: center; gap: 8px;">
-                ${title}
-                <i class="fas fa-check-circle" style="color: #1877f2; font-size: 0.9em;"></i>
-                <span style="font-size: 0.7em; color: #666;">Wikipedia</span>
-              </h3>
+              <h3>${title}</h3>
+              <div class="article-stats">
+                <i class="fas fa-eye" style="color: #1877f2;"></i>
+                <span>${Math.floor(Math.random() * 5000 + 1000)} vistas</span>
+                ${Math.random() > 0.5 ? '<i class="fas fa-chart-line" style="color: #00f2ea; margin-left: 10px;"></i>' : ''}
+              </div>
               <p>${snippet}</p>
               </div>
               <div class="video-actions">
@@ -932,7 +981,7 @@
       recent.forEach(term => {
         const li = document.createElement('li');
         li.textContent = term;
-        
+
         // Agregar botón de eliminar
         const deleteAction = document.createElement('div');
         deleteAction.className = 'delete-action';
@@ -986,7 +1035,7 @@
             executeSearch(); 
           }
         });
-        
+
         list.appendChild(li);
       });
     }
@@ -1019,24 +1068,24 @@
           cursor: pointer;
           border: 1px solid rgba(255,255,255,0.1);
         `;
-        
+
         li.addEventListener('mouseover', () => {
           li.style.transform = 'translateX(5px)';
           li.style.background = 'rgba(255,255,255,0.1)';
         });
-        
+
         li.addEventListener('mouseout', () => {
           li.style.transform = 'translateX(0)';
           li.style.background = 'rgba(255,255,255,0.05)';
         });
-        
+
         const leftContent = document.createElement('div');
         leftContent.style.cssText = `
           display: flex;
           align-items: center;
           gap: 15px;
         `;
-        
+
         // Punto de tendencia con animación
         const trendDot = document.createElement('div');
         trendDot.style.cssText = `
@@ -1047,7 +1096,7 @@
           position: relative;
           ${item.trending ? 'animation: pulse 2s infinite;' : ''}
         `;
-        
+
         const topicText = document.createElement('span');
         topicText.style.cssText = `
           font-size: 1.1em;
@@ -1055,11 +1104,11 @@
           align-items: center;
           gap: 8px;
         `;
-        
+
         const topicSpan = document.createElement('span');
         topicSpan.textContent = item.topic;
         topicText.appendChild(topicSpan);
-        
+
         // Agregar ícono de verificado si tiene muchas vistas
         if (item.views >= 800) {
           const verifiedIcon = document.createElement('i');
@@ -1077,10 +1126,10 @@
           topicText.appendChild(verifiedIcon);
           topicText.appendChild(wikiLabel);
         }
-        
+
         leftContent.appendChild(trendDot);
         leftContent.appendChild(topicText);
-        
+
         // Estadísticas con iconos y animación
         const stats = document.createElement('div');
         stats.style.cssText = `
@@ -1090,40 +1139,40 @@
           color: #888;
           font-size: 0.9em;
         `;
-        
+
         // Icono de estadísticas
         const statsIcon = document.createElement('i');
         statsIcon.className = 'fas fa-chart-line';
         statsIcon.style.color = item.trending ? '#1877f2' : '#666';
-        
+
         const viewsText = document.createElement('span');
         viewsText.textContent = `${item.views.toLocaleString()}`;
-        
+
         const viewsIcon = document.createElement('i');
         viewsIcon.className = 'fas fa-eye';
         viewsIcon.style.marginLeft = '5px';
-        
+
         stats.appendChild(statsIcon);
         stats.appendChild(viewsText);
         stats.appendChild(viewsIcon);
-        
+
         li.appendChild(leftContent);
         li.appendChild(stats);
-        
+
         li.addEventListener('click', () => {
           document.getElementById('searchInput').value = item.topic;
           executeSearch();
         });
-        
+
         list.appendChild(li);
       });
-      
+
       // Actualizar tendencias cada 30 segundos
       setTimeout(() => {
         updateTrendingStats();
       }, 30000);
     }
-    
+
     function updateTrendingStats() {
       const trending = loadTrending();
       trending.forEach(item => {
@@ -1178,8 +1227,8 @@
       const submitReportBtn = document.getElementById('submitReport');
 
       const introSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/wAVlZWVlZWVlZWVlZWVlZWVlZWVlZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2v7+/v7+/v7+/v7+/v7+/v7+/v7//////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAGgAAAAEAAAMYAAQGAkNhAAAQJAADBhgAABUWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
-      const typeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA+UAVlZWVlZWVlZWVlZWVlZWVlZWVlZ8fHx8fHx8fHx8fHx8fHx8fHx8fHx8zMzMzMzMzMzMzMzMzMzMzMzMzMzM////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAAN4AAQIBAMDAAAABQ4AAAMGGAAAFhYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
-      const executeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/MAVlZWVlZWVlZWVlZWVlZWVlZWVlZ7e3t7e3t7e3t7e3t7e3t7e3t7e3t7ysrKysrKysrKysrKysrKysrKysrK////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAANyAAQGAwIAAAAACw4AAAMGGAAAFRYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+      const typeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA+UAVlZWVlZWVlZWVlZWVlZWVlZWVlZ8fHx8fHx8fHx8fHx8fHx8fHx8fHx8zMzMzMzMzMzMzMzMzMzMzMzMzMzM////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAAN4AAQIBAMDAAAABQ4AAAMGGAAAFhYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+      const executeSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAFhpbmcAAAAPAAAAAwAAA/MAVlZWVlZWVlZWVlZWVlZWVlZWVlZ7e3t7e3t7e3t7e3t7e3t7e3t7e3t7ysrKysrKysrKysrKysrKysrKysrK////////////////////////////////////////////////////////////////////////////////////////////////////////////MAAAAxpMRFNBAAAAHQAAAAEAAANyAAQGAwIAAAAACw4AAAMGGAAAFRYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
 
       introSound.volume = 0.5;
       introSound.play().catch(e => console.log('Error playing sound:', e));
@@ -1278,7 +1327,7 @@
       closeVideoBtn.addEventListener('click', () => { toggleVideoPlayerOverlay(false); });
       submitReportBtn.addEventListener('click', submitReport);
 
-      
+
     });
   </script>
 </body>
