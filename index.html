@@ -235,23 +235,76 @@
       font-weight: 600;
       text-transform: uppercase;
     }
-    textarea {
-      width: 100%; 
+    .editor-wrapper {
+      position: relative;
       height: 100%;
-      padding: 16px; 
+      background: var(--editor-bg);
+    }
+    
+    .line-numbers {
+      width: 45px;
+      padding: 16px 8px;
+      background: var(--editor-bg);
+      color: #666;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: right;
+      user-select: none;
+      border-right: 1px solid rgba(0,0,0,0.1);
+      white-space: pre;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+    
+    textarea {
+      width: 100%;
+      height: 100%;
+      padding: 16px 16px 16px 53px;
       border: none;
       font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
-      font-size: 14px; 
+      font-size: 14px;
       line-height: 1.5;
       tab-size: 2;
-      resize: none; 
-      background: var(--editor-bg); 
+      resize: none;
+      background: var(--editor-bg);
       color: var(--text-color);
+      white-space: pre;
+      overflow-wrap: normal;
+      overflow-x: auto;
     }
-    textarea:focus { 
+    
+    textarea:focus {
       outline: none;
       background: var(--editor-bg);
     }
+
+    /* Colores de sintaxis */
+    .syntax-highlight {
+      position: absolute;
+      left: 53px;
+      top: 16px;
+      right: 0;
+      bottom: 0;
+      padding: 0 16px;
+      pointer-events: none;
+      color: transparent;
+      white-space: pre;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      z-index: -1;
+      background: transparent;
+    }
+
+    .syntax-highlight .keyword { color: #C678DD; }
+    .syntax-highlight .string { color: #98C379; }
+    .syntax-highlight .number { color: #D19A66; }
+    .syntax-highlight .function { color: #61AFEF; }
+    .syntax-highlight .comment { color: #5C6370; font-style: italic; }
     .dark-mode .editor-area {
       background: #1e1e1e;
     }
@@ -565,13 +618,25 @@
   <!-- ===== Editor ===== -->
   <div class="editor-container">
     <div class="editor-area" data-language="html">
-      <textarea id="htmlEditor" placeholder="Escribe tu código HTML aquí..." spellcheck="false"></textarea>
+      <div class="editor-wrapper">
+        <div class="line-numbers" id="htmlLineNumbers">1</div>
+        <textarea id="htmlEditor" placeholder="Escribe tu código HTML aquí..." spellcheck="false"></textarea>
+        <div class="syntax-highlight" id="htmlHighlight"></div>
+      </div>
     </div>
     <div class="editor-area" data-language="css">
-      <textarea id="cssEditor" placeholder="Escribe tu código CSS aquí..." spellcheck="false"></textarea>
+      <div class="editor-wrapper">
+        <div class="line-numbers" id="cssLineNumbers">1</div>
+        <textarea id="cssEditor" placeholder="Escribe tu código CSS aquí..." spellcheck="false"></textarea>
+        <div class="syntax-highlight" id="cssHighlight"></div>
+      </div>
     </div>
     <div class="editor-area" data-language="javascript">
-      <textarea id="jsEditor" placeholder="Escribe tu código JavaScript aquí..." spellcheck="false"></textarea>
+      <div class="editor-wrapper">
+        <div class="line-numbers" id="jsLineNumbers">1</div>
+        <textarea id="jsEditor" placeholder="Escribe tu código JavaScript aquí..." spellcheck="false"></textarea>
+        <div class="syntax-highlight" id="jsHighlight"></div>
+      </div>
     </div>
   </div>
 
@@ -613,7 +678,6 @@
     /*************************************************
      *       CONFIGURACIÓN DE CLAVES API (EJEMPLO)
      *************************************************/
-    const CHATGPT_API_KEY = "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";
     const YOUTUBE_API_KEY = "AIzaSyDUzRmn9mQ4RL5EwzgExD3CfIzULos76NQ";
 
     // Si no existe un idioma guardado, se usa "es"
@@ -761,54 +825,8 @@
     }
 
     /* ========================
-       Validación HTML con ChatGPT
+       Validación HTML Simple
        ======================== */
-    let debounceTimeout;
-    async function validateHTML() {
-      const htmlEditor = document.getElementById('htmlEditor');
-      const htmlCode = htmlEditor.value.trim();
-      const t = translations[currentLang] || translations["es"];
-      const localErrors = [];
-      if (!htmlCode.toLowerCase().startsWith('<!doctype html>')) localErrors.push(`${t.commonErrorsFound} <!DOCTYPE html>`);
-      if (!/<html[\s>]/i.test(htmlCode)) localErrors.push(`${t.commonErrorsFound} <html>`);
-      if (!/<\/html>/i.test(htmlCode)) localErrors.push(`${t.commonErrorsFound} </html>`);
-      if (!/<head[\s>]/i.test(htmlCode)) localErrors.push(`${t.commonErrorsFound} <head>`);
-      if (!/<body[\s>]/i.test(htmlCode)) localErrors.push(`${t.commonErrorsFound} <body>`);
-      if (!/<\/body>/i.test(htmlCode)) localErrors.push(`${t.commonErrorsFound} </body>`);
-      let errorDiv = document.getElementById('htmlErrorMessages');
-      if (!errorDiv) {
-        errorDiv = document.createElement('div');
-        errorDiv.id = 'htmlErrorMessages';
-        errorDiv.style.backgroundColor = 'rgba(255,255,0,0.3)';
-        errorDiv.style.padding = '10px';
-        errorDiv.style.marginTop = '5px';
-        errorDiv.style.borderRadius = '5px';
-        htmlEditor.parentNode.appendChild(errorDiv);
-      }
-      htmlEditor.classList.add('html-error');
-      errorDiv.classList.add('shake');
-      setTimeout(() => { errorDiv.classList.remove('shake'); }, 500);
-      errorDiv.innerHTML = `<strong>${t.analyzing}</strong>`;
-      const chatGPTresponse = await analyzeHTMLWithChatGPT(htmlCode);
-      let finalMessage = "";
-      if (localErrors.length === 0) { finalMessage += `<strong>${t.noErrorsFound}</strong><br>`; htmlEditor.classList.remove('html-error'); }
-      else { finalMessage += localErrors.join('<br>') + '<br>'; }
-      if (chatGPTresponse) finalMessage += `<br><strong>ChatGPT:</strong> ${chatGPTresponse}`;
-      errorDiv.innerHTML = finalMessage;
-    }
-    async function analyzeHTMLWithChatGPT(htmlCode) {
-      try {
-        const prompt = `Analiza el siguiente HTML y di qué errores tiene y sugerencias de mejora. Responde brevemente:\n${htmlCode}`;
-        const response = await fetch("https://api.openai.com/v1/completions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${CHATGPT_API_KEY}` },
-          body: JSON.stringify({ model: "text-davinci-003", prompt, max_tokens: 100, temperature: 0.2 })
-        });
-        const data = await response.json();
-        if (data.choices && data.choices.length > 0) return data.choices[0].text.trim();
-        return null;
-      } catch (error) { console.error("Error al llamar a ChatGPT:", error); return null; }
-    }
 
     /* ========================
        Funciones de Búsqueda (YouTube y Wikipedia)
@@ -1191,6 +1209,42 @@
     /*************************************************
      *    EVENTOS AL CARGAR LA PÁGINA
      *************************************************/
+    function updateLineNumbers(editor, lineNumbersElement) {
+      const lines = editor.value.split('\n').length;
+      let lineNumbers = [];
+      for (let i = 1; i <= lines; i++) {
+        lineNumbers.push(i);
+      }
+      lineNumbersElement.textContent = lineNumbers.join('\n');
+      
+      // Ajustar el ancho según el número de dígitos
+      const maxDigits = String(lines).length;
+      lineNumbersElement.style.width = (maxDigits * 10 + 25) + 'px';
+    }
+
+    function updateSyntaxHighlight(editor, highlightElement, language) {
+      let code = editor.value;
+      
+      // Patrones básicos de resaltado
+      const patterns = {
+        keyword: /\b(function|return|const|let|var|if|else|for|while|class|import|export|default|async|await)\b/g,
+        string: /"([^"\\]|\\.)*"|'([^'\\]|\\.)*'/g,
+        number: /\b\d+(\.\d+)?\b/g,
+        function: /\b\w+(?=\()/g,
+        comment: /\/\/.*|\/\*[\s\S]*?\*\//g
+      };
+
+      // Aplicar resaltado
+      let highlighted = code;
+      for (const [type, pattern] of Object.entries(patterns)) {
+        highlighted = highlighted.replace(pattern, match => 
+          `<span class="${type}">${match}</span>`
+        );
+      }
+
+      highlightElement.innerHTML = highlighted;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       updateLanguage(currentLang);
       checkSession();
@@ -1241,6 +1295,20 @@
         document.getElementById('loginModal').style.display = 'block';
       }, 2500);
       [htmlEditor, cssEditor, jsEditor].forEach(editor => {
+        const editorId = editor.id;
+        const lineNumbersElement = document.getElementById(editorId.replace('Editor', 'LineNumbers'));
+        const highlightElement = document.getElementById(editorId.replace('Editor', 'Highlight'));
+        
+        editor.addEventListener('input', () => {
+          updateLineNumbers(editor, lineNumbersElement);
+          updateSyntaxHighlight(editor, highlightElement, editorId.replace('Editor', ''));
+        });
+        
+        editor.addEventListener('scroll', () => {
+          lineNumbersElement.scrollTop = editor.scrollTop;
+          highlightElement.scrollTop = editor.scrollTop;
+        });
+        
         editor.addEventListener('keydown', () => {
           const newTypeSound = typeSound.cloneNode();
           newTypeSound.volume = 0.3;
@@ -1293,10 +1361,7 @@
       document.getElementById("lineLoginBtn").addEventListener("click", loginSimulated);
       document.getElementById('updatePopup').addEventListener('click', showNotificationPanel);
       document.getElementById('closeNotificationPanel').addEventListener('click', hideNotificationPanel);
-      htmlEditor.addEventListener('input', function() {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(validateHTML, 1000);
-      });
+      
       searchBtn.addEventListener('click', () => { toggleSearchOverlay(true); });
       closeSearchOverlay.addEventListener('click', () => { toggleSearchOverlay(false); });
       searchExecuteBtn.addEventListener('click', executeSearch);
