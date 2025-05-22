@@ -746,13 +746,8 @@
        ======================== */
     function checkSession() { if(localStorage.getItem('loggedIn') === 'true') document.getElementById('loginModal').style.display = 'none'; }
     function loginSimulated() {
-      const loginContent = document.getElementById('loginContent');
-      loginContent.innerHTML = '<div class="spinner"></div><p>Iniciando sesión...</p>';
-      setTimeout(() => {
-        loginContent.innerHTML = `<h2>${getTranslation("welcomeMessage").split("!")[0]}!</h2><p>${getTranslation("welcomeMessage")}</p>`;
-        localStorage.setItem('loggedIn', 'true');
-        setTimeout(() => { document.getElementById('loginModal').style.display = 'none'; }, 2000);
-      }, 3000);
+      localStorage.setItem('loggedIn', 'true');
+      document.getElementById('loginModal').style.display = 'none';
     }
 
     /* ========================
