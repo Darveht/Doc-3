@@ -676,6 +676,7 @@
       <div class="search-input-container">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
         <input type="text" id="searchInput" placeholder="Buscar..." />
+        <i class="fa-solid fa-xmark clear-search" id="clearSearch" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #666; cursor: pointer; display: none; font-size: 16px;"></i>
       </div>
       <button id="searchExecuteBtn"></button>
     </div>
@@ -1388,6 +1389,19 @@
       searchBtn.addEventListener('click', () => { toggleSearchOverlay(true); });
       closeSearchOverlay.addEventListener('click', () => { toggleSearchOverlay(false); });
       searchExecuteBtn.addEventListener('click', executeSearch);
+      
+      // Mostrar/ocultar botón de limpiar según el contenido del input
+      const searchInput = document.getElementById('searchInput');
+      const clearSearch = document.getElementById('clearSearch');
+      
+      searchInput.addEventListener('input', () => {
+        clearSearch.style.display = searchInput.value ? 'block' : 'none';
+      });
+      
+      clearSearch.addEventListener('click', () => {
+        searchInput.value = '';
+        clearSearch.style.display = 'none';
+      });
       toggleVideos.addEventListener('click', () => {
         toggleVideos.classList.add('active');
         toggleArticles.classList.remove('active');
