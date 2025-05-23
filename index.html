@@ -362,9 +362,29 @@
       display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
     }
     .search-top-bar i { font-size: 1.5rem; cursor: pointer; }
+    .search-input-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: #f1f1f1;
+      border-radius: 8px;
+      padding: 0 10px;
+    }
+    .search-icon {
+      color: #666;
+      margin-right: 8px;
+    }
     .search-top-bar input {
-      flex: 1; padding: 10px; font-size: 1rem; border: 1px solid #ccc;
-      border-radius: 5px; background: var(--editor-bg); color: var(--text-color);
+      flex: 1;
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-color);
+    }
+    .search-top-bar input:focus {
+      outline: none;
     }
     .search-top-bar button {
       background: var(--primary-color); color: #fff; border: none;
@@ -653,7 +673,11 @@
   <div id="searchOverlay">
     <div class="search-top-bar">
       <i class="fa-solid fa-arrow-left" id="closeSearchOverlay"></i>
-      <input type="text" id="searchInput" placeholder="Buscar videos o artículos..." />
+      <div class="search-input-container">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Buscar..." />
+        <i class="fa-solid fa-xmark clear-search" id="clearSearch" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #666; cursor: pointer; display: none; font-size: 16px; background: #e0e0e0; border-radius: 50%; padding: 4px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;"></i>
+      </div>
       <button id="searchExecuteBtn"></button>
     </div>
     <!-- Search toggle removed -->
@@ -1365,6 +1389,19 @@
       searchBtn.addEventListener('click', () => { toggleSearchOverlay(true); });
       closeSearchOverlay.addEventListener('click', () => { toggleSearchOverlay(false); });
       searchExecuteBtn.addEventListener('click', executeSearch);
+      
+      // Mostrar/ocultar botón de limpiar según el contenido del input
+      const searchInput = document.getElementById('searchInput');
+      const clearSearch = document.getElementById('clearSearch');
+      
+      searchInput.addEventListener('input', () => {
+        clearSearch.style.display = searchInput.value ? 'block' : 'none';
+      });
+      
+      clearSearch.addEventListener('click', () => {
+        searchInput.value = '';
+        clearSearch.style.display = 'none';
+      });
       toggleVideos.addEventListener('click', () => {
         toggleVideos.classList.add('active');
         toggleArticles.classList.remove('active');
