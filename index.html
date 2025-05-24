@@ -698,7 +698,64 @@
 
 
   <!-- ===== Script Principal ===== -->
+  <!-- Offline Message -->
+  <div id="offlineMessage" style="display: none; position: fixed; bottom: 20px; left: 20px; background: #ff4444; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999;">
+    Estás trabajando sin conexión
+  </div>
+
   <script>
+    // Service Worker inline
+    if ('serviceWorker' in navigator) {
+      const swContent = `
+        const CACHE_NAME = 'clack-offline-v1';
+        const urlsToCache = [
+          '/',
+          '/index.html'
+        ];
+
+        self.addEventListener('install', event => {
+          event.waitUntil(
+            caches.open(CACHE_NAME)
+              .then(cache => cache.addAll(urlsToCache))
+          );
+        });
+
+        self.addEventListener('fetch', event => {
+          event.respondWith(
+            caches.match(event.request)
+              .then(response => response || fetch(event.request))
+              .catch(() => {
+                if (event.request.mode === 'navigate') {
+                  return caches.match('/index.html');
+                }
+              })
+          );
+        });
+      `;
+
+      const blob = new Blob([swContent], {type: 'text/javascript'});
+      const swUrl = URL.createObjectURL(blob);
+      
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register(swUrl)
+          .then(registration => {
+            console.log('ServiceWorker registered:', registration);
+          })
+          .catch(error => {
+            console.log('ServiceWorker registration failed:', error);
+          });
+      });
+    }
+
+    // Check online/offline status
+    window.addEventListener('online', () => {
+      document.getElementById('offlineMessage').style.display = 'none';
+    });
+    
+    window.addEventListener('offline', () => {
+      document.getElementById('offlineMessage').style.display = 'block';
+    });
+
     /*************************************************
      *       CONFIGURACIÓN DE CLAVES API (EJEMPLO)
      *************************************************/
