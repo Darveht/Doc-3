@@ -312,7 +312,105 @@
       background: #1e1e1e;
       color: #d4d4d4;
     }
-    /* Vista Previa */
+    /* Vista Previa y Herramientas */
+    .preview-tools {
+      display: flex;
+      gap: 10px;
+      margin-right: 20px;
+    }
+
+    .preview-tools button {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .preview-tools button:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.1);
+    }
+
+    .scan-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      display: none;
+      background: rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .scan-line {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00ff00, transparent);
+      box-shadow: 0 0 10px #00ff00;
+      animation: scanMove 3s linear infinite;
+    }
+
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .particle {
+      position: absolute;
+      background: #00ff00;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: particleFloat 2s linear infinite;
+    }
+
+    @keyframes particleFloat {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) scale(0);
+        opacity: 0;
+      }
+    }
+
+    .code-highlight {
+      position: absolute;
+      background: rgba(0, 255, 0, 0.2);
+      animation: highlight 0.5s ease;
+    }
+
+    @keyframes highlight {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .scan-results {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      padding: 20px;
+      border-radius: 10px;
+      color: #00ff00;
+      font-family: monospace;
+      display: none;
+    }
+
+    @keyframes scanMove {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+
     .preview-overlay {
       display: none; position: fixed; top: 0; left: 0;
       width: 100%; height: 100%; background: var(--editor-bg);
@@ -664,7 +762,16 @@
   <div id="previewOverlay" class="preview-overlay">
     <div class="preview-header">
       <h2 id="previewHeaderText">Vista Previa</h2>
+      <div class="preview-tools">
+        <button id="zoomInBtn" title="Acercar"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+        <button id="zoomOutBtn" title="Alejar"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+        <button id="scanBtn" title="Escanear seguridad"><i class="fa-solid fa-shield-virus"></i></button>
+      </div>
       <button id="closePreview"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <div id="scanAnimation" class="scan-animation">
+      <div class="scan-line"></div>
+      <div class="scan-results"></div>
     </div>
     <iframe id="previewFrame"></iframe>
   </div>
@@ -1326,7 +1433,119 @@
       highlightElement.innerHTML = highlighted;
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // Funciones de herramientas de vista previa
+function initPreviewTools() {
+  let currentZoom = 1;
+  const frame = document.getElementById('previewFrame');
+  
+  document.getElementById('zoomInBtn').addEventListener('click', () => {
+    currentZoom = Math.min(currentZoom + 0.1, 2);
+    frame.style.transform = `scale(${currentZoom})`;
+  });
+
+  document.getElementById('zoomOutBtn').addEventListener('click', () => {
+    currentZoom = Math.max(currentZoom - 0.1, 0.5);
+    frame.style.transform = `scale(${currentZoom})`;
+  });
+
+  document.getElementById('scanBtn').addEventListener('click', () => {
+    const scanAnimation = document.getElementById('scanAnimation');
+    const scanResults = scanAnimation.querySelector('.scan-results');
+    scanAnimation.style.display = 'block';
+    
+    // Create particles container
+    const particles = document.createElement('div');
+    particles.className = 'particles';
+    scanAnimation.appendChild(particles);
+
+    // Generate particles
+    function createParticle(x, y) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = x + 'px';
+      particle.style.top = y + 'px';
+      particle.style.width = Math.random() * 4 + 2 + 'px';
+      particle.style.height = particle.style.width;
+      particles.appendChild(particle);
+      
+      setTimeout(() => particle.remove(), 2000);
+    }
+
+    // Analyze code sections
+    const codeElements = [
+      { elem: htmlEditor, type: 'HTML' },
+      { elem: cssEditor, type: 'CSS' },
+      { elem: jsEditor, type: 'JavaScript' }
+    ];
+
+    let currentElement = 0;
+    let totalIssues = 0;
+    let progress = 0;
+
+    scanResults.style.display = 'block';
+    scanResults.innerHTML = `
+      <h3>Análisis de Seguridad en Tiempo Real</h3>
+      <p>Iniciando escaneo...</p>
+      <div class="progress"></div>
+    `;
+
+    const analyzeInterval = setInterval(() => {
+      if (currentElement < codeElements.length) {
+        const { elem, type } = codeElements[currentElement];
+        const code = elem.value;
+        
+        // Create floating particles
+        for (let i = 0; i < 3; i++) {
+          createParticle(
+            Math.random() * scanAnimation.offsetWidth,
+            Math.random() * scanAnimation.offsetHeight
+          );
+        }
+
+        // Simulate code analysis
+        let issues = [];
+        if (type === 'HTML') {
+          if (code.includes('<script>')) issues.push('Script inline detectado');
+          if (!code.includes('<!DOCTYPE html>')) issues.push('Falta DOCTYPE');
+        } else if (type === 'CSS') {
+          if (code.includes('!important')) issues.push('Uso de !important');
+        } else if (type === 'JavaScript') {
+          if (code.includes('eval(')) issues.push('Uso de eval()');
+        }
+
+        totalIssues += issues.length;
+        progress = Math.min(100, ((currentElement + 1) / codeElements.length) * 100);
+
+        scanResults.innerHTML = `
+          <h3>Análisis de Seguridad en Tiempo Real</h3>
+          <p>Analizando ${type}...</p>
+          <div class="progress">Progreso: ${Math.floor(progress)}%</div>
+          <div class="issues">Problemas encontrados: ${totalIssues}</div>
+          ${issues.length ? '<ul>' + issues.map(i => `<li>${i}</li>`).join('') + '</ul>' : ''}
+        `;
+
+        currentElement++;
+      } else {
+        clearInterval(analyzeInterval);
+        
+        scanResults.innerHTML = `
+          <h3>Análisis Completado ✓</h3>
+          <p>${totalIssues > 0 ? `Se encontraron ${totalIssues} problemas` : 'No se encontraron amenazas'}</p>
+          <p>Archivos analizados: ${codeElements.length}</p>
+          <p>Seguridad general: ${totalIssues === 0 ? '100%' : Math.max(0, 100 - totalIssues * 10) + '%'}</p>
+        `;
+
+        setTimeout(() => {
+          particles.remove();
+          scanAnimation.style.display = 'none';
+          scanResults.style.display = 'none';
+        }, 3000);
+      }
+    }, 1000);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
       updateLanguage(currentLang);
       checkSession();
       setupSwipeDetection();
@@ -1402,6 +1621,7 @@
           ? '<i class="fa-solid fa-sun"></i>'
           : '<i class="fa-solid fa-moon"></i>';
       });
+      initPreviewTools();
       previewBtn.addEventListener('click', () => {
         executeSound.play();
         runScanAnimation();
