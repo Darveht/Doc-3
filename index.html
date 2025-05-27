@@ -111,12 +111,29 @@
     }
     .modal-content h2 { margin-bottom: 10px; font-size: 2rem; }
     .modal-content p { margin-bottom: 20px; font-size: 1.2rem; }
-    #lineLoginBtn, #changeLangBtn {
-      padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px;
-      background: #fff; color: var(--primary-color); cursor: pointer;
-      margin-top: 10px;
+    #githubLoginBtn, #changeLangBtn {
+      padding: 15px 25px; font-size: 16px; border: none; border-radius: 8px;
+      background: #24292e; color: #fff; cursor: pointer;
+      margin-top: 15px; font-weight: 600;
+      display: flex; align-items: center; gap: 10px;
+      transition: all 0.3s ease; min-width: 280px;
+      justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
-    #lineLoginBtn:hover, #changeLangBtn:hover { background: #f0f0f0; }
+    #githubLoginBtn:hover { 
+      background: #1a1e22; transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    #githubLoginBtn i {
+      font-size: 18px; transition: transform 0.3s ease;
+    }
+    #githubLoginBtn:hover i {
+      transform: scale(1.1);
+    }
+    #changeLangBtn {
+      background: #fff; color: var(--primary-color);
+      margin-top: 10px; min-width: auto;
+    }
+    #changeLangBtn:hover { background: #f0f0f0; }
     /* Spinner */
     .spinner {
       border: 8px solid #f3f3f3; border-top: 8px solid #fff;
@@ -675,11 +692,11 @@
   <!-- ===== Modal Login ===== -->
   <div id="loginModal" class="modal">
     <div class="modal-content" id="loginContent">
-      <h2 id="modalTitle">Registro / Inicia sesión con LINE</h2>
+      <h2 id="modalTitle">Registro / Inicia sesión con GitHub</h2>
       <p id="modalDescription">Inicia sesión como invitado.</p>
-      <button id="lineLoginBtn">
-        <i class="fa-brands fa-line"></i>
-        <span id="loginBtnText">Iniciar sesión con LINE como invitado</span>
+      <button id="githubLoginBtn">
+        <i class="fa-brands fa-github"></i>
+        <span id="loginBtnText">Iniciar sesión con GitHub como invitado</span>
       </button>
       <button id="changeLangBtn">Cambiar Idioma</button>
     </div>
@@ -875,9 +892,9 @@
     let currentLang = localStorage.getItem('currentLang');
 
     const defaultTranslations = {
-      modalTitle: "Registro / Inicia sesión con LINE",
+      modalTitle: "Registro / Inicia sesión con GitHub",
       modalDescription: "Inicia sesión como invitado.",
-      loginButton: "Iniciar sesión con LINE como invitado",
+      loginButton: "Iniciar sesión con GitHub como invitado",
       previewButton: "Vista Previa",
       htmlPlaceholder: "HTML...",
       cssPlaceholder: "CSS...",
@@ -1659,7 +1676,7 @@ document.addEventListener('DOMContentLoaded', () => {
           btn.addEventListener('click', e => { updateLanguage(e.target.getAttribute('data-lang')); });
         }
       });
-      document.getElementById("lineLoginBtn").addEventListener("click", loginSimulated);
+      document.getElementById("githubLoginBtn").addEventListener("click", loginSimulated);
       document.getElementById('updatePopup').addEventListener('click', showNotificationPanel);
       document.getElementById('closeNotificationPanel').addEventListener('click', hideNotificationPanel);
       
