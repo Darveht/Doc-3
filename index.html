@@ -356,6 +356,80 @@
       transform: scale(1.05);
     }
 
+    /* Herramientas del Editor */
+    .editor-tools {
+      display: flex;
+      gap: 15px;
+      margin: 10px 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .tool-group {
+      display: flex;
+      gap: 5px;
+      padding: 5px;
+      background: rgba(0,0,0,0.05);
+      border-radius: 8px;
+    }
+
+    .editor-tools button {
+      background: var(--editor-bg);
+      border: 1px solid #ddd;
+      color: var(--text-color);
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .editor-tools button:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .project-actions .duplicate-btn {
+      background: #28a745;
+    }
+
+    .project-actions .duplicate-btn:hover {
+      background: #218838;
+    }
+
+    .project-actions .export-btn {
+      background: #17a2b8;
+    }
+
+    .project-actions .export-btn:hover {
+      background: #138496;
+    }
+
+    .project-actions .fullscreen-btn {
+      background: #6f42c1;
+    }
+
+    .project-actions .fullscreen-btn:hover {
+      background: #5a2d91;
+    }
+
+    /* Modo pantalla completa */
+    .project-editor.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      background: var(--bg-color);
+    }
+
+    .project-editor.fullscreen .editor-container {
+      height: calc(100vh - 160px);
+    }
+
     .dark-mode .preview-tools button {
       background: var(--primary-color);
       color: white;
@@ -968,6 +1042,15 @@
               <button onclick="saveProject()" class="save-btn">
                 <i class="fas fa-save"></i> Guardar
               </button>
+              <button onclick="duplicateProject()" class="duplicate-btn" title="Duplicar proyecto">
+                <i class="fas fa-copy"></i> Duplicar
+              </button>
+              <button onclick="exportProject()" class="export-btn" title="Exportar proyecto">
+                <i class="fas fa-download"></i> Exportar
+              </button>
+              <button onclick="toggleFullscreen()" class="fullscreen-btn" title="Pantalla completa">
+                <i class="fas fa-expand"></i>
+              </button>
               <button onclick="closeProject()" class="close-btn">
                 <i class="fas fa-times"></i> Cerrar
               </button>
@@ -998,9 +1081,40 @@
             </div>
           </div>
 
+          <div class="editor-tools">
+            <div class="tool-group">
+              <button onclick="formatAllCode()" title="Formatear todo el código">
+                <i class="fas fa-code"></i> Formatear
+              </button>
+              <button onclick="findAndReplace()" title="Buscar y reemplazar">
+                <i class="fas fa-search"></i> B&R
+              </button>
+              <button onclick="validateCode()" title="Validar código">
+                <i class="fas fa-check-circle"></i> Validar
+              </button>
+            </div>
+            <div class="tool-group">
+              <button onclick="undoChanges()" title="Deshacer">
+                <i class="fas fa-undo"></i>
+              </button>
+              <button onclick="redoChanges()" title="Rehacer">
+                <i class="fas fa-redo"></i>
+              </button>
+              <button onclick="clearAllEditors()" title="Limpiar todo">
+                <i class="fas fa-trash"></i> Limpiar
+              </button>
+            </div>
+          </div>
+          
           <div class="preview-tools">
             <button id="previewBtnProject"><i class="fa-solid fa-eye"></i> <span id="previewBtnTextProject">Vista Previa</span></button>
             <button id="scanBtnProject" title="Escanear seguridad"><i class="fa-solid fa-shield-virus"></i> Escanear</button>
+            <button onclick="shareProject()" title="Compartir proyecto">
+              <i class="fas fa-share"></i> Compartir
+            </button>
+            <button onclick="showProjectSettings()" title="Configuraciones del proyecto">
+              <i class="fas fa-cog"></i> Config
+            </button>
           </div>
 
           <div id="scanAnimation" class="scan-animation">
@@ -1910,6 +2024,549 @@ function initPreviewTools() {
       }
     }
 
+    function duplicateProject() {
+      if (!currentProjectId) {
+        alert('No hay proyecto activo para duplicar');
+        return;
+      }
+      
+      const projects = loadProjects();
+      const project = projects.find(p => p.id === currentProjectId);
+      
+      if (project) {
+        const newProject = {
+          ...project,
+          id: Date.now(),
+          name: project.name + ' - Copia',
+          createdAt: new Date().toISOString()
+        };
+        
+        projects.push(newProject);
+        saveProjects(projects);
+        renderProjectsList();
+        showNotification('Proyecto duplicado exitosamente', 'success');
+      }
+    }
+
+    function exportProject() {
+      if (!currentProjectId) {
+        alert('No hay proyecto activo para exportar');
+        return;
+      }
+      
+      const projects = loadProjects();
+      const project = projects.find(p => p.id === currentProjectId);
+      
+      if (project) {
+        const exportData = {
+          name: project.name,
+          html: project.html || '',
+          css: project.css || '',
+          js: project.js || '',
+          exportDate: new Date().toISOString()
+        };
+        
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${project.name}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        showNotification('Proyecto exportado exitosamente', 'success');
+      }
+    }
+
+    function formatAllCode() {
+      try {
+        // Obtener el editor activo dependiendo de la sección
+        const currentSection = document.querySelector('.section.active').id;
+        let htmlEditor, cssEditor, jsEditor;
+        
+        if (currentSection === 'proyectos') {
+          htmlEditor = document.getElementById('htmlEditor');
+          cssEditor = document.getElementById('cssEditor');
+          jsEditor = document.getElementById('jsEditor');
+        } else {
+          htmlEditor = document.getElementById('htmlEditorMain');
+          cssEditor = document.getElementById('cssEditorMain');
+          jsEditor = document.getElementById('jsEditorMain');
+        }
+        
+        let formatted = false;
+        
+        if (htmlEditor && htmlEditor.value.trim()) {
+          const originalValue = htmlEditor.value;
+          htmlEditor.value = formatHTML(htmlEditor.value);
+          if (originalValue !== htmlEditor.value) formatted = true;
+          updateLineNumbers(htmlEditor, document.getElementById(htmlEditor.id.replace('Editor', 'LineNumbers')));
+        }
+        
+        if (cssEditor && cssEditor.value.trim()) {
+          const originalValue = cssEditor.value;
+          cssEditor.value = formatCSS(cssEditor.value);
+          if (originalValue !== cssEditor.value) formatted = true;
+          updateLineNumbers(cssEditor, document.getElementById(cssEditor.id.replace('Editor', 'LineNumbers')));
+        }
+        
+        if (jsEditor && jsEditor.value.trim()) {
+          const originalValue = jsEditor.value;
+          jsEditor.value = formatJS(jsEditor.value);
+          if (originalValue !== jsEditor.value) formatted = true;
+          updateLineNumbers(jsEditor, document.getElementById(jsEditor.id.replace('Editor', 'LineNumbers')));
+        }
+        
+        if (formatted) {
+          showNotification('Código formateado exitosamente', 'success');
+        } else {
+          showNotification('No hay código para formatear', 'info');
+        }
+      } catch (error) {
+        console.error('Error al formatear:', error);
+        showNotification('Error al formatear el código', 'error');
+      }
+    }
+
+    function formatHTML(html) {
+      if (!html || html.trim() === '') return html;
+      
+      // Formatear HTML básico
+      let formatted = html.trim();
+      
+      // Añadir DOCTYPE si no existe
+      if (!formatted.toLowerCase().includes('<!doctype')) {
+        formatted = '<!DOCTYPE html>\n' + formatted;
+      }
+      
+      // Formatear tags
+      formatted = formatted
+        .replace(/></g, '>\n<')
+        .replace(/(<\/[^>]+>)/g, '$1\n')
+        .replace(/(<[^/>]+>)/g, '$1\n')
+        .replace(/\n\s*\n/g, '\n')
+        .trim();
+      
+      // Indentar
+      const lines = formatted.split('\n');
+      let indentLevel = 0;
+      const indentedLines = lines.map(line => {
+        const trimmed = line.trim();
+        if (trimmed === '') return '';
+        
+        if (trimmed.startsWith('</')) {
+          indentLevel = Math.max(0, indentLevel - 1);
+        }
+        
+        const indented = '  '.repeat(indentLevel) + trimmed;
+        
+        if (trimmed.startsWith('<') && !trimmed.startsWith('</') && !trimmed.endsWith('/>') && !['<br>', '<hr>', '<img', '<input', '<meta', '<link'].some(tag => trimmed.toLowerCase().startsWith(tag))) {
+          indentLevel++;
+        }
+        
+        return indented;
+      });
+      
+      return indentedLines.join('\n');
+    }
+
+    function formatCSS(css) {
+      if (!css || css.trim() === '') return css;
+      
+      let formatted = css.trim();
+      
+      // Formatear CSS
+      formatted = formatted
+        .replace(/\s*{\s*/g, ' {\n  ')
+        .replace(/;\s*/g, ';\n  ')
+        .replace(/\s*}\s*/g, '\n}\n\n')
+        .replace(/,\s*/g, ',\n')
+        .replace(/\n\s*\n\s*\n/g, '\n\n')
+        .trim();
+      
+      return formatted;
+    }
+
+    function formatJS(js) {
+      if (!js || js.trim() === '') return js;
+      
+      let formatted = js.trim();
+      
+      // Formatear JavaScript básico
+      formatted = formatted
+        .replace(/\s*{\s*/g, ' {\n  ')
+        .replace(/;\s*/g, ';\n  ')
+        .replace(/\s*}\s*/g, '\n}\n\n')
+        .replace(/,\s*/g, ', ')
+        .replace(/\)\s*{/g, ') {\n  ')
+        .replace(/\n\s*\n\s*\n/g, '\n\n')
+        .trim();
+      
+      return formatted;
+    }
+
+    function findAndReplace() {
+      const searchTerm = prompt('¿Qué quieres buscar?');
+      if (!searchTerm || searchTerm.trim() === '') {
+        showNotification('Búsqueda cancelada', 'info');
+        return;
+      }
+      
+      const replaceTerm = prompt('¿Con qué lo quieres reemplazar?');
+      if (replaceTerm === null) {
+        showNotification('Reemplazo cancelado', 'info');
+        return;
+      }
+      
+      // Determinar qué editores usar
+      const currentSection = document.querySelector('.section.active').id;
+      let editors;
+      
+      if (currentSection === 'proyectos') {
+        editors = ['htmlEditor', 'cssEditor', 'jsEditor'];
+      } else {
+        editors = ['htmlEditorMain', 'cssEditorMain', 'jsEditorMain'];
+      }
+      
+      let totalReplacements = 0;
+      let editorsModified = [];
+      
+      editors.forEach(editorId => {
+        const editor = document.getElementById(editorId);
+        if (editor && editor.value) {
+          const originalValue = editor.value;
+          const regex = new RegExp(searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+          const replacements = (originalValue.match(regex) || []).length;
+          
+          if (replacements > 0) {
+            editor.value = originalValue.replace(regex, replaceTerm);
+            totalReplacements += replacements;
+            editorsModified.push(editorId.replace('Editor', '').replace('Main', '').toUpperCase());
+            
+            // Actualizar números de línea
+            const lineNumbersId = editorId.replace('Editor', 'LineNumbers');
+            const lineNumbersElement = document.getElementById(lineNumbersId);
+            if (lineNumbersElement) {
+              updateLineNumbers(editor, lineNumbersElement);
+            }
+          }
+        }
+      });
+      
+      if (totalReplacements > 0) {
+        showNotification(`${totalReplacements} reemplazos en ${editorsModified.join(', ')}`, 'success');
+      } else {
+        showNotification(`No se encontró "${searchTerm}"`, 'info');
+      }
+    }
+
+    function validateCode() {
+      const currentSection = document.querySelector('.section.active').id;
+      let htmlEditor, cssEditor, jsEditor;
+      
+      if (currentSection === 'proyectos') {
+        htmlEditor = document.getElementById('htmlEditor');
+        cssEditor = document.getElementById('cssEditor');
+        jsEditor = document.getElementById('jsEditor');
+      } else {
+        htmlEditor = document.getElementById('htmlEditorMain');
+        cssEditor = document.getElementById('cssEditorMain');
+        jsEditor = document.getElementById('jsEditorMain');
+      }
+      
+      let issues = [];
+      let warnings = [];
+      
+      // Validación HTML
+      if (htmlEditor && htmlEditor.value.trim()) {
+        const htmlContent = htmlEditor.value;
+        
+        if (!htmlContent.toLowerCase().includes('<!doctype')) {
+          issues.push('HTML: Falta declaración DOCTYPE');
+        }
+        
+        if (!htmlContent.includes('<html')) {
+          warnings.push('HTML: Se recomienda usar tag <html>');
+        }
+        
+        if (!htmlContent.includes('<head>')) {
+          warnings.push('HTML: Se recomienda usar tag <head>');
+        }
+        
+        if (!htmlContent.includes('<body>')) {
+          warnings.push('HTML: Se recomienda usar tag <body>');
+        }
+        
+        // Verificar tags sin cerrar
+        const openTags = (htmlContent.match(/<[a-zA-Z][^/>]*[^/]>/g) || []).length;
+        const closeTags = (htmlContent.match(/<\/[a-zA-Z][^>]*>/g) || []).length;
+        const selfClosing = (htmlContent.match(/<[^>]*\/>/g) || []).length;
+        
+        if (openTags - selfClosing !== closeTags) {
+          issues.push('HTML: Tags HTML desbalanceados');
+        }
+      }
+      
+      // Validación CSS
+      if (cssEditor && cssEditor.value.trim()) {
+        const cssContent = cssEditor.value;
+        const openBraces = (cssContent.match(/{/g) || []).length;
+        const closeBraces = (cssContent.match(/}/g) || []).length;
+        
+        if (openBraces !== closeBraces) {
+          issues.push('CSS: Llaves desbalanceadas');
+        }
+        
+        if (cssContent.includes('!important')) {
+          warnings.push('CSS: Uso excesivo de !important');
+        }
+      }
+      
+      // Validación JavaScript
+      if (jsEditor && jsEditor.value.trim()) {
+        const jsContent = jsEditor.value;
+        
+        const openParens = (jsContent.match(/\(/g) || []).length;
+        const closeParens = (jsContent.match(/\)/g) || []).length;
+        if (openParens !== closeParens) {
+          issues.push('JS: Paréntesis desbalanceados');
+        }
+        
+        const openBrackets = (jsContent.match(/\[/g) || []).length;
+        const closeBrackets = (jsContent.match(/\]/g) || []).length;
+        if (openBrackets !== closeBrackets) {
+          issues.push('JS: Corchetes desbalanceados');
+        }
+        
+        const openBraces = (jsContent.match(/{/g) || []).length;
+        const closeBraces = (jsContent.match(/}/g) || []).length;
+        if (openBraces !== closeBraces) {
+          issues.push('JS: Llaves desbalanceadas');
+        }
+        
+        if (jsContent.includes('eval(')) {
+          warnings.push('JS: Uso de eval() puede ser peligroso');
+        }
+      }
+      
+      // Mostrar resultados
+      let message = '';
+      if (issues.length === 0 && warnings.length === 0) {
+        showNotification('✅ Código validado - Sin errores detectados', 'success');
+      } else {
+        if (issues.length > 0) {
+          message += '❌ ERRORES:\n' + issues.join('\n') + '\n\n';
+        }
+        if (warnings.length > 0) {
+          message += '⚠️ ADVERTENCIAS:\n' + warnings.join('\n');
+        }
+        
+        // Crear modal personalizado para mostrar resultados
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+          position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+          background: rgba(0,0,0,0.8); z-index: 10000; display: flex;
+          align-items: center; justify-content: center; padding: 20px;
+        `;
+        
+        const content = document.createElement('div');
+        content.style.cssText = `
+          background: white; padding: 30px; border-radius: 10px;
+          max-width: 500px; max-height: 70vh; overflow-y: auto;
+          color: #333; text-align: left;
+        `;
+        
+        content.innerHTML = `
+          <h3 style="margin-bottom: 20px; color: #1877f2;">Resultados de Validación</h3>
+          <pre style="white-space: pre-wrap; font-family: Arial, sans-serif;">${message}</pre>
+          <button style="background: #1877f2; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 20px;" onclick="this.parentElement.parentElement.remove()">Cerrar</button>
+        `;
+        
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+      }
+    }
+
+    function clearAllEditors() {
+      const currentSection = document.querySelector('.section.active').id;
+      let htmlEditor, cssEditor, jsEditor;
+      
+      if (currentSection === 'proyectos') {
+        htmlEditor = document.getElementById('htmlEditor');
+        cssEditor = document.getElementById('cssEditor');
+        jsEditor = document.getElementById('jsEditor');
+      } else {
+        htmlEditor = document.getElementById('htmlEditorMain');
+        cssEditor = document.getElementById('cssEditorMain');
+        jsEditor = document.getElementById('jsEditorMain');
+      }
+      
+      if (confirm('¿Estás seguro de que quieres limpiar todo el código?')) {
+        let cleared = false;
+        
+        if (htmlEditor) {
+          htmlEditor.value = '';
+          updateLineNumbers(htmlEditor, document.getElementById(htmlEditor.id.replace('Editor', 'LineNumbers')));
+          cleared = true;
+        }
+        if (cssEditor) {
+          cssEditor.value = '';
+          updateLineNumbers(cssEditor, document.getElementById(cssEditor.id.replace('Editor', 'LineNumbers')));
+          cleared = true;
+        }
+        if (jsEditor) {
+          jsEditor.value = '';
+          updateLineNumbers(jsEditor, document.getElementById(jsEditor.id.replace('Editor', 'LineNumbers')));
+          cleared = true;
+        }
+        
+        if (cleared) {
+          showNotification('Editores limpiados exitosamente', 'success');
+        }
+      }
+    }
+
+    function shareProject() {
+      if (!currentProjectId) {
+        alert('No hay proyecto activo para compartir');
+        return;
+      }
+      
+      const shareUrl = `${window.location.origin}${window.location.pathname}?project=${currentProjectId}`;
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        showNotification('Enlace copiado al portapapeles', 'success');
+      }).catch(() => {
+        prompt('Copia este enlace para compartir:', shareUrl);
+      });
+    }
+
+    function showProjectSettings() {
+      alert('Configuraciones del proyecto - Función en desarrollo');
+    }
+
+    function toggleFullscreen() {
+      const editor = document.getElementById('projectEditor');
+      if (editor.classList.contains('fullscreen')) {
+        editor.classList.remove('fullscreen');
+        document.querySelector('.fullscreen-btn i').className = 'fas fa-expand';
+      } else {
+        editor.classList.add('fullscreen');
+        document.querySelector('.fullscreen-btn i').className = 'fas fa-compress';
+      }
+    }
+
+    let undoStack = [];
+    let redoStack = [];
+    let maxUndoSteps = 20;
+
+    function saveState() {
+      const currentSection = document.querySelector('.section.active').id;
+      const state = getCurrentState();
+      
+      // Solo guardar si hay cambios
+      if (undoStack.length === 0 || JSON.stringify(state) !== JSON.stringify(undoStack[undoStack.length - 1])) {
+        undoStack.push(state);
+        if (undoStack.length > maxUndoSteps) {
+          undoStack.shift();
+        }
+        redoStack = []; // Limpiar redo stack cuando se hace un nuevo cambio
+      }
+    }
+
+    function undoChanges() {
+      if (undoStack.length > 1) {
+        const currentState = getCurrentState();
+        redoStack.push(currentState);
+        undoStack.pop(); // Remover estado actual
+        const previousState = undoStack[undoStack.length - 1];
+        restoreState(previousState);
+        showNotification('Cambio deshecho ↶', 'info');
+      } else {
+        showNotification('No hay más cambios para deshacer', 'info');
+      }
+    }
+
+    function redoChanges() {
+      if (redoStack.length > 0) {
+        const state = redoStack.pop();
+        undoStack.push(getCurrentState());
+        restoreState(state);
+        showNotification('Cambio rehecho ↷', 'info');
+      } else {
+        showNotification('No hay más cambios para rehacer', 'info');
+      }
+    }
+
+    function getCurrentState() {
+      const currentSection = document.querySelector('.section.active').id;
+      let htmlEditor, cssEditor, jsEditor;
+      
+      if (currentSection === 'proyectos') {
+        htmlEditor = document.getElementById('htmlEditor');
+        cssEditor = document.getElementById('cssEditor');
+        jsEditor = document.getElementById('jsEditor');
+      } else {
+        htmlEditor = document.getElementById('htmlEditorMain');
+        cssEditor = document.getElementById('cssEditorMain');
+        jsEditor = document.getElementById('jsEditorMain');
+      }
+      
+      return {
+        html: htmlEditor ? htmlEditor.value : '',
+        css: cssEditor ? cssEditor.value : '',
+        js: jsEditor ? jsEditor.value : '',
+        section: currentSection
+      };
+    }
+
+    function restoreState(state) {
+      let htmlEditor, cssEditor, jsEditor;
+      
+      if (state.section === 'proyectos') {
+        htmlEditor = document.getElementById('htmlEditor');
+        cssEditor = document.getElementById('cssEditor');
+        jsEditor = document.getElementById('jsEditor');
+      } else {
+        htmlEditor = document.getElementById('htmlEditorMain');
+        cssEditor = document.getElementById('cssEditorMain');
+        jsEditor = document.getElementById('jsEditorMain');
+      }
+      
+      if (htmlEditor) {
+        htmlEditor.value = state.html;
+        updateLineNumbers(htmlEditor, document.getElementById(htmlEditor.id.replace('Editor', 'LineNumbers')));
+      }
+      if (cssEditor) {
+        cssEditor.value = state.css;
+        updateLineNumbers(cssEditor, document.getElementById(cssEditor.id.replace('Editor', 'LineNumbers')));
+      }
+      if (jsEditor) {
+        jsEditor.value = state.js;
+        updateLineNumbers(jsEditor, document.getElementById(jsEditor.id.replace('Editor', 'LineNumbers')));
+      }
+    }
+
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 5px;
+        z-index: 10000;
+        font-weight: 600;
+        color: white;
+        background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+
     function deleteProject(projectId) {
       if (confirm('¿Estás seguro de que quieres eliminar este proyecto?')) {
         let projects = loadProjects();
@@ -2048,11 +2705,20 @@ document.addEventListener('DOMContentLoaded', () => {
           const lineNumbersElement = document.getElementById(lineNumbers);
           const highlightElement = document.getElementById(highlight);
 
+          // Guardar estado inicial
+          setTimeout(() => saveState(), 100);
+
           editor.addEventListener('input', () => {
             updateLineNumbers(editor, lineNumbersElement);
             if (highlightElement) {
               updateSyntaxHighlight(editor, highlightElement, editor.id.includes('html') ? 'html' : editor.id.includes('css') ? 'css' : 'js');
             }
+            
+            // Guardar estado después de cambios (con debounce)
+            clearTimeout(editor.saveStateTimeout);
+            editor.saveStateTimeout = setTimeout(() => {
+              saveState();
+            }, 1000);
           });
 
           editor.addEventListener('scroll', () => {
@@ -2060,11 +2726,77 @@ document.addEventListener('DOMContentLoaded', () => {
             if (highlightElement) highlightElement.scrollTop = editor.scrollTop;
           });
 
-          editor.addEventListener('keydown', () => {
+          editor.addEventListener('keydown', (e) => {
             const newTypeSound = typeSound.cloneNode();
             newTypeSound.volume = 0.3;
             newTypeSound.play().catch(e => console.log('Error playing sound:', e));
+            
+            // Atajos de teclado
+            if (e.ctrlKey || e.metaKey) {
+              switch(e.key.toLowerCase()) {
+                case 'z':
+                  if (e.shiftKey) {
+                    e.preventDefault();
+                    redoChanges();
+                  } else {
+                    e.preventDefault();
+                    undoChanges();
+                  }
+                  break;
+                case 'y':
+                  e.preventDefault();
+                  redoChanges();
+                  break;
+                case 'f':
+                  e.preventDefault();
+                  findAndReplace();
+                  break;
+                case 's':
+                  e.preventDefault();
+                  if (currentProjectId) {
+                    saveProject();
+                  } else {
+                    showNotification('Proyecto guardado automáticamente', 'info');
+                  }
+                  break;
+              }
+            }
+            
+            // Auto-completar brackets
+            const cursor = editor.selectionStart;
+            const value = editor.value;
+            
+            switch(e.key) {
+              case '(':
+                e.preventDefault();
+                editor.value = value.slice(0, cursor) + '()' + value.slice(cursor);
+                editor.setSelectionRange(cursor + 1, cursor + 1);
+                break;
+              case '[':
+                e.preventDefault();
+                editor.value = value.slice(0, cursor) + '[]' + value.slice(cursor);
+                editor.setSelectionRange(cursor + 1, cursor + 1);
+                break;
+              case '{':
+                e.preventDefault();
+                editor.value = value.slice(0, cursor) + '{}' + value.slice(cursor);
+                editor.setSelectionRange(cursor + 1, cursor + 1);
+                break;
+              case '"':
+                e.preventDefault();
+                editor.value = value.slice(0, cursor) + '""' + value.slice(cursor);
+                editor.setSelectionRange(cursor + 1, cursor + 1);
+                break;
+              case "'":
+                e.preventDefault();
+                editor.value = value.slice(0, cursor) + "''" + value.slice(cursor);
+                editor.setSelectionRange(cursor + 1, cursor + 1);
+                break;
+            }
           });
+
+          // Inicializar números de línea
+          updateLineNumbers(editor, lineNumbersElement);
         }
       });
 
