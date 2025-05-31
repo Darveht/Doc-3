@@ -908,6 +908,242 @@
       animation-delay: 0.4s;
     }
     
+    /* Skeleton para página completa */
+    #pageSkeletonOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-color);
+      z-index: 11500;
+      overflow: hidden;
+    }
+    
+    .page-skeleton-container {
+      padding: 20px;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    
+    .page-skeleton-header {
+      height: 60px;
+      background: #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .page-skeleton-nav {
+      height: 40px;
+      background: #e8e8e8;
+      border-radius: 6px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .page-skeleton-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .page-skeleton-editor {
+      height: 400px;
+      background: #e0e0e0;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .page-skeleton-editor::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      background: #d0d0d0;
+      border-radius: 12px 12px 0 0;
+    }
+    
+    .page-skeleton-tools {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .page-skeleton-tool {
+      width: 80px;
+      height: 35px;
+      background: #e0e0e0;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .page-skeleton-projects {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .page-skeleton-project-list {
+      width: 250px;
+      height: 300px;
+      background: #e0e0e0;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .page-skeleton-project-editor {
+      flex: 1;
+      height: 500px;
+      background: #e0e0e0;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Efecto shimmer para todos los skeletons */
+    .page-skeleton-header::before,
+    .page-skeleton-nav::before,
+    .page-skeleton-editor::after,
+    .page-skeleton-tool::before,
+    .page-skeleton-project-list::before,
+    .page-skeleton-project-editor::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      animation: skeletonShimmer 1.8s infinite;
+    }
+    
+    /* Skeleton para ajustes */
+    .settings-skeleton {
+      display: none;
+      padding: 20px;
+    }
+    
+    .settings-skeleton-item {
+      height: 60px;
+      background: #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .settings-skeleton-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      animation: skeletonShimmer 1.8s infinite;
+    }
+    
+    /* Skeleton para proyectos */
+    .projects-skeleton {
+      display: none;
+      padding: 20px;
+    }
+    
+    .projects-skeleton-title {
+      height: 40px;
+      background: #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .projects-skeleton-container {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .projects-skeleton-list {
+      width: 250px;
+      height: 400px;
+      background: #e0e0e0;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .projects-skeleton-editor {
+      flex: 1;
+      height: 600px;
+      background: #e0e0e0;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .projects-skeleton-title::before,
+    .projects-skeleton-list::before,
+    .projects-skeleton-editor::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      animation: skeletonShimmer 1.8s infinite;
+    }
+    
+    /* Indicador de traducción global */
+    .global-translation-indicator {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.9);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 15px;
+      z-index: 12000;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+    }
+    
+    .global-translation-indicator h3 {
+      margin-bottom: 15px;
+      font-size: 18px;
+      color: #fff;
+    }
+    
+    .global-translation-indicator .translation-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+    
+    .global-translation-indicator .flag-display {
+      font-size: 24px;
+      animation: pulse 2s infinite;
+    }
+    
     @keyframes skeletonShimmer {
       0% {
         left: -100%;
@@ -1720,6 +1956,43 @@
   <!-- ===== Overlay Scan (Vista Previa) ===== -->
   <div id="scanOverlay"></div>
 
+  <!-- ===== Overlay Skeleton de Página Completa ===== -->
+  <div id="pageSkeletonOverlay">
+    <div class="page-skeleton-container">
+      <div class="page-skeleton-header"></div>
+      <div class="page-skeleton-nav"></div>
+      <div class="page-skeleton-content">
+        <div class="page-skeleton-editor"></div>
+        <div class="page-skeleton-editor"></div>
+        <div class="page-skeleton-editor"></div>
+      </div>
+      <div class="page-skeleton-tools">
+        <div class="page-skeleton-tool"></div>
+        <div class="page-skeleton-tool"></div>
+        <div class="page-skeleton-tool"></div>
+        <div class="page-skeleton-tool"></div>
+        <div class="page-skeleton-tool"></div>
+      </div>
+      <div class="page-skeleton-projects">
+        <div class="page-skeleton-project-list"></div>
+        <div class="page-skeleton-project-editor"></div>
+      </div>
+    </div>
+    
+    <div class="global-translation-indicator">
+      <h3>Traduciendo interfaz</h3>
+      <div class="translation-progress">
+        <span class="flag-display" id="translationFlag">🌐</span>
+        <div class="translating-dots">
+          <div class="translating-dot"></div>
+          <div class="translating-dot"></div>
+          <div class="translating-dot"></div>
+        </div>
+        <span id="translationStatus">Cambiando idioma...</span>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== Overlay Ajustes estilo Instagram ===== -->
   <div id="settingsOverlay">
     <div class="settings-header">
@@ -1733,7 +2006,17 @@
       <input type="text" placeholder="Buscar" id="settingsSearch">
     </div>
     
-    <div class="settings-content">
+    <!-- Skeleton para ajustes -->
+    <div class="settings-skeleton" id="settingsSkeleton">
+      <div class="settings-skeleton-item"></div>
+      <div class="settings-skeleton-item"></div>
+      <div class="settings-skeleton-item"></div>
+      <div class="settings-skeleton-item"></div>
+      <div class="settings-skeleton-item"></div>
+      <div class="settings-skeleton-item"></div>
+    </div>
+    
+    <div class="settings-content" id="settingsContent">
       <div class="settings-item" id="languageSettingsItem">
         <div class="settings-item-icon">
           <i class="fas fa-globe"></i>
@@ -1977,7 +2260,17 @@
   <!-- ===== Proyectos ===== -->
     <section id="proyectos" class="section">
       <h2>Mis Proyectos</h2>
-      <div class="projects-container">
+      
+      <!-- Skeleton para proyectos -->
+      <div class="projects-skeleton" id="projectsSkeleton">
+        <div class="projects-skeleton-title"></div>
+        <div class="projects-skeleton-container">
+          <div class="projects-skeleton-list"></div>
+          <div class="projects-skeleton-editor"></div>
+        </div>
+      </div>
+      
+      <div class="projects-container" id="projectsContent">
         <div class="project-list">
           <button onclick="createNewProject()" class="new-project-btn">
             <i class="fas fa-plus"></i> Nuevo Proyecto
@@ -2187,11 +2480,11 @@
     // Configuración de idiomas del chat
     let currentChatLang = 'es';
     const chatLanguages = {
-      'es': { name: 'Español', flag: '🇪🇸', model: '' },
-      'pt': { name: 'Português', flag: '🇧🇷', model: 'Helsinki-NLP/opus-mt-es-pt' },
-      'ko': { name: '한국어', flag: '🇰🇷', model: 'Helsinki-NLP/opus-mt-es-ko' },
-      'vi': { name: 'Tiếng Việt', flag: '🇻🇳', model: 'Helsinki-NLP/opus-mt-es-vi' },
-      'en': { name: 'English', flag: '🇺🇸', model: 'Helsinki-NLP/opus-mt-es-en' }
+      'es': { name: 'Español', flag: '🇪🇸', code: 'es' },
+      'en': { name: 'English', flag: '🇺🇸', code: 'en' },
+      'pt': { name: 'Português', flag: '🇧🇷', code: 'pt' },
+      'ko': { name: '한국어', flag: '🇰🇷', code: 'ko' },
+      'vi': { name: 'Tiếng Việt', flag: '🇻🇳', code: 'vi' }
     };
 
     // Si no existe un idioma guardado, se usa "es"
@@ -2236,18 +2529,431 @@
     function updateLanguage(lang) {
       currentLang = lang;
       localStorage.setItem('currentLang', lang);
-      const t = translations[currentLang] || translations["es"];
-      document.getElementById('modalTitle').innerHTML = t.modalTitle;
-      document.getElementById('modalDescription').innerHTML = t.modalDescription;
-      document.getElementById('loginBtnText').textContent = t.loginButton;
-      document.getElementById('previewBtnText').textContent = t.previewButton;
-      document.getElementById('previewHeaderText').textContent = t.previewHeader;
-      document.getElementById('htmlEditor').placeholder = t.htmlPlaceholder;
-      document.getElementById('cssEditor').placeholder = t.cssPlaceholder;
-      document.getElementById('jsEditor').placeholder = t.jsPlaceholder;
-      document.getElementById('searchExecuteBtn').textContent = t.searchButton;
-      runLangTransitionAnimation();
-      document.getElementById('settingsOverlay').style.display = 'none';
+      
+      // Mostrar skeleton de página completa
+      showPageSkeleton(lang);
+      
+      // Simular proceso de traducción
+      setTimeout(() => {
+        const t = translations[currentLang] || translations["es"];
+        
+        // Actualizar todos los textos de la interfaz
+        updateAllTexts(t);
+        
+        // Ocultar skeleton después de "traducir"
+        setTimeout(() => {
+          hidePageSkeleton();
+          document.getElementById('settingsOverlay').style.display = 'none';
+        }, 1500);
+      }, 800);
+    }
+    
+    function showPageSkeleton(lang) {
+      const overlay = document.getElementById('pageSkeletonOverlay');
+      const flag = document.getElementById('translationFlag');
+      const status = document.getElementById('translationStatus');
+      
+      // Configurar bandera según idioma
+      const flags = {
+        'es': '🇪🇸',
+        'en': '🇺🇸', 
+        'ja': '🇯🇵',
+        'ko': '🇰🇷',
+        'vi': '🇻🇳',
+        'zh': '🇨🇳'
+      };
+      
+      const statusTexts = {
+        'es': 'Optimizando experiencia...',
+        'en': 'Optimizing experience...',
+        'ja': 'エクスペリエンスを最適化中...',
+        'ko': '경험을 최적화하는 중...',
+        'vi': 'Đang tối ưu hóa trải nghiệm...',
+        'zh': '正在优化体验...'
+      };
+      
+      flag.textContent = flags[lang] || '🌐';
+      status.textContent = statusTexts[lang] || 'Optimizando...';
+      
+      overlay.style.display = 'block';
+      
+      // También mostrar skeleton en ajustes si están abiertos
+      if (document.getElementById('settingsOverlay').style.display === 'block') {
+        showSettingsSkeleton();
+      }
+      
+      // Mostrar skeleton en proyectos si está activo
+      if (document.getElementById('proyectos').classList.contains('active')) {
+        showProjectsSkeleton();
+      }
+      
+      // Mostrar skeleton en búsqueda si está abierta
+      if (document.getElementById('searchOverlay').style.display === 'block') {
+        showSearchSkeleton();
+      }
+      
+      // Mostrar skeleton en vista previa si está abierta
+      if (document.getElementById('previewOverlay').style.display === 'block') {
+        showPreviewSkeleton();
+      }
+    }
+    
+    function hidePageSkeleton() {
+      const overlay = document.getElementById('pageSkeletonOverlay');
+      overlay.style.display = 'none';
+      hideSettingsSkeleton();
+      hideProjectsSkeleton();
+      hideSearchSkeleton();
+      hidePreviewSkeleton();
+    }
+    
+    function showSettingsSkeleton() {
+      const skeleton = document.getElementById('settingsSkeleton');
+      const content = document.getElementById('settingsContent');
+      skeleton.style.display = 'block';
+      content.style.display = 'none';
+    }
+    
+    function hideSettingsSkeleton() {
+      const skeleton = document.getElementById('settingsSkeleton');
+      const content = document.getElementById('settingsContent');
+      skeleton.style.display = 'none';
+      content.style.display = 'block';
+    }
+    
+    function showProjectsSkeleton() {
+      const skeleton = document.getElementById('projectsSkeleton');
+      const content = document.getElementById('projectsContent');
+      skeleton.style.display = 'block';
+      content.style.display = 'none';
+    }
+    
+    function hideProjectsSkeleton() {
+      const skeleton = document.getElementById('projectsSkeleton');
+      const content = document.getElementById('projectsContent');
+      skeleton.style.display = 'none';
+      content.style.display = 'block';
+    }
+    
+    function showSearchSkeleton() {
+      // Crear skeleton dinámico para búsqueda
+      const searchOverlay = document.getElementById('searchOverlay');
+      let skeleton = document.getElementById('searchSkeleton');
+      
+      if (!skeleton) {
+        skeleton = document.createElement('div');
+        skeleton.id = 'searchSkeleton';
+        skeleton.style.cssText = `
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: var(--bg-color);
+          z-index: 1;
+          padding: 20px;
+        `;
+        
+        skeleton.innerHTML = `
+          <div style="height: 60px; background: #e0e0e0; border-radius: 8px; margin-bottom: 20px; position: relative; overflow: hidden;"></div>
+          <div style="height: 40px; background: #e8e8e8; border-radius: 6px; margin-bottom: 20px; position: relative; overflow: hidden;"></div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            <div style="height: 200px; background: #e0e0e0; border-radius: 12px; position: relative; overflow: hidden;"></div>
+            <div style="height: 200px; background: #e0e0e0; border-radius: 12px; position: relative; overflow: hidden;"></div>
+            <div style="height: 200px; background: #e0e0e0; border-radius: 12px; position: relative; overflow: hidden;"></div>
+          </div>
+        `;
+        
+        // Agregar efecto shimmer a todos los elementos
+        const shimmerElements = skeleton.querySelectorAll('div[style*="background: #"]');
+        shimmerElements.forEach(el => {
+          el.style.position = 'relative';
+          el.style.overflow = 'hidden';
+          const shimmer = document.createElement('div');
+          shimmer.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: skeletonShimmer 1.8s infinite;
+          `;
+          el.appendChild(shimmer);
+        });
+        
+        searchOverlay.appendChild(skeleton);
+      }
+      
+      skeleton.style.display = 'block';
+    }
+    
+    function hideSearchSkeleton() {
+      const skeleton = document.getElementById('searchSkeleton');
+      if (skeleton) {
+        skeleton.style.display = 'none';
+      }
+    }
+    
+    function showPreviewSkeleton() {
+      // Crear skeleton dinámico para vista previa
+      const previewOverlay = document.getElementById('previewOverlay');
+      let skeleton = document.getElementById('previewSkeleton');
+      
+      if (!skeleton) {
+        skeleton = document.createElement('div');
+        skeleton.id = 'previewSkeleton';
+        skeleton.style.cssText = `
+          position: absolute;
+          top: 60px;
+          left: 0;
+          width: 100%;
+          height: calc(100% - 60px);
+          background: var(--bg-color);
+          z-index: 1;
+          padding: 20px;
+        `;
+        
+        skeleton.innerHTML = `
+          <div style="height: 40px; background: #e0e0e0; border-radius: 8px; margin-bottom: 20px; position: relative; overflow: hidden;"></div>
+          <div style="height: calc(100vh - 200px); background: #e0e0e0; border-radius: 12px; position: relative; overflow: hidden;">
+            <div style="height: 30px; background: #d0d0d0; border-radius: 12px 12px 0 0;"></div>
+          </div>
+        `;
+        
+        // Agregar efecto shimmer
+        const shimmerElements = skeleton.querySelectorAll('div[style*="background: #"]');
+        shimmerElements.forEach(el => {
+          el.style.position = 'relative';
+          el.style.overflow = 'hidden';
+          const shimmer = document.createElement('div');
+          shimmer.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: skeletonShimmer 1.8s infinite;
+          `;
+          el.appendChild(shimmer);
+        });
+        
+        previewOverlay.appendChild(skeleton);
+      }
+      
+      skeleton.style.display = 'block';
+    }
+    
+    function hidePreviewSkeleton() {
+      const skeleton = document.getElementById('previewSkeleton');
+      if (skeleton) {
+        skeleton.style.display = 'none';
+      }
+    }
+    
+    function updateAllTexts(t) {
+      // Actualizar textos del modal
+      const modalTitle = document.getElementById('modalTitle');
+      const modalDescription = document.getElementById('modalDescription');
+      const loginBtnText = document.getElementById('loginBtnText');
+      
+      if (modalTitle) modalTitle.innerHTML = t.modalTitle;
+      if (modalDescription) modalDescription.innerHTML = t.modalDescription;
+      if (loginBtnText) loginBtnText.textContent = t.loginButton;
+      
+      // Actualizar botones
+      const previewBtnText = document.getElementById('previewBtnText');
+      const previewBtnTextProject = document.getElementById('previewBtnTextProject');
+      const previewHeaderText = document.getElementById('previewHeaderText');
+      const searchExecuteBtn = document.getElementById('searchExecuteBtn');
+      
+      if (previewBtnText) previewBtnText.textContent = t.previewButton;
+      if (previewBtnTextProject) previewBtnTextProject.textContent = t.previewButton;
+      if (previewHeaderText) previewHeaderText.textContent = t.previewHeader;
+      if (searchExecuteBtn) searchExecuteBtn.textContent = t.searchButton;
+      
+      // Actualizar placeholders de editores
+      const htmlEditor = document.getElementById('htmlEditor');
+      const cssEditor = document.getElementById('cssEditor');
+      const jsEditor = document.getElementById('jsEditor');
+      const htmlEditorMain = document.getElementById('htmlEditorMain');
+      const cssEditorMain = document.getElementById('cssEditorMain');
+      const jsEditorMain = document.getElementById('jsEditorMain');
+      
+      if (htmlEditor) htmlEditor.placeholder = t.htmlPlaceholder;
+      if (cssEditor) cssEditor.placeholder = t.cssPlaceholder;
+      if (jsEditor) jsEditor.placeholder = t.jsPlaceholder;
+      if (htmlEditorMain) htmlEditorMain.placeholder = t.htmlPlaceholder;
+      if (cssEditorMain) cssEditorMain.placeholder = t.cssPlaceholder;
+      if (jsEditorMain) jsEditorMain.placeholder = t.jsPlaceholder;
+      
+      // Actualizar navegación y secciones
+      updateNavigationTexts(t);
+      updateSettingsTexts(t);
+      updateProjectsTexts(t);
+    }
+    
+    function updateNavigationTexts(t) {
+      // Actualizar textos de navegación según idioma
+      const navTexts = {
+        'es': { inicio: 'Inicio', proyectos: 'Proyectos' },
+        'en': { inicio: 'Home', proyectos: 'Projects' },
+        'ja': { inicio: 'ホーム', proyectos: 'プロジェクト' },
+        'ko': { inicio: '홈', proyectos: '프로젝트' },
+        'vi': { inicio: 'Trang chủ', proyectos: 'Dự án' },
+        'zh': { inicio: '首页', proyectos: '项目' }
+      };
+      
+      const texts = navTexts[currentLang] || navTexts['es'];
+      const navLinks = document.querySelectorAll('nav a');
+      
+      if (navLinks[0]) navLinks[0].textContent = texts.inicio;
+      if (navLinks[1]) navLinks[1].textContent = texts.proyectos;
+    }
+    
+    function updateSettingsTexts(t) {
+      // Actualizar textos de ajustes según idioma
+      const settingsTexts = {
+        'es': { 
+          title: 'Configuración',
+          language: 'Idioma',
+          theme: 'Tema',
+          privacy: 'Privacidad',
+          security: 'Seguridad',
+          assistant: 'Asistente Virtual',
+          about: 'Acerca de'
+        },
+        'en': { 
+          title: 'Settings',
+          language: 'Language',
+          theme: 'Theme',
+          privacy: 'Privacy',
+          security: 'Security',
+          assistant: 'Virtual Assistant',
+          about: 'About'
+        },
+        'ja': { 
+          title: '設定',
+          language: '言語',
+          theme: 'テーマ',
+          privacy: 'プライバシー',
+          security: 'セキュリティ',
+          assistant: 'バーチャルアシスタント',
+          about: 'について'
+        },
+        'ko': { 
+          title: '설정',
+          language: '언어',
+          theme: '테마',
+          privacy: '개인정보',
+          security: '보안',
+          assistant: '가상 어시스턴트',
+          about: '정보'
+        },
+        'vi': { 
+          title: 'Cài đặt',
+          language: 'Ngôn ngữ',
+          theme: 'Chủ đề',
+          privacy: 'Riêng tư',
+          security: 'Bảo mật',
+          assistant: 'Trợ lý ảo',
+          about: 'Giới thiệu'
+        },
+        'zh': { 
+          title: '设置',
+          language: '语言',
+          theme: '主题',
+          privacy: '隐私',
+          security: '安全',
+          assistant: '虚拟助手',
+          about: '关于'
+        }
+      };
+      
+      const texts = settingsTexts[currentLang] || settingsTexts['es'];
+      
+      // Actualizar título de ajustes
+      const settingsTitle = document.querySelector('.settings-header h2');
+      if (settingsTitle) settingsTitle.textContent = texts.title;
+      
+      // Actualizar elementos de ajustes
+      const settingsItems = document.querySelectorAll('.settings-item-title');
+      if (settingsItems[0]) settingsItems[0].textContent = texts.language;
+      if (settingsItems[1]) settingsItems[1].textContent = texts.theme;
+      if (settingsItems[2]) settingsItems[2].textContent = texts.privacy;
+      if (settingsItems[3]) settingsItems[3].textContent = texts.security;
+      if (settingsItems[4]) settingsItems[4].textContent = texts.assistant;
+      if (settingsItems[5]) settingsItems[5].textContent = texts.about;
+    }
+    
+    function updateProjectsTexts(t) {
+      // Actualizar textos de proyectos según idioma
+      const projectsTexts = {
+        'es': { 
+          title: 'Mis Proyectos',
+          newProject: 'Nuevo Proyecto',
+          save: 'Guardar',
+          duplicate: 'Duplicar',
+          export: 'Exportar',
+          close: 'Cerrar'
+        },
+        'en': { 
+          title: 'My Projects',
+          newProject: 'New Project',
+          save: 'Save',
+          duplicate: 'Duplicate',
+          export: 'Export',
+          close: 'Close'
+        },
+        'ja': { 
+          title: 'マイプロジェクト',
+          newProject: '新しいプロジェクト',
+          save: '保存',
+          duplicate: '複製',
+          export: 'エクスポート',
+          close: '閉じる'
+        },
+        'ko': { 
+          title: '내 프로젝트',
+          newProject: '새 프로젝트',
+          save: '저장',
+          duplicate: '복제',
+          export: '내보내기',
+          close: '닫기'
+        },
+        'vi': { 
+          title: 'Dự án của tôi',
+          newProject: 'Dự án mới',
+          save: 'Lưu',
+          duplicate: 'Sao chép',
+          export: 'Xuất',
+          close: 'Đóng'
+        },
+        'zh': { 
+          title: '我的项目',
+          newProject: '新项目',
+          save: '保存',
+          duplicate: '复制',
+          export: '导出',
+          close: '关闭'
+        }
+      };
+      
+      const texts = projectsTexts[currentLang] || projectsTexts['es'];
+      
+      // Actualizar título de proyectos
+      const projectsTitle = document.querySelector('#proyectos h2');
+      if (projectsTitle) projectsTitle.textContent = texts.title;
+      
+      // Actualizar botones de proyecto (si existen)
+      const newProjectBtn = document.querySelector('.new-project-btn');
+      if (newProjectBtn) {
+        const icon = newProjectBtn.querySelector('i');
+        newProjectBtn.innerHTML = '';
+        if (icon) newProjectBtn.appendChild(icon);
+        newProjectBtn.append(' ' + texts.newProject);
+      }
     }
 
     function runLangTransitionAnimation() {
@@ -2879,47 +3585,54 @@ function initPreviewTools() {
         return;
       }
 
+      // Mostrar skeleton de guardado
+      showProjectActionSkeleton('save');
+
       const projectName = document.getElementById('projectName').value;
       const htmlCode = document.getElementById('htmlEditor').value;
       const cssCode = document.getElementById('cssEditor').value;
       const jsCode = document.getElementById('jsEditor').value;
 
-      let projects = loadProjects();
-      const projectIndex = projects.findIndex(p => p.id === currentProjectId);
-      
-      if (projectIndex !== -1) {
-        projects[projectIndex] = {
-          ...projects[projectIndex],
-          name: projectName,
-          html: htmlCode,
-          css: cssCode,
-          js: jsCode,
-          updatedAt: new Date().toISOString()
-        };
+      // Simular delay de guardado
+      setTimeout(() => {
+        let projects = loadProjects();
+        const projectIndex = projects.findIndex(p => p.id === currentProjectId);
         
-        saveProjects(projects);
-        renderProjectsList();
-        
-        // Mostrar notificación de guardado exitoso
-        const notification = document.createElement('div');
-        notification.style.cssText = `
-          position: fixed;
-          top: 20px;
-          right: 20px;
-          background: #4CAF50;
-          color: white;
-          padding: 15px 20px;
-          border-radius: 5px;
-          z-index: 10000;
-          font-weight: 600;
-        `;
-        notification.textContent = `Proyecto "${projectName}" guardado exitosamente`;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-          notification.remove();
-        }, 3000);
-      }
+        if (projectIndex !== -1) {
+          projects[projectIndex] = {
+            ...projects[projectIndex],
+            name: projectName,
+            html: htmlCode,
+            css: cssCode,
+            js: jsCode,
+            updatedAt: new Date().toISOString()
+          };
+          
+          saveProjects(projects);
+          renderProjectsList();
+          hideProjectActionSkeleton();
+          
+          // Mostrar notificación de guardado exitoso
+          const notification = document.createElement('div');
+          notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            z-index: 10000;
+            font-weight: 600;
+          `;
+          notification.textContent = `Proyecto "${projectName}" guardado exitosamente`;
+          document.body.appendChild(notification);
+          
+          setTimeout(() => {
+            notification.remove();
+          }, 3000);
+        }
+      }, 800);
     }
 
     function loadProject(projectId) {
@@ -2948,21 +3661,28 @@ function initPreviewTools() {
         return;
       }
       
+      // Mostrar skeleton de duplicado
+      showProjectActionSkeleton('duplicate');
+      
       const projects = loadProjects();
       const project = projects.find(p => p.id === currentProjectId);
       
       if (project) {
-        const newProject = {
-          ...project,
-          id: Date.now(),
-          name: project.name + ' - Copia',
-          createdAt: new Date().toISOString()
-        };
-        
-        projects.push(newProject);
-        saveProjects(projects);
-        renderProjectsList();
-        showNotification('Proyecto duplicado exitosamente', 'success');
+        // Simular delay de duplicado
+        setTimeout(() => {
+          const newProject = {
+            ...project,
+            id: Date.now(),
+            name: project.name + ' - Copia',
+            createdAt: new Date().toISOString()
+          };
+          
+          projects.push(newProject);
+          saveProjects(projects);
+          renderProjectsList();
+          hideProjectActionSkeleton();
+          showNotification('Proyecto duplicado exitosamente', 'success');
+        }, 1200);
       }
     }
 
@@ -2972,27 +3692,34 @@ function initPreviewTools() {
         return;
       }
       
+      // Mostrar skeleton de exportación
+      showProjectActionSkeleton('export');
+      
       const projects = loadProjects();
       const project = projects.find(p => p.id === currentProjectId);
       
       if (project) {
-        const exportData = {
-          name: project.name,
-          html: project.html || '',
-          css: project.css || '',
-          js: project.js || '',
-          exportDate: new Date().toISOString()
-        };
-        
-        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${project.name}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        
-        showNotification('Proyecto exportado exitosamente', 'success');
+        // Simular delay de exportación
+        setTimeout(() => {
+          const exportData = {
+            name: project.name,
+            html: project.html || '',
+            css: project.css || '',
+            js: project.js || '',
+            exportDate: new Date().toISOString()
+          };
+          
+          const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${project.name}.json`;
+          a.click();
+          URL.revokeObjectURL(url);
+          
+          hideProjectActionSkeleton();
+          showNotification('Proyecto exportado exitosamente', 'success');
+        }, 1000);
       }
     }
 
@@ -3464,6 +4191,58 @@ function initPreviewTools() {
       }
     }
 
+    function showProjectActionSkeleton(action) {
+      // Crear overlay de skeleton para acciones
+      let skeleton = document.getElementById('projectActionSkeleton');
+      
+      if (!skeleton) {
+        skeleton = document.createElement('div');
+        skeleton.id = 'projectActionSkeleton';
+        skeleton.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(255,255,255,0.95);
+          border-radius: 15px;
+          padding: 30px;
+          z-index: 11000;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          backdrop-filter: blur(10px);
+          min-width: 200px;
+        `;
+        document.body.appendChild(skeleton);
+      }
+      
+      const actionTexts = {
+        'save': { icon: '💾', text: 'Guardando proyecto...' },
+        'duplicate': { icon: '📁', text: 'Duplicando proyecto...' },
+        'export': { icon: '📤', text: 'Exportando proyecto...' }
+      };
+      
+      const actionData = actionTexts[action] || { icon: '⚙️', text: 'Procesando...' };
+      
+      skeleton.innerHTML = `
+        <div style="font-size: 40px; margin-bottom: 15px; animation: pulse 2s infinite;">${actionData.icon}</div>
+        <div style="color: #333; font-weight: 600; margin-bottom: 20px;">${actionData.text}</div>
+        <div style="display: flex; gap: 5px; justify-content: center;">
+          <div style="width: 8px; height: 8px; background: var(--primary-color); border-radius: 50%; animation: translatingPulse 1.4s infinite;"></div>
+          <div style="width: 8px; height: 8px; background: var(--primary-color); border-radius: 50%; animation: translatingPulse 1.4s infinite; animation-delay: 0.2s;"></div>
+          <div style="width: 8px; height: 8px; background: var(--primary-color); border-radius: 50%; animation: translatingPulse 1.4s infinite; animation-delay: 0.4s;"></div>
+        </div>
+      `;
+      
+      skeleton.style.display = 'block';
+    }
+    
+    function hideProjectActionSkeleton() {
+      const skeleton = document.getElementById('projectActionSkeleton');
+      if (skeleton) {
+        skeleton.style.display = 'none';
+      }
+    }
+
     function showNotification(message, type = 'info') {
       const notification = document.createElement('div');
       notification.style.cssText = `
@@ -3559,7 +4338,17 @@ function initPreviewTools() {
     }
 
 document.addEventListener('DOMContentLoaded', () => {
-      updateLanguage(currentLang);
+      // Cargar idioma guardado desde localStorage
+      const savedLang = localStorage.getItem('currentLang');
+      if (savedLang) {
+        currentLang = savedLang;
+        console.log(`Idioma cargado desde localStorage: ${currentLang}`);
+      }
+      
+      // Aplicar idioma sin animación al cargar
+      const t = translations[currentLang] || translations["es"];
+      updateAllTexts(t);
+      
       checkSession();
       setupSwipeDetection();
       renderRecentSearches();
@@ -3817,9 +4606,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (previewBtnProject) {
         previewBtnProject.addEventListener('click', () => {
           executeSound.play();
+          document.getElementById('previewOverlay').style.display = 'block';
+          showPreviewSkeleton();
           runScanAnimation();
           setTimeout(() => {
-            document.getElementById('previewOverlay').style.display = 'block';
+            hidePreviewSkeleton();
             const htmlCode = document.getElementById('htmlEditor').value;
             const cssCode = document.getElementById('cssEditor').value;
             const jsCode = document.getElementById('jsEditor').value;
@@ -3838,7 +4629,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </html>
             `;
             previewFrame.srcdoc = combinedCode;
-          }, 5000);
+          }, 3000);
         });
       }
 
@@ -3943,9 +4734,11 @@ document.addEventListener('DOMContentLoaded', () => {
       initPreviewTools();
       previewBtn.addEventListener('click', () => {
         executeSound.play();
+        document.getElementById('previewOverlay').style.display = 'block';
+        showPreviewSkeleton();
         runScanAnimation();
         setTimeout(() => {
-          document.getElementById('previewOverlay').style.display = 'block';
+          hidePreviewSkeleton();
           const htmlCode = document.getElementById('htmlEditorMain').value;
           const cssCode = document.getElementById('cssEditorMain').value;
           const jsCode = document.getElementById('jsEditorMain').value;
@@ -3964,7 +4757,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </html>
           `;
           previewFrame.srcdoc = combinedCode;
-        }, 5000);
+        }, 3000);
       });
       closePreview.addEventListener('click', () => {
         document.getElementById('previewOverlay').style.display = 'none';
@@ -4156,7 +4949,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="skeleton-line"></div>
               <div class="translating-indicator">
                 <i class="fas fa-language"></i>
-                <span>Traduciendo a ${chatLanguages[currentChatLang].name}...</span>
+                <span>Traduciendo a ${chatLanguages[currentChatLang] ? chatLanguages[currentChatLang].name : currentChatLang}...</span>
                 <div class="translating-dots">
                   <div class="translating-dot"></div>
                   <div class="translating-dot"></div>
@@ -4170,12 +4963,13 @@ document.addEventListener('DOMContentLoaded', () => {
           
           try {
             console.log('Iniciando traducción...');
+            
+            // Simular delay mínimo para mostrar la animación
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
             // Traducir el mensaje
             const translatedMessage = await translateText(message, currentChatLang);
             console.log(`Mensaje traducido: ${translatedMessage}`);
-            
-            // Simular delay mínimo para mostrar la animación
-            await new Promise(resolve => setTimeout(resolve, 1000));
             
             // Remover skeleton y mostrar mensaje traducido
             skeletonDiv.remove();
@@ -4189,17 +4983,25 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             `;
             chatMessages.appendChild(messageDiv);
+            
+            // Mostrar notificación de éxito
+            if (translatedMessage !== message) {
+              console.log('✅ Traducción exitosa');
+            }
+            
           } catch (error) {
             console.error('Error en traducción:', error);
-            // Si falla la traducción, mostrar mensaje original con indicación
+            // Si falla la traducción, mostrar mensaje original
             skeletonDiv.remove();
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message bot';
             messageDiv.innerHTML = `
               <div class="message-content">
-                <small style="color: #999; font-style: italic;">⚠️ Error en traducción - Texto original:</small><br>
                 ${message}
                 <div class="message-time">${getCurrentTime()}</div>
+                <small style="color: #999; font-style: italic; display: block; margin-top: 5px;">
+                  💬 Mensaje en español (Error de traducción)
+                </small>
               </div>
             `;
             chatMessages.appendChild(messageDiv);
@@ -4246,7 +5048,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       
-      // Función para traducir texto usando Hugging Face
+      // Sistema de traducción mejorado usando Google Translate API gratuita
       async function translateText(text, targetLang) {
         // Si el idioma objetivo es español, no traducir
         if (targetLang === 'es') {
@@ -4254,63 +5056,139 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         try {
-          let model;
+          console.log(`Traduciendo: "${text}" a idioma: ${targetLang}`);
           
-          // Configurar modelos específicos para cada idioma
-          switch(targetLang) {
-            case 'en':
-              model = 'Helsinki-NLP/opus-mt-es-en';
-              break;
-            case 'pt':
-              model = 'Helsinki-NLP/opus-mt-es-pt';
-              break;
-            case 'ko':
-              model = 'Helsinki-NLP/opus-mt-es-ko';
-              break;
-            case 'vi':
-              model = 'Helsinki-NLP/opus-mt-es-vi';
-              break;
-            default:
-              return text; // Si no hay modelo disponible, retornar texto original
-          }
+          // Usar Google Translate API gratuita
+          const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
           
-          console.log(`Traduciendo a ${targetLang} usando modelo: ${model}`);
-          
-          const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${HUGGINGFACE_API_KEY}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              inputs: text,
-              options: { 
-                wait_for_model: true,
-                use_cache: false
-              }
-            })
-          });
+          const response = await fetch(url);
           
           if (!response.ok) {
-            console.error('Error HTTP:', response.status, response.statusText);
             throw new Error(`Error HTTP: ${response.status}`);
           }
           
           const result = await response.json();
           console.log('Resultado de traducción:', result);
           
-          if (result && result[0] && result[0].translation_text) {
-            return result[0].translation_text;
-          } else if (result && typeof result === 'string') {
-            return result;
-          } else {
-            console.error('Formato de respuesta inesperado:', result);
-            return text;
+          // Extraer texto traducido
+          if (result && result[0] && Array.isArray(result[0])) {
+            let translatedText = '';
+            result[0].forEach(item => {
+              if (item && item[0]) {
+                translatedText += item[0];
+              }
+            });
+            
+            if (translatedText) {
+              console.log(`Texto traducido: "${translatedText}"`);
+              return translatedText;
+            }
           }
+          
+          // Si no se pudo traducir, usar traducciones predefinidas
+          return getPredefnedTranslation(text, targetLang);
+          
         } catch (error) {
           console.error('Error de traducción:', error);
-          return text; // Retornar texto original si falla la traducción
+          // Fallback a traducciones predefinidas
+          return getPredefnedTranslation(text, targetLang);
         }
+      }
+      
+      // Traducciones predefinidas para mensajes comunes
+      function getPredefnedTranslation(text, targetLang) {
+        const translations = {
+          en: {
+            'crear proyecto': 'create project',
+            'cambiar tema': 'change theme',
+            'escáner': 'scanner',
+            'exportar': 'export',
+            'atajos': 'shortcuts',
+            'vista previa': 'preview',
+            'proyectos': 'projects',
+            'idioma': 'language',
+            '¡Hola! 👋 Soy tu asistente virtual de Clack.': 'Hello! 👋 I am your Clack virtual assistant.',
+            'Puedo ayudarte con:': 'I can help you with:',
+            '• 💻 Funciones del editor de código': '• 💻 Code editor functions',
+            '• 🎨 Personalización y temas': '• 🎨 Customization and themes',
+            '• 🔧 Gestión de proyectos': '• 🔧 Project management',
+            '• 🚀 Vista previa y deployment': '• 🚀 Preview and deployment',
+            '• 🛡️ Análisis de seguridad': '• 🛡️ Security analysis',
+            '¿En qué puedo ayudarte hoy?': 'How can I help you today?'
+          },
+          pt: {
+            'crear proyecto': 'criar projeto',
+            'cambiar tema': 'mudar tema',
+            'escáner': 'scanner',
+            'exportar': 'exportar',
+            'atajos': 'atalhos',
+            'vista previa': 'visualização',
+            'proyectos': 'projetos',
+            'idioma': 'idioma',
+            '¡Hola! 👋 Soy tu asistente virtual de Clack.': 'Olá! 👋 Eu sou seu assistente virtual do Clack.',
+            'Puedo ayudarte con:': 'Posso ajudá-lo com:',
+            '• 💻 Funciones del editor de código': '• 💻 Funções do editor de código',
+            '• 🎨 Personalización y temas': '• 🎨 Personalização e temas',
+            '• 🔧 Gestión de proyectos': '• 🔧 Gestão de projetos',
+            '• 🚀 Vista previa y deployment': '• 🚀 Visualização e implementação',
+            '• 🛡️ Análisis de seguridad': '• 🛡️ Análise de segurança',
+            '¿En qué puedo ayudarte hoy?': 'Como posso ajudá-lo hoje?'
+          },
+          ko: {
+            'crear proyecto': '프로젝트 생성',
+            'cambiar tema': '테마 변경',
+            'escáner': '스캐너',
+            'exportar': '내보내기',
+            'atajos': '단축키',
+            'vista previa': '미리보기',
+            'proyectos': '프로젝트',
+            'idioma': '언어',
+            '¡Hola! 👋 Soy tu asistente virtual de Clack.': '안녕하세요! 👋 저는 Clack의 가상 어시스턴트입니다.',
+            'Puedo ayudarte con:': '다음 사항으로 도움을 드릴 수 있습니다:',
+            '• 💻 Funciones del editor de código': '• 💻 코드 편집기 기능',
+            '• 🎨 Personalización y temas': '• 🎨 사용자 정의 및 테마',
+            '• 🔧 Gestión de proyectos': '• 🔧 프로젝트 관리',
+            '• 🚀 Vista previa y deployment': '• 🚀 미리보기 및 배포',
+            '• 🛡️ Análisis de seguridad': '• 🛡️ 보안 분석',
+            '¿En qué puedo ayudarte hoy?': '오늘 어떻게 도와드릴까요?'
+          },
+          vi: {
+            'crear proyecto': 'tạo dự án',
+            'cambiar tema': 'thay đổi chủ đề',
+            'escáner': 'máy quét',
+            'exportar': 'xuất',
+            'atajos': 'phím tắt',
+            'vista previa': 'xem trước',
+            'proyectos': 'dự án',
+            'idioma': 'ngôn ngữ',
+            '¡Hola! 👋 Soy tu asistente virtual de Clack.': 'Xin chào! 👋 Tôi là trợ lý ảo Clack của bạn.',
+            'Puedo ayudarte con:': 'Tôi có thể giúp bạn với:',
+            '• 💻 Funciones del editor de código': '• 💻 Các chức năng của trình soạn thảo mã',
+            '• 🎨 Personalización y temas': '• 🎨 Tùy chỉnh và chủ đề',
+            '• 🔧 Gestión de proyectos': '• 🔧 Quản lý dự án',
+            '• 🚀 Vista previa y deployment': '• 🚀 Xem trước và triển khai',
+            '• 🛡️ Análisis de seguridad': '• 🛡️ Phân tích bảo mật',
+            '¿En qué puedo ayudarte hoy?': 'Hôm nay tôi có thể giúp bạn điều gì?'
+          }
+        };
+        
+        const langTranslations = translations[targetLang];
+        if (langTranslations) {
+          // Buscar traducción exacta
+          if (langTranslations[text]) {
+            return langTranslations[text];
+          }
+          
+          // Buscar traducciones parciales
+          for (const [original, translated] of Object.entries(langTranslations)) {
+            if (text.includes(original)) {
+              return text.replace(original, translated);
+            }
+          }
+        }
+        
+        // Si no hay traducción disponible, retornar texto original
+        return text;
       }
       
       function getBotResponse(userMessage) {
@@ -4352,19 +5230,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       
       async function askQuickQuestion(question) {
-        let translatedQuestion = question;
-        
-        // Traducir pregunta rápida si no está en español
+        // Mostrar indicador de carga si es necesario traducir
         if (currentChatLang !== 'es') {
+          const chatInput = document.getElementById('chatInput');
+          chatInput.value = '⏳ Traduciendo pregunta...';
+          chatInput.disabled = true;
+          
           try {
-            translatedQuestion = await translateText(question, currentChatLang);
+            const translatedQuestion = await translateText(question, currentChatLang);
+            chatInput.value = translatedQuestion;
+            chatInput.disabled = false;
+            document.getElementById('sendButton').disabled = false;
+            console.log(`Pregunta traducida: ${question} -> ${translatedQuestion}`);
           } catch (error) {
             console.error('Error traduciendo pregunta rápida:', error);
+            chatInput.value = question; // Usar pregunta original si falla la traducción
+            chatInput.disabled = false;
+            document.getElementById('sendButton').disabled = false;
           }
+        } else {
+          document.getElementById('chatInput').value = question;
+          document.getElementById('sendButton').disabled = false;
         }
-        
-        document.getElementById('chatInput').value = translatedQuestion;
-        document.getElementById('sendButton').disabled = false;
       }
       
       // Búsqueda en ajustes
@@ -4389,9 +5276,21 @@ document.addEventListener('DOMContentLoaded', () => {
       
       document.getElementById("githubLoginBtn").addEventListener("click", loginSimulated);
 
-      searchBtn.addEventListener('click', () => { toggleSearchOverlay(true); });
+      searchBtn.addEventListener('click', () => { 
+        showSearchSkeleton();
+        setTimeout(() => {
+          hideSearchSkeleton();
+        }, 1000);
+        toggleSearchOverlay(true); 
+      });
       closeSearchOverlay.addEventListener('click', () => { toggleSearchOverlay(false); });
-      searchExecuteBtn.addEventListener('click', executeSearch);
+      searchExecuteBtn.addEventListener('click', () => {
+        showSearchSkeleton();
+        setTimeout(() => {
+          executeSearch();
+          hideSearchSkeleton();
+        }, 800);
+      });
 
       // Mostrar/ocultar botón de limpiar según el contenido del input
       const searchInput = document.getElementById('searchInput');
