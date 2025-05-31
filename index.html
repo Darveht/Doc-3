@@ -41,6 +41,154 @@
       .editor-container {
         grid-template-columns: 1fr;
         padding: 0 10px;
+        height: auto;
+        min-height: calc(100vh - 160px);
+      }
+      
+      /* Header responsivo */
+      header {
+        padding: 5px 10px;
+        flex-wrap: wrap;
+      }
+      
+      header h1 {
+        font-size: 1.2rem;
+      }
+      
+      .controls {
+        gap: 5px;
+      }
+      
+      .controls button {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+      
+      /* Navegación responsiva */
+      nav {
+        padding: 8px 10px;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      
+      nav a {
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+      
+      /* Proyectos responsivos */
+      .projects-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .project-list {
+        width: 100%;
+        order: 2;
+      }
+      
+      .project-editor {
+        order: 1;
+      }
+      
+      .project-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+      }
+      
+      .project-header input#projectName {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+      
+      .project-header .project-actions {
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      
+      .project-header .project-actions button {
+        flex: 1;
+        min-width: 0;
+        font-size: 12px;
+        padding: 8px 10px;
+      }
+      
+      /* Editor tools responsivo */
+      .editor-tools {
+        flex-direction: column;
+        gap: 10px;
+        margin: 10px 10px;
+      }
+      
+      .tool-group {
+        justify-content: center;
+      }
+      
+      .editor-tools button {
+        padding: 10px 15px;
+        font-size: 14px;
+      }
+      
+      /* Preview tools responsivo */
+      .preview-tools {
+        flex-direction: column;
+        gap: 8px;
+        margin: 10px 10px;
+      }
+      
+      .preview-tools button {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      /* Editor areas en móvil */
+      .editor-area {
+        min-height: 250px;
+      }
+      
+      textarea {
+        font-size: 16px; /* Previene zoom en iOS */
+      }
+      
+      /* Líneas de números en móvil */
+      .line-numbers {
+        width: 35px;
+        font-size: 12px;
+      }
+      
+      textarea {
+        padding-left: 43px;
+      }
+      
+      .syntax-highlight {
+        left: 43px;
+        font-size: 12px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .editor-container {
+        padding: 0 5px;
+        gap: 10px;
+      }
+      
+      .project-header .project-actions button {
+        font-size: 10px;
+        padding: 6px 8px;
+      }
+      
+      .controls button span {
+        display: none;
+      }
+      
+      .controls button {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
     @keyframes pulse {
@@ -174,56 +322,491 @@
     @keyframes scanEffect {
       0% { opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; }
     }
-    /* Overlay Ajustes (Idiomas y Soporte) */
+    /* Overlay Ajustes estilo Instagram */
     #settingsOverlay {
       display: none; position: fixed; z-index: 11000; top: 0; left: 0;
-      width: 100%; height: 100%; background: var(--primary-color); color: #fff;
-      padding-top: 100px; text-align: center;
+      width: 100%; height: 100%; background: var(--bg-color); color: var(--text-color);
+      animation: slideUp 0.3s ease;
     }
-    #settingsOverlay h2 { margin-bottom: 20px; font-size: 2rem; }
-    .lang-option {
-      background: #fff; color: var(--primary-color); border: none;
-      padding: 10px 20px; margin: 5px; font-size: 16px;
-      border-radius: 5px; cursor: pointer; transition: background 0.2s;
+    
+    #settingsOverlay.show {
+      display: block;
     }
-    .lang-option:hover { background: #f0f0f0; }
+    
+    .settings-header {
+      background: var(--editor-bg);
+      padding: 15px 20px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .settings-header .back-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--text-color);
+      cursor: pointer;
+      padding: 5px;
+    }
+    
+    .settings-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+      flex: 1;
+    }
+    
+    .settings-search {
+      padding: 15px 20px;
+      background: var(--editor-bg);
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .settings-search input {
+      width: 100%;
+      padding: 10px 15px;
+      background: #f1f1f1;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      color: var(--text-color);
+    }
+    
+    .settings-search input::placeholder {
+      color: #8e8e8e;
+    }
+    
+    .settings-content {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--editor-bg);
+    }
+    
+    .settings-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid #e0e0e0;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      text-decoration: none;
+      color: var(--text-color);
+    }
+    
+    .settings-item:hover {
+      background: #f8f8f8;
+    }
+    
+    .settings-item-icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    
+    .settings-item-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .settings-item-title {
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 2px;
+    }
+    
+    .settings-item-subtitle {
+      font-size: 13px;
+      color: #8e8e8e;
+    }
+    
+    .settings-item-arrow {
+      font-size: 14px;
+      color: #8e8e8e;
+    }
+    
+    .settings-section-title {
+      padding: 20px 20px 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #8e8e8e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Submenu de idiomas */
+    .language-submenu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--editor-bg);
+      z-index: 11001;
+      animation: slideUp 0.3s ease;
+    }
+    
+    .language-submenu.show {
+      display: block;
+    }
+    
+    .language-option {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid #e0e0e0;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    
+    .language-option:hover {
+      background: #f8f8f8;
+    }
+    
+    .language-option.selected {
+      background: #e3f2fd;
+    }
+    
+    .language-option .flag {
+      font-size: 20px;
+      margin-right: 15px;
+      width: 24px;
+      text-align: center;
+    }
+    
+    .language-option .name {
+      flex: 1;
+      font-size: 16px;
+    }
+    
+    .language-option .check {
+      color: var(--primary-color);
+      font-size: 16px;
+    }
+    
+    /* Bot de Ayuda */
+    #helpBotOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--editor-bg);
+      z-index: 11002;
+      flex-direction: column;
+    }
+    
+    #helpBotOverlay.show {
+      display: flex;
+    }
+    
+    .chat-header {
+      background: var(--primary-color);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .chat-header .back-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 5px;
+    }
+    
+    .chat-header .bot-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .chat-header .bot-avatar {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      font-size: 20px;
+      animation: pulse 2s infinite;
+    }
+    
+    .chat-header .bot-details h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .chat-header .bot-details p {
+      margin: 0;
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f8f9fa;
+    }
+    
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      animation: messageSlideIn 0.3s ease;
+    }
+    
+    .message.user {
+      justify-content: flex-end;
+    }
+    
+    .message.bot {
+      justify-content: flex-start;
+    }
+    
+    .message-content {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      position: relative;
+      word-wrap: break-word;
+    }
+    
+    .message.user .message-content {
+      background: var(--primary-color);
+      color: white;
+      border-bottom-right-radius: 5px;
+    }
+    
+    .message.bot .message-content {
+      background: white;
+      color: var(--text-color);
+      border: 1px solid #e0e0e0;
+      border-bottom-left-radius: 5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .message-time {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 5px;
+      text-align: right;
+    }
+    
+    .message.bot .message-time {
+      text-align: left;
+    }
+    
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 18px;
+      border-bottom-left-radius: 5px;
+      border: 1px solid #e0e0e0;
+      max-width: 70%;
+      margin-bottom: 15px;
+    }
+    
+    .typing-dots {
+      display: flex;
+      gap: 3px;
+    }
+    
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: #999;
+      border-radius: 50%;
+      animation: typingDot 1.4s infinite;
+    }
+    
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    .chat-input-container {
+      padding: 15px 20px;
+      background: white;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    
+    .chat-input {
+      flex: 1;
+      border: 1px solid #e0e0e0;
+      border-radius: 20px;
+      padding: 12px 16px;
+      font-size: 14px;
+      resize: none;
+      min-height: 20px;
+      max-height: 100px;
+      background: #f8f9fa;
+    }
+    
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      background: white;
+    }
+    
+    .send-button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .send-button:hover {
+      background: #166fe5;
+      transform: scale(1.05);
+    }
+    
+    .send-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .quick-questions {
+      padding: 10px 20px;
+      background: white;
+      border-top: 1px solid #e0e0e0;
+    }
+    
+    .quick-questions-title {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    .quick-questions-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .quick-question {
+      background: #f0f2f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 15px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-color);
+    }
+    
+    .quick-question:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-1px);
+    }
+    
+    @keyframes messageSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes typingDot {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+      }
+      30% {
+        transform: translateY(-10px);
+        opacity: 1;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .settings-header {
+        padding: 12px 15px;
+      }
+      
+      .settings-item {
+        padding: 12px 15px;
+      }
+      
+      .settings-search {
+        padding: 12px 15px;
+      }
+      
+      .settings-section-title {
+        padding: 15px 15px 8px 15px;
+      }
+      
+      .chat-messages {
+        padding: 15px;
+      }
+      
+      .message-content {
+        max-width: 85%;
+      }
+      
+      .chat-input-container {
+        padding: 12px 15px;
+      }
+      
+      .quick-questions {
+        padding: 8px 15px;
+      }
+    }
     /* Botón de Soporte dentro de Ajustes */
     #supportOption {
       margin-top: 20px;
       background: #fff;
       color: var(--primary-color);
     }
-    /* Floating Update Popup */
-    #updatePopup {
-      position: fixed; bottom: 20px; right: 20px;
-      background: #fff; color: var(--primary-color);
-      border: 1px solid var(--primary-color); border-radius: 10px;
-      padding: 10px 15px; display: flex; align-items: center;
-      gap: 10px; cursor: pointer; z-index: 12000;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    #updatePopup.hidden { display: none; }
-    /* Panel de Notificaciones */
-    #notificationPanel {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: var(--bg-color); color: var(--text-color);
-      z-index: 13000; display: none; flex-direction: column;
-      overflow-y: auto;
-    }
-    .notification-header {
-      background: var(--primary-color); padding: 15px 20px;
-      display: flex; justify-content: space-between; align-items: center;
-      color: #fff;
-    }
-    .notification-list { padding: 20px; }
-    .notification-item {
-      background: #fff; border: 1px solid var(--primary-color);
-      border-radius: 5px; padding: 10px; margin-bottom: 10px;
-    }
-    #closeNotificationPanel {
-      background: transparent; border: none; color: #fff;
-      font-size: 1.5rem; cursor: pointer;
-    }
+    
     /* Editor */
     .editor-container {
       max-width: 100%; 
@@ -768,7 +1351,30 @@
       margin-right: 5px;
     }
 
-  /* Estilos para navegación */
+  /* Selector de idioma flotante */
+    #langSelector:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    
+    #langSelector:active {
+      transform: scale(0.95);
+    }
+    
+    @media (max-width: 768px) {
+      #langSelector {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+      }
+      
+      #langSelector i {
+        font-size: 16px;
+      }
+    }
+
+    /* Estilos para navegación */
     nav {
       background: rgba(24, 119, 242, 0.9);
       padding: 10px 20px;
@@ -953,41 +1559,210 @@
   <!-- ===== Overlay Scan (Vista Previa) ===== -->
   <div id="scanOverlay"></div>
 
-  <!-- ===== Overlay Ajustes (Idiomas y Soporte) ===== -->
+  <!-- ===== Overlay Ajustes estilo Instagram ===== -->
   <div id="settingsOverlay">
-    <h2>Selecciona tu idioma</h2>
-    <button class="lang-option" data-lang="ja">日本語</button>
-    <button class="lang-option" data-lang="es">Español</button>
-    <button class="lang-option" data-lang="en">English</button>
-    <button class="lang-option" data-lang="ko">한국어</button>
-    <button class="lang-option" data-lang="vi">Tiếng Việt</button>
-    <button class="lang-option" data-lang="zh">中文</button>
-
-  </div>
-
-  <!-- ===== Floating Update Popup ===== -->
-  <div id="updatePopup" class="hidden">
-    <i class="fa-solid fa-flag"></i>
-    <span id="updateText">¡La aplicación se ha actualizado!</span>
-  </div>
-
-  <!-- ===== Panel de Notificaciones ===== -->
-  <div id="notificationPanel">
-    <div class="notification-header">
-      <h2 id="notificationPanelTitle">Notificaciones</h2>
-      <button id="closeNotificationPanel"><i class="fa-solid fa-times"></i></button>
+    <div class="settings-header">
+      <button class="back-btn" id="closeSettings">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h2>Configuración</h2>
     </div>
-    <div id="notificationList" class="notification-list"></div>
+    
+    <div class="settings-search">
+      <input type="text" placeholder="Buscar" id="settingsSearch">
+    </div>
+    
+    <div class="settings-content">
+      <div class="settings-item" id="languageSettingsItem">
+        <div class="settings-item-icon">
+          <i class="fas fa-globe"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Idioma</div>
+          <div class="settings-item-subtitle" id="currentLanguageText">Español</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      
+      <div class="settings-item" id="themeSettingsItem">
+        <div class="settings-item-icon">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Tema</div>
+          <div class="settings-item-subtitle" id="currentThemeText">Claro</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      
+      <div class="settings-item">
+        <div class="settings-item-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Privacidad</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      
+      <div class="settings-item">
+        <div class="settings-item-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Seguridad</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      
+      <div class="settings-section-title">Información</div>
+      
+      <div class="settings-item" id="helpBotItem">
+        <div class="settings-item-icon">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Asistente Virtual</div>
+          <div class="settings-item-subtitle">Chat de ayuda en tiempo real</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      
+      <div class="settings-item">
+        <div class="settings-item-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Acerca de</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Submenu de Idiomas ===== -->
+  <div id="languageSubmenu" class="language-submenu">
+    <div class="settings-header">
+      <button class="back-btn" id="backToSettings">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h2>Idioma</h2>
+    </div>
+    
+    <div class="settings-content">
+      <div class="language-option" data-lang="es">
+        <div class="flag">🇪🇸</div>
+        <div class="name">Español</div>
+        <div class="check" style="display: none;"><i class="fas fa-check"></i></div>
+      </div>
+      
+      <div class="language-option" data-lang="en">
+        <div class="flag">🇺🇸</div>
+        <div class="name">English</div>
+        <div class="check" style="display: none;"><i class="fas fa-check"></i></div>
+      </div>
+      
+      <div class="language-option" data-lang="ja">
+        <div class="flag">🇯🇵</div>
+        <div class="name">日本語</div>
+        <div class="check" style="display: none;"><i class="fas fa-check"></i></div>
+      </div>
+      
+      <div class="language-option" data-lang="ko">
+        <div class="flag">🇰🇷</div>
+        <div class="name">한국어</div>
+        <div class="check" style="display: none;"><i class="fas fa-check"></i></div>
+      </div>
+      
+      <div class="language-option" data-lang="vi">
+        <div class="flag">🇻🇳</div>
+        <div class="name">Tiếng Việt</div>
+        <div class="check" style="display: none;"><i class="fas fa-check"></i></div>
+      </div>
+      
+      <div class="language-option" data-lang="zh">
+        <div class="flag">🇨🇳</div>
+        <div class="name">中文</div>
+        <div class="check" style="display: none;"><i class="fas fa-check"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Bot de Ayuda ===== -->
+  <div id="helpBotOverlay">
+    <div class="chat-header">
+      <button class="back-btn" id="closeHelpBot">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="bot-info">
+        <div class="bot-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="bot-details">
+          <h3>Asistente Clack</h3>
+          <p>En línea • Siempre disponible</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="chat-container">
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot">
+          <div class="message-content">
+            ¡Hola! 👋 Soy tu asistente virtual de Clack. Puedo ayudarte con:
+            <br><br>
+            • 💻 Funciones del editor de código
+            • 🎨 Personalización y temas
+            • 🔧 Gestión de proyectos
+            • 🚀 Vista previa y deployment
+            • 🛡️ Análisis de seguridad
+            <br><br>
+            ¿En qué puedo ayudarte hoy?
+            <div class="message-time" id="welcomeTime"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="quick-questions">
+        <div class="quick-questions-title">Preguntas frecuentes:</div>
+        <div class="quick-questions-list">
+          <span class="quick-question" onclick="askQuickQuestion('¿Cómo crear un nuevo proyecto?')">¿Cómo crear un proyecto?</span>
+          <span class="quick-question" onclick="askQuickQuestion('¿Cómo cambiar el tema?')">¿Cambiar tema?</span>
+          <span class="quick-question" onclick="askQuickQuestion('¿Cómo usar el escáner?')">¿Usar escáner?</span>
+          <span class="quick-question" onclick="askQuickQuestion('¿Cómo exportar proyecto?')">¿Exportar proyecto?</span>
+          <span class="quick-question" onclick="askQuickQuestion('¿Atajos de teclado?')">¿Atajos?</span>
+        </div>
+      </div>
+      
+      <div class="chat-input-container">
+        <textarea class="chat-input" id="chatInput" placeholder="Escribe tu pregunta..." rows="1"></textarea>
+        <button class="send-button" id="sendButton">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- ===== Header ===== -->
+  
+
   <header>
     <h1><i class="fa-solid fa-code"></i> Clack</h1>
     <div class="controls">
       <button id="previewBtn"><i class="fa-solid fa-eye"></i> <span id="previewBtnText">Vista Previa</span></button>
-      <button id="themeBtn"><i class="fa-solid fa-moon"></i></button>
       <button id="searchBtn" title="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
-      <button id="notificationBtn" title="Notificaciones"><i class="fa-solid fa-bell"></i></button>
       <button id="settingsBtn" title="Ajustes"><i class="fa-solid fa-gear"></i></button>
     </div>
   </header>
@@ -1249,8 +2024,6 @@
       jsPlaceholder: "JavaScript...",
       previewHeader: "Vista Previa",
       welcomeMessage: "¡Bienvenido a la aplicación! Disfruta del software implementando tus conocimientos de Programación!",
-      notificationUpdate: "¡La aplicación se ha actualizado!",
-      notificationPanelTitle: "Notificaciones",
       analyzing: "Analizando...",
       noErrorsFound: "HTML에서 오류가 발견되지 않았습니다!",
       commonErrorsFound: "발견된 일반적인 오류:",
@@ -1286,8 +2059,6 @@
       document.getElementById('htmlEditor').placeholder = t.htmlPlaceholder;
       document.getElementById('cssEditor').placeholder = t.cssPlaceholder;
       document.getElementById('jsEditor').placeholder = t.jsPlaceholder;
-      document.getElementById('updateText').innerHTML = t.notificationUpdate;
-      document.getElementById('notificationPanelTitle').textContent = t.notificationPanelTitle;
       document.getElementById('searchExecuteBtn').textContent = t.searchButton;
       runLangTransitionAnimation();
       document.getElementById('settingsOverlay').style.display = 'none';
@@ -1317,46 +2088,7 @@
       });
     }
 
-    /* ========================
-       Funciones de Notificaciones
-       ======================== */
-    function loadNotifications() {
-      const stored = localStorage.getItem('notifications');
-      return stored ? JSON.parse(stored) : [];
-    }
-    function saveNotifications(notifications) {
-      localStorage.setItem('notifications', JSON.stringify(notifications));
-    }
-    function renderNotifications() {
-      const notifications = loadNotifications();
-      const notificationList = document.getElementById('notificationList');
-      notificationList.innerHTML = "";
-      notifications.forEach(item => {
-        const div = document.createElement('div');
-        div.classList.add('notification-item');
-        div.innerHTML = `<strong>${item.message}</strong><br><small>${item.date}</small>`;
-        notificationList.appendChild(div);
-      });
-    }
-    function addNotification(message) {
-      const now = new Date();
-      const notification = { message, date: now.toLocaleDateString() + " " + now.toLocaleTimeString() };
-      let notifications = loadNotifications();
-      notifications.unshift(notification);
-      saveNotifications(notifications);
-      renderNotifications();
-    }
-    function simulateUpdateNotification() {
-      setInterval(() => {
-        const t = translations[currentLang] || translations["es"];
-        const now = new Date();
-        document.getElementById('updateText').innerHTML = t.notificationUpdate + "<br><small>" + now.toLocaleDateString() + " " + now.toLocaleTimeString() + "</small>";
-        document.getElementById('updatePopup').classList.remove('hidden');
-        addNotification(t.notificationUpdate);
-      }, 30000);
-    }
-    function showNotificationPanel() { document.getElementById('notificationPanel').style.display = 'flex'; renderNotifications(); }
-    function hideNotificationPanel() { document.getElementById('notificationPanel').style.display = 'none'; }
+    
 
     /* ========================
        Funciones de Sesión
@@ -2644,17 +3376,15 @@ document.addEventListener('DOMContentLoaded', () => {
       updateLanguage(currentLang);
       checkSession();
       setupSwipeDetection();
-      simulateUpdateNotification();
-      renderNotifications();
       renderRecentSearches();
       renderTrending();
       renderProjectsList();
+      updateThemeDisplay();
 
       // Elementos de Clack
       const codeEffect = document.querySelector('.code-effect');
       const settingsBtn = document.getElementById('settingsBtn');
       const previewBtn = document.getElementById('previewBtn');
-      const themeBtn = document.getElementById('themeBtn');
       const closePreview = document.getElementById('closePreview');
       const previewFrame = document.getElementById('previewFrame');
       const htmlEditor = document.getElementById('htmlEditor');
@@ -2929,12 +3659,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }, 1000);
         });
       }
-      themeBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        themeBtn.innerHTML = document.body.classList.contains('dark-mode')
-          ? '<i class="fa-solid fa-sun"></i>'
-          : '<i class="fa-solid fa-moon"></i>';
-      });
+      // Función de tema movida a ajustes
       initPreviewTools();
       previewBtn.addEventListener('click', () => {
         executeSound.play();
@@ -2965,21 +3690,277 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('previewOverlay').style.display = 'none';
       });
       settingsBtn.addEventListener('click', () => {
-        document.getElementById('settingsOverlay').style.display = 'block';
+        const overlay = document.getElementById('settingsOverlay');
+        overlay.style.display = 'block';
+        overlay.classList.add('show');
+        updateCurrentLanguageDisplay();
       });
-      document.getElementById('notificationBtn').addEventListener('click', showNotificationPanel);
+      
+      // Cerrar ajustes
+      document.getElementById('closeSettings').addEventListener('click', () => {
+        const overlay = document.getElementById('settingsOverlay');
+        overlay.style.display = 'none';
+        overlay.classList.remove('show');
+      });
+      
+      // Abrir submenu de idiomas
+      document.getElementById('languageSettingsItem').addEventListener('click', () => {
+        document.getElementById('languageSubmenu').classList.add('show');
+        updateLanguageSelection();
+      });
+      
+      // Volver a ajustes desde idiomas
+      document.getElementById('backToSettings').addEventListener('click', () => {
+        document.getElementById('languageSubmenu').classList.remove('show');
+      });
+      
+      // Manejar selección de idioma
+      document.querySelectorAll('.language-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+          const lang = e.currentTarget.getAttribute('data-lang');
+          updateLanguage(lang);
+          updateLanguageSelection();
+          updateCurrentLanguageDisplay();
+          
+          // Volver a ajustes después de 500ms
+          setTimeout(() => {
+            document.getElementById('languageSubmenu').classList.remove('show');
+          }, 500);
+        });
+      });
+      
+      // Manejar cambio de tema desde ajustes
+      document.getElementById('themeSettingsItem').addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        updateThemeDisplay();
+      });
+      
+      // Abrir bot de ayuda
+      document.getElementById('helpBotItem').addEventListener('click', () => {
+        document.getElementById('helpBotOverlay').classList.add('show');
+        document.getElementById('settingsOverlay').style.display = 'none';
+        initHelpBot();
+      });
+      
+      // Cerrar bot de ayuda
+      document.getElementById('closeHelpBot').addEventListener('click', () => {
+        document.getElementById('helpBotOverlay').classList.remove('show');
+      });
+      
+      // Función para actualizar la visualización del idioma actual
+      function updateCurrentLanguageDisplay() {
+        const languageNames = {
+          'es': 'Español',
+          'en': 'English', 
+          'ja': '日本語',
+          'ko': '한국어',
+          'vi': 'Tiếng Việt',
+          'zh': '中文'
+        };
+        document.getElementById('currentLanguageText').textContent = languageNames[currentLang] || 'Español';
+      }
+      
+      // Función para actualizar la selección visual en el submenu de idiomas
+      function updateLanguageSelection() {
+        document.querySelectorAll('.language-option').forEach(option => {
+          const check = option.querySelector('.check');
+          if (option.getAttribute('data-lang') === currentLang) {
+            option.classList.add('selected');
+            check.style.display = 'block';
+          } else {
+            option.classList.remove('selected');
+            check.style.display = 'none';
+          }
+        });
+      }
+      
+      // Función para actualizar la visualización del tema
+      function updateThemeDisplay() {
+        const isDark = document.body.classList.contains('dark-mode');
+        document.getElementById('currentThemeText').textContent = isDark ? 'Oscuro' : 'Claro';
+        document.getElementById('themeIcon').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+      }
+      
+      // Bot de Ayuda - Base de conocimientos
+      const botKnowledge = {
+        'crear proyecto': 'Para crear un nuevo proyecto: 1️⃣ Ve a la sección "Proyectos", 2️⃣ Haz clic en "Nuevo Proyecto", 3️⃣ Escribe el nombre y ¡listo! 🎉',
+        'cambiar tema': 'Para cambiar el tema: 1️⃣ Abre Ajustes ⚙️, 2️⃣ Selecciona "Tema", 3️⃣ El tema cambiará automáticamente entre claro y oscuro. 🌙☀️',
+        'escáner': 'El escáner de seguridad 🛡️ analiza tu código buscando vulnerabilidades. Solo haz clic en el botón "Escanear" en la vista previa.',
+        'exportar': 'Para exportar: 1️⃣ Abre tu proyecto, 2️⃣ Haz clic en "Exportar" 📥, 3️⃣ Se descargará un archivo JSON con tu código.',
+        'atajos': 'Atajos útiles: Ctrl+S (guardar), Ctrl+Z (deshacer), Ctrl+Y (rehacer), Ctrl+F (buscar y reemplazar). ⌨️',
+        'vista previa': 'La vista previa 👁️ muestra cómo se ve tu código en tiempo real. Incluye zoom y análisis de seguridad.',
+        'proyectos': 'En la sección Proyectos puedes crear, editar, duplicar y exportar tus códigos. Todo se guarda automáticamente. 💾',
+        'idioma': 'Puedes cambiar el idioma en Ajustes > Idioma. Soportamos Español, Inglés, Japonés, Coreano, Vietnamita y Chino. 🌍'
+      };
+      
+      function initHelpBot() {
+        // Establecer tiempo de bienvenida
+        document.getElementById('welcomeTime').textContent = getCurrentTime();
+        
+        // Configurar área de chat
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('sendButton');
+        
+        // Auto-resize del textarea
+        chatInput.addEventListener('input', () => {
+          chatInput.style.height = 'auto';
+          chatInput.style.height = (chatInput.scrollHeight) + 'px';
+          
+          // Habilitar/deshabilitar botón de envío
+          sendButton.disabled = chatInput.value.trim() === '';
+        });
+        
+        // Enviar mensaje
+        const sendMessage = () => {
+          const message = chatInput.value.trim();
+          if (message) {
+            addUserMessage(message);
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            sendButton.disabled = true;
+            
+            // Simular respuesta del bot
+            setTimeout(() => {
+              showTypingIndicator();
+              setTimeout(() => {
+                hideTypingIndicator();
+                addBotMessage(getBotResponse(message));
+              }, 1500);
+            }, 500);
+          }
+        };
+        
+        sendButton.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+          }
+        });
+      }
+      
+      function getCurrentTime() {
+        return new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      }
+      
+      function addUserMessage(message) {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message user';
+        messageDiv.innerHTML = `
+          <div class="message-content">
+            ${message}
+            <div class="message-time">${getCurrentTime()}</div>
+          </div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      
+      function addBotMessage(message) {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message bot';
+        messageDiv.innerHTML = `
+          <div class="message-content">
+            ${message}
+            <div class="message-time">${getCurrentTime()}</div>
+          </div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      
+      function showTypingIndicator() {
+        const chatMessages = document.getElementById('chatMessages');
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'typingIndicator';
+        typingDiv.className = 'message bot';
+        typingDiv.innerHTML = `
+          <div class="typing-indicator">
+            <div class="typing-dots">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+            <span style="margin-left: 8px; color: #666; font-size: 12px;">Escribiendo...</span>
+          </div>
+        `;
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      
+      function hideTypingIndicator() {
+        const typingIndicator = document.getElementById('typingIndicator');
+        if (typingIndicator) {
+          typingIndicator.remove();
+        }
+      }
+      
+      function getBotResponse(userMessage) {
+        const message = userMessage.toLowerCase();
+        
+        // Buscar en la base de conocimientos
+        for (const [keyword, response] of Object.entries(botKnowledge)) {
+          if (message.includes(keyword)) {
+            return response;
+          }
+        }
+        
+        // Respuestas contextuales
+        if (message.includes('hola') || message.includes('hi')) {
+          return '¡Hola! 👋 ¿En qué puedo ayudarte con Clack hoy?';
+        }
+        
+        if (message.includes('gracias') || message.includes('thank')) {
+          return '¡De nada! 😊 Estoy aquí para ayudarte cuando lo necesites.';
+        }
+        
+        if (message.includes('error') || message.includes('problema')) {
+          return '¿Puedes contarme más sobre el error? 🔍 Puedo ayudarte a identificar problemas comunes en el código o con las funciones de la app.';
+        }
+        
+        if (message.includes('código') || message.includes('programar')) {
+          return '¡Excelente! 💻 Clack tiene editores para HTML, CSS y JavaScript con resaltado de sintaxis, numeración de líneas y validación automática. ¿Necesitas ayuda con algo específico?';
+        }
+        
+        // Respuesta por defecto
+        return `🤔 Hmm, no estoy seguro de cómo ayudarte con eso específicamente. Pero puedo asistirte con:
+        
+        • Crear y gestionar proyectos
+        • Usar las herramientas del editor
+        • Configurar ajustes y temas
+        • Vista previa y análisis de código
+        
+        ¿Hay algo específico que te gustaría saber?`;
+      }
+      
+      function askQuickQuestion(question) {
+        document.getElementById('chatInput').value = question;
+        document.getElementById('sendButton').disabled = false;
+      }
+      
+      // Búsqueda en ajustes
+      document.getElementById('settingsSearch').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const items = document.querySelectorAll('.settings-item');
+        
+        items.forEach(item => {
+          const title = item.querySelector('.settings-item-title')?.textContent.toLowerCase() || '';
+          const subtitle = item.querySelector('.settings-item-subtitle')?.textContent.toLowerCase() || '';
+          
+          if (title.includes(searchTerm) || subtitle.includes(searchTerm)) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
       document.getElementById('changeLangBtn').addEventListener('click', () => {
         document.getElementById('settingsOverlay').style.display = 'block';
       });
-      document.querySelectorAll('.lang-option').forEach(btn => {
-        // Asignar para las opciones de idioma (excepto el botón de soporte)
-        if(btn.id !== "supportOption") {
-          btn.addEventListener('click', e => { updateLanguage(e.target.getAttribute('data-lang')); });
-        }
-      });
+      
       document.getElementById("githubLoginBtn").addEventListener("click", loginSimulated);
-      document.getElementById('updatePopup').addEventListener('click', showNotificationPanel);
-      document.getElementById('closeNotificationPanel').addEventListener('click', hideNotificationPanel);
 
       searchBtn.addEventListener('click', () => { toggleSearchOverlay(true); });
       closeSearchOverlay.addEventListener('click', () => { toggleSearchOverlay(false); });
