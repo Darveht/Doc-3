@@ -767,6 +767,167 @@
       }
     }
     
+    /* Selector de idiomas del chat */
+    .chat-language-selector {
+      position: relative;
+    }
+    
+    .language-selector-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .language-selector-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    
+    .chat-language-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      display: none;
+      min-width: 150px;
+      z-index: 1000;
+      overflow: hidden;
+      animation: slideDownChat 0.3s ease;
+    }
+    
+    .chat-language-dropdown.show {
+      display: block;
+    }
+    
+    .chat-lang-option {
+      padding: 12px 15px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    
+    .chat-lang-option:hover {
+      background: #f0f2f5;
+    }
+    
+    .chat-lang-option.selected {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .chat-lang-option::before {
+      content: attr(data-flag);
+      font-size: 16px;
+    }
+    
+    @keyframes slideDownChat {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Animación skeleton para traducción */
+    .message-skeleton {
+      background: #f0f0f0;
+      border-radius: 18px;
+      padding: 12px 16px;
+      margin-bottom: 15px;
+      max-width: 70%;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .message-skeleton::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: skeletonShimmer 1.5s infinite;
+    }
+    
+    .skeleton-line {
+      height: 12px;
+      background: #e0e0e0;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    
+    .skeleton-line:last-child {
+      margin-bottom: 0;
+      width: 60%;
+    }
+    
+    .translating-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #666;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    
+    .translating-dots {
+      display: flex;
+      gap: 2px;
+    }
+    
+    .translating-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      animation: translatingPulse 1.4s infinite;
+    }
+    
+    .translating-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .translating-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes skeletonShimmer {
+      0% {
+        left: -100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+    
+    @keyframes translatingPulse {
+      0%, 60%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+      }
+      30% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+    }
+    
     @media (max-width: 768px) {
       .settings-header {
         padding: 12px 15px;
@@ -1715,6 +1876,20 @@
           <p>En línea • Siempre disponible</p>
         </div>
       </div>
+      <div class="chat-language-selector">
+        <button class="language-selector-btn" id="chatLanguageBtn">
+          <i class="fas fa-globe"></i>
+          <span id="currentChatLang">ES</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="chat-language-dropdown" id="chatLanguageDropdown">
+          <div class="chat-lang-option" data-lang="es" data-flag="🇪🇸">Español</div>
+          <div class="chat-lang-option" data-lang="pt" data-flag="🇧🇷">Português</div>
+          <div class="chat-lang-option" data-lang="ko" data-flag="🇰🇷">한국어</div>
+          <div class="chat-lang-option" data-lang="vi" data-flag="🇻🇳">Tiếng Việt</div>
+          <div class="chat-lang-option" data-lang="en" data-flag="🇺🇸">English</div>
+        </div>
+      </div>
     </div>
     
     <div class="chat-container">
@@ -2004,9 +2179,20 @@
     });
 
     /*************************************************
-     *       CONFIGURACIÓN DE CLAVES API (EJEMPLO)
+     *       CONFIGURACIÓN DE CLAVES API
      *************************************************/
     const YOUTUBE_API_KEY = "AIzaSyDUzRmn9mQ4RL5EwzgExD3CfIzULos76NQ";
+    const HUGGINGFACE_API_KEY = "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";
+    
+    // Configuración de idiomas del chat
+    let currentChatLang = 'es';
+    const chatLanguages = {
+      'es': { name: 'Español', flag: '🇪🇸', model: '' },
+      'pt': { name: 'Português', flag: '🇧🇷', model: 'Helsinki-NLP/opus-mt-es-pt' },
+      'ko': { name: '한국어', flag: '🇰🇷', model: 'Helsinki-NLP/opus-mt-es-ko' },
+      'vi': { name: 'Tiếng Việt', flag: '🇻🇳', model: 'Helsinki-NLP/opus-mt-es-vi' },
+      'en': { name: 'English', flag: '🇺🇸', model: 'Helsinki-NLP/opus-mt-es-en' }
+    };
 
     // Si no existe un idioma guardado, se usa "es"
     if (!localStorage.getItem('currentLang')) {
@@ -3530,6 +3716,100 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
+      // Inicializar selector de idiomas del chat
+      function initChatLanguageSelector() {
+        const chatLanguageBtn = document.getElementById('chatLanguageBtn');
+        const chatLanguageDropdown = document.getElementById('chatLanguageDropdown');
+        const currentChatLangSpan = document.getElementById('currentChatLang');
+        
+        if (chatLanguageBtn && chatLanguageDropdown) {
+          // Mostrar/ocultar dropdown
+          chatLanguageBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chatLanguageDropdown.classList.toggle('show');
+          });
+          
+          // Cerrar dropdown al hacer clic fuera
+          document.addEventListener('click', () => {
+            chatLanguageDropdown.classList.remove('show');
+          });
+          
+          // Manejar selección de idioma
+          chatLanguageDropdown.addEventListener('click', async (e) => {
+            const option = e.target.closest('.chat-lang-option');
+            if (option) {
+              const selectedLang = option.dataset.lang;
+              currentChatLang = selectedLang;
+              
+              // Actualizar UI
+              currentChatLangSpan.textContent = selectedLang.toUpperCase();
+              
+              // Marcar opción seleccionada
+              document.querySelectorAll('.chat-lang-option').forEach(opt => {
+                opt.classList.remove('selected');
+              });
+              option.classList.add('selected');
+              
+              chatLanguageDropdown.classList.remove('show');
+              
+              // Mostrar notificación de cambio de idioma
+              const notification = document.createElement('div');
+              notification.style.cssText = `
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--primary-color);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 20px;
+                z-index: 10000;
+                font-size: 14px;
+                animation: slideUp 0.3s ease;
+              `;
+              notification.innerHTML = `
+                ${chatLanguages[selectedLang].flag} Idioma cambiado a ${chatLanguages[selectedLang].name}
+              `;
+              document.body.appendChild(notification);
+              
+              setTimeout(() => {
+                notification.remove();
+              }, 3000);
+              
+              // Traducir mensaje de bienvenida si es necesario
+              if (selectedLang !== 'es') {
+                const welcomeMessage = document.querySelector('.message.bot .message-content');
+                if (welcomeMessage) {
+                  const originalText = `¡Hola! 👋 Soy tu asistente virtual de Clack. Puedo ayudarte con:
+
+• 💻 Funciones del editor de código
+• 🎨 Personalización y temas
+• 🔧 Gestión de proyectos
+• 🚀 Vista previa y deployment
+• 🛡️ Análisis de seguridad
+
+¿En qué puedo ayudarte hoy?`;
+                  
+                  try {
+                    const translatedText = await translateText(originalText, selectedLang);
+                    welcomeMessage.innerHTML = `
+                      ${translatedText}
+                      <div class="message-time">${getCurrentTime()}</div>
+                    `;
+                  } catch (error) {
+                    console.error('Error traduciendo mensaje de bienvenida:', error);
+                  }
+                }
+              }
+            }
+          });
+          
+          // Inicializar idioma por defecto
+          currentChatLangSpan.textContent = currentChatLang.toUpperCase();
+          document.querySelector(`[data-lang="${currentChatLang}"]`)?.classList.add('selected');
+        }
+      }
+      
       // Configurar botones de vista previa y escáner en proyectos
       const previewBtnProject = document.getElementById('previewBtnProject');
       const scanBtnProject = document.getElementById('scanBtnProject');
@@ -3740,6 +4020,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('helpBotOverlay').classList.add('show');
         document.getElementById('settingsOverlay').style.display = 'none';
         initHelpBot();
+        initChatLanguageSelector();
       });
       
       // Cerrar bot de ayuda
@@ -3857,17 +4138,85 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
       }
       
-      function addBotMessage(message) {
+      async function addBotMessage(message) {
         const chatMessages = document.getElementById('chatMessages');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'message bot';
-        messageDiv.innerHTML = `
-          <div class="message-content">
-            ${message}
-            <div class="message-time">${getCurrentTime()}</div>
-          </div>
-        `;
-        chatMessages.appendChild(messageDiv);
+        
+        console.log(`Idioma actual del chat: ${currentChatLang}`);
+        console.log(`Mensaje original: ${message}`);
+        
+        // Si no es español, mostrar skeleton y traducir
+        if (currentChatLang !== 'es') {
+          // Mostrar skeleton mientras se traduce
+          const skeletonDiv = document.createElement('div');
+          skeletonDiv.className = 'message bot';
+          skeletonDiv.innerHTML = `
+            <div class="message-skeleton">
+              <div class="skeleton-line"></div>
+              <div class="skeleton-line"></div>
+              <div class="skeleton-line"></div>
+              <div class="translating-indicator">
+                <i class="fas fa-language"></i>
+                <span>Traduciendo a ${chatLanguages[currentChatLang].name}...</span>
+                <div class="translating-dots">
+                  <div class="translating-dot"></div>
+                  <div class="translating-dot"></div>
+                  <div class="translating-dot"></div>
+                </div>
+              </div>
+            </div>
+          `;
+          chatMessages.appendChild(skeletonDiv);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          
+          try {
+            console.log('Iniciando traducción...');
+            // Traducir el mensaje
+            const translatedMessage = await translateText(message, currentChatLang);
+            console.log(`Mensaje traducido: ${translatedMessage}`);
+            
+            // Simular delay mínimo para mostrar la animación
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Remover skeleton y mostrar mensaje traducido
+            skeletonDiv.remove();
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = `
+              <div class="message-content">
+                ${translatedMessage}
+                <div class="message-time">${getCurrentTime()}</div>
+              </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+          } catch (error) {
+            console.error('Error en traducción:', error);
+            // Si falla la traducción, mostrar mensaje original con indicación
+            skeletonDiv.remove();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = `
+              <div class="message-content">
+                <small style="color: #999; font-style: italic;">⚠️ Error en traducción - Texto original:</small><br>
+                ${message}
+                <div class="message-time">${getCurrentTime()}</div>
+              </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+          }
+        } else {
+          // Mostrar directamente en español
+          const messageDiv = document.createElement('div');
+          messageDiv.className = 'message bot';
+          messageDiv.innerHTML = `
+            <div class="message-content">
+              ${message}
+              <div class="message-time">${getCurrentTime()}</div>
+            </div>
+          `;
+          chatMessages.appendChild(messageDiv);
+        }
+        
         chatMessages.scrollTop = chatMessages.scrollHeight;
       }
       
@@ -3894,6 +4243,73 @@ document.addEventListener('DOMContentLoaded', () => {
         const typingIndicator = document.getElementById('typingIndicator');
         if (typingIndicator) {
           typingIndicator.remove();
+        }
+      }
+      
+      // Función para traducir texto usando Hugging Face
+      async function translateText(text, targetLang) {
+        // Si el idioma objetivo es español, no traducir
+        if (targetLang === 'es') {
+          return text;
+        }
+        
+        try {
+          let model;
+          
+          // Configurar modelos específicos para cada idioma
+          switch(targetLang) {
+            case 'en':
+              model = 'Helsinki-NLP/opus-mt-es-en';
+              break;
+            case 'pt':
+              model = 'Helsinki-NLP/opus-mt-es-pt';
+              break;
+            case 'ko':
+              model = 'Helsinki-NLP/opus-mt-es-ko';
+              break;
+            case 'vi':
+              model = 'Helsinki-NLP/opus-mt-es-vi';
+              break;
+            default:
+              return text; // Si no hay modelo disponible, retornar texto original
+          }
+          
+          console.log(`Traduciendo a ${targetLang} usando modelo: ${model}`);
+          
+          const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${HUGGINGFACE_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              inputs: text,
+              options: { 
+                wait_for_model: true,
+                use_cache: false
+              }
+            })
+          });
+          
+          if (!response.ok) {
+            console.error('Error HTTP:', response.status, response.statusText);
+            throw new Error(`Error HTTP: ${response.status}`);
+          }
+          
+          const result = await response.json();
+          console.log('Resultado de traducción:', result);
+          
+          if (result && result[0] && result[0].translation_text) {
+            return result[0].translation_text;
+          } else if (result && typeof result === 'string') {
+            return result;
+          } else {
+            console.error('Formato de respuesta inesperado:', result);
+            return text;
+          }
+        } catch (error) {
+          console.error('Error de traducción:', error);
+          return text; // Retornar texto original si falla la traducción
         }
       }
       
@@ -3935,8 +4351,19 @@ document.addEventListener('DOMContentLoaded', () => {
         ¿Hay algo específico que te gustaría saber?`;
       }
       
-      function askQuickQuestion(question) {
-        document.getElementById('chatInput').value = question;
+      async function askQuickQuestion(question) {
+        let translatedQuestion = question;
+        
+        // Traducir pregunta rápida si no está en español
+        if (currentChatLang !== 'es') {
+          try {
+            translatedQuestion = await translateText(question, currentChatLang);
+          } catch (error) {
+            console.error('Error traduciendo pregunta rápida:', error);
+          }
+        }
+        
+        document.getElementById('chatInput').value = translatedQuestion;
         document.getElementById('sendButton').disabled = false;
       }
       
