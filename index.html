@@ -1525,123 +1525,419 @@
       100% { transform: translateX(0); }
     }
     .shake { animation: shake 0.5s; }
-    /* Busqueda (Estilo TikTok) */
+    /* Busqueda (Estilo Twitter/X Moderno) */
     #searchOverlay {
       display: none; position: fixed; z-index: 14000; top: 0; left: 0;
-      width: 100%; height: 100%; background: var(--bg-color);
-      color: var(--text-color); overflow-y: auto; padding: 20px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      width: 100%; height: 100%; 
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+      color: #ffffff; overflow-y: auto; padding: 0;
+      animation: searchFadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    
+    @keyframes searchFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
-    @keyframes slideUp {
-      from { transform: translateY(30px); opacity: 0; }
+    
+    @keyframes searchSlideUp {
+      from { transform: translateY(20px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
+    
     .search-top-bar {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid #2f3336;
+      padding: 15px 20px;
+      display: flex; align-items: center; gap: 15px;
     }
-    .search-top-bar i { font-size: 1.5rem; cursor: pointer; }
+    
+    .search-top-bar i { 
+      font-size: 1.3rem; cursor: pointer; color: #ffffff;
+      transition: all 0.2s ease;
+      padding: 8px;
+      border-radius: 50%;
+    }
+    
+    .search-top-bar i:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.1);
+    }
+    
     .search-input-container {
       flex: 1;
       position: relative;
       display: flex;
       align-items: center;
-      background: #f1f1f1;
-      border-radius: 8px;
-      padding: 0 10px;
+      background: #16181c;
+      border: 2px solid #2f3336;
+      border-radius: 25px;
+      padding: 0 20px;
+      transition: all 0.3s ease;
+      overflow: hidden;
     }
+    
+    .search-input-container:focus-within {
+      border-color: #1d9bf0;
+      box-shadow: 0 0 0 1px #1d9bf0;
+      background: #000000;
+    }
+    
     .search-icon {
-      color: #666;
-      margin-right: 8px;
+      color: #71767b;
+      margin-right: 12px;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
     }
+    
+    .search-input-container:focus-within .search-icon {
+      color: #1d9bf0;
+    }
+    
     .search-top-bar input {
       flex: 1;
-      padding: 10px;
-      font-size: 1rem;
+      padding: 15px 0;
+      font-size: 1.1rem;
       border: none;
       background: transparent;
-      color: var(--text-color);
+      color: #ffffff;
+      font-weight: 400;
     }
+    
+    .search-top-bar input::placeholder {
+      color: #71767b;
+      font-weight: 400;
+    }
+    
     .search-top-bar input:focus {
       outline: none;
     }
+    
     .search-top-bar button {
-      background: var(--primary-color); color: #fff; border: none;
-      padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600;
+      background: linear-gradient(45deg, #1d9bf0, #1a8cd8);
+      color: #fff; border: none;
+      padding: 12px 24px; border-radius: 25px; cursor: pointer; 
+      font-weight: 700; font-size: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(29, 155, 240, 0.3);
     }
+    
+    .search-top-bar button:hover {
+      background: linear-gradient(45deg, #1a8cd8, #1d9bf0);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(29, 155, 240, 0.4);
+    }
+    
+    /* Contenedor principal de búsqueda */
+    .search-main-content {
+      padding: 0 20px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
     /* Recientes y Tendencias */
-    .recent-searches { margin-bottom: 20px; }
-    .recent-searches h3 { font-size: 1.2rem; margin-bottom: 10px; }
-    .recent-searches ul { list-style: none; padding-left: 0; }
+    .recent-searches { 
+      margin-bottom: 30px;
+      animation: searchSlideUp 0.5s ease 0.1s both;
+    }
+    
+    .recent-searches h3 { 
+      font-size: 1.4rem; 
+      margin-bottom: 15px; 
+      color: #ffffff;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .recent-searches h3::before {
+      content: "🕒";
+      font-size: 1.2rem;
+    }
+    
+    .recent-searches ul { 
+      list-style: none; 
+      padding: 0; 
+      background: #16181c;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #2f3336;
+    }
+    
     .recent-searches li {
       cursor: pointer;
-      padding: 5px;
-      border-bottom: 1px solid #ddd;
+      padding: 16px 20px;
       position: relative;
       touch-action: pan-y;
-      transition: transform 0.3s ease;
-      background: white;
+      transition: all 0.3s ease;
+      background: #16181c;
+      border-bottom: 1px solid #2f3336;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
+    
+    .recent-searches li:last-child {
+      border-bottom: none;
+    }
+    
+    .recent-searches li::before {
+      content: "🔍";
+      font-size: 1rem;
+      opacity: 0.7;
+    }
+    
+    .recent-searches li:hover {
+      background: #1e2328;
+      transform: translateX(4px);
+    }
+    
     .recent-searches li.swiping {
       transition: none;
     }
+    
     .recent-searches li .delete-action {
       position: absolute;
       right: -100px;
       top: 0;
       height: 100%;
       width: 100px;
-      background: #ff4444;
+      background: linear-gradient(45deg, #f91880, #ff4444);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: opacity 0.3s ease;
+      transition: all 0.3s ease;
       opacity: 0;
+      border-radius: 0 16px 16px 0;
     }
+    
     .recent-searches li.show-delete .delete-action {
       opacity: 1;
     }
-    .trending { margin-bottom: 20px; }
-    .trending h3 { font-size: 1.2rem; margin-bottom: 10px; }
-    .trending ul { list-style: none; padding-left: 0; }
-    .trending li {
-      cursor: pointer; padding: 5px; border-bottom: 1px solid #ddd;
+    
+    .trending { 
+      margin-bottom: 30px;
+      animation: searchSlideUp 0.5s ease 0.2s both;
     }
+    
+    .trending h3 { 
+      font-size: 1.4rem; 
+      margin-bottom: 15px;
+      color: #ffffff;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .trending h3::before {
+      content: "🔥";
+      font-size: 1.2rem;
+    }
+    
+    .trending ul { 
+      list-style: none; 
+      padding: 0;
+      background: #16181c;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #2f3336;
+    }
+    
+    .trending li {
+      cursor: pointer; 
+      padding: 18px 20px; 
+      border-bottom: 1px solid #2f3336;
+      transition: all 0.3s ease;
+      position: relative;
+      background: #16181c;
+    }
+    
+    .trending li:last-child {
+      border-bottom: none;
+    }
+    
+    .trending li:hover {
+      background: #1e2328;
+      transform: translateX(4px);
+    }
+    
+    .trending li::before {
+      content: "📈";
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+    
+    .trending li {
+      padding-left: 50px;
+    }
+    
     /* Resultados de Búsqueda */
     .search-results {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 20px;
+      animation: searchSlideUp 0.5s ease 0.3s both;
     }
+    
     .video-card {
-      background: #fff; border-radius: 8px; overflow: hidden;
-      border: 1px solid #ccc; display: flex; flex-direction: column;
+      background: #16181c; 
+      border-radius: 16px; 
+      overflow: hidden;
+      border: 1px solid #2f3336; 
+      display: flex; 
+      flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
     }
-    .video-card img { width: 100%; height: auto; }
-    .video-info { padding: 10px; }
-    .video-info h3 { font-size: 1rem; margin: 0 0 5px 0; color: #333; }
+    
+    .video-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+      border-color: #1d9bf0;
+    }
+    
+    .video-card img { 
+      width: 100%; 
+      height: 200px; 
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .video-card:hover img {
+      transform: scale(1.05);
+    }
+    
+    .video-info { 
+      padding: 16px 20px; 
+      flex: 1;
+    }
+    
+    .video-info h3 { 
+      font-size: 1.1rem; 
+      margin: 0 0 8px 0; 
+      color: #ffffff;
+      font-weight: 600;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
     .video-actions {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px; border-top: 1px solid #ccc;
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      padding: 16px 20px; 
+      border-top: 1px solid #2f3336;
+      background: rgba(0, 0, 0, 0.3);
     }
+    
     .video-actions button {
-      background: var(--primary-color); color: #fff; border: none;
-      padding: 5px 10px; border-radius: 5px; cursor: pointer;
+      background: linear-gradient(45deg, #1d9bf0, #1a8cd8);
+      color: #fff; 
+      border: none;
+      padding: 8px 16px; 
+      border-radius: 20px; 
+      cursor: pointer;
       font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
+    
+    .video-actions button:hover {
+      background: linear-gradient(45deg, #1a8cd8, #1d9bf0);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(29, 155, 240, 0.3);
+    }
+    
     /* Alternador Videos / Artículos */
-    .search-toggle { display: flex; gap: 10px; margin-bottom: 20px; }
-    .search-toggle button {
-      flex: 1; padding: 10px; border: 1px solid var(--primary-color);
-      border-radius: 5px; background: #fff; color: var(--primary-color);
-      cursor: pointer; font-weight: 600;
+    .search-toggle { 
+      display: flex; 
+      gap: 0; 
+      margin-bottom: 25px;
+      background: #16181c;
+      border-radius: 25px;
+      padding: 4px;
+      border: 1px solid #2f3336;
+      animation: searchSlideUp 0.5s ease both;
     }
+    
+    .search-toggle button {
+      flex: 1; 
+      padding: 12px 24px; 
+      border: none;
+      border-radius: 21px; 
+      background: transparent; 
+      color: #71767b;
+      cursor: pointer; 
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+    }
+    
     .search-toggle button.active {
-      background: var(--primary-color); color: #fff;
+      background: linear-gradient(45deg, #1d9bf0, #1a8cd8);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(29, 155, 240, 0.3);
+      transform: scale(1.02);
+    }
+    
+    .search-toggle button:not(.active):hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Responsive para móviles */
+    @media (max-width: 768px) {
+      .search-top-bar {
+        padding: 12px 15px;
+      }
+      
+      .search-input-container {
+        padding: 0 15px;
+      }
+      
+      .search-top-bar input {
+        padding: 12px 0;
+        font-size: 1rem;
+      }
+      
+      .search-top-bar button {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+      
+      .search-main-content {
+        padding: 0 15px 15px;
+      }
+      
+      .search-results {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .recent-searches h3,
+      .trending h3 {
+        font-size: 1.2rem;
+      }
+      
+      .recent-searches li,
+      .trending li {
+        padding: 14px 15px;
+      }
     }
     /* Reproductor de Video a Pantalla Completa */
     #videoPlayerOverlay {
@@ -1735,6 +2031,76 @@
       50% {
         transform: translate(-50%, -50%) rotate(180deg) translateX(30px);
       }
+    }
+
+    /* Estilos para botones de artículo */
+    .action-btn:hover {
+      background: rgba(29, 155, 240, 0.1) !important;
+      color: #1d9bf0 !important;
+      transform: scale(1.05);
+    }
+
+    #likeArticle:hover, #likeArticle.liked {
+      background: rgba(249, 24, 128, 0.1) !important;
+      color: #f91880 !important;
+    }
+
+    #likeArticle.liked i {
+      color: #f91880 !important;
+    }
+
+    
+
+    #bookmarkArticle:hover, #bookmarkArticle.bookmarked {
+      background: rgba(29, 155, 240, 0.1) !important;
+      color: #1d9bf0 !important;
+    }
+
+    #reportArticle:hover {
+      background: rgba(249, 24, 128, 0.1) !important;
+      color: #f91880 !important;
+    }
+
+    #readerArticle:hover, #readerArticle.reading {
+      background: rgba(52, 199, 89, 0.1) !important;
+      color: #34c759 !important;
+    }
+
+    #readerArticle.reading {
+      animation: pulse 2s infinite;
+    }
+
+    #closeArticle:hover {
+      background: rgba(29, 155, 240, 0.1) !important;
+    }
+
+    
+
+    #followAuthor:hover {
+      background: #1a8cd8 !important;
+      transform: scale(1.05);
+    }
+
+    #followAuthor.following {
+      background: transparent !important;
+      color: #1d9bf0 !important;
+      border: 1px solid #1d9bf0 !important;
+    }
+
+    /* Efectos para artículos relacionados */
+    .related-article-item {
+      padding: 15px;
+      border: 1px solid #2f3336;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #16181c;
+    }
+
+    .related-article-item:hover {
+      background: #1e2328;
+      border-color: #1d9bf0;
+      transform: translateY(-2px);
     }
 
     .article-stats {
@@ -2386,31 +2752,134 @@
     <iframe id="previewFrame"></iframe>
   </div>
 
-  <!-- ===== Overlay de Búsqueda (Estilo TikTok) ===== -->
+  <!-- ===== Overlay de Búsqueda (Estilo Twitter/X Moderno) ===== -->
   <div id="searchOverlay">
     <div class="search-top-bar">
       <i class="fa-solid fa-arrow-left" id="closeSearchOverlay"></i>
       <div class="search-input-container">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="searchInput" placeholder="Buscar..." />
-        <i class="fa-solid fa-xmark clear-search" id="clearSearch" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #666; cursor: pointer; display: none; font-size: 16px;"></i>
+        <input type="text" id="searchInput" placeholder="Buscar en Clack..." />
+        <i class="fa-solid fa-xmark clear-search" id="clearSearch" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #71767b; cursor: pointer; display: none; font-size: 16px; padding: 4px; border-radius: 50%; transition: all 0.2s ease;"></i>
       </div>
-      <button id="searchExecuteBtn"></button>
+      <button id="searchExecuteBtn">Buscar</button>
     </div>
-    <!-- Search toggle removed -->
-    <div class="recent-searches">
-      <h3>Búsquedas recientes</h3>
-      <ul id="recentList"></ul>
+    
+    <div class="search-main-content">
+      <div class="search-toggle">
+        <button class="active" id="toggleArticles">📚 Artículos</button>
+        <button id="toggleVideos">🎥 Videos</button>
+      </div>
+      
+      <div class="recent-searches">
+        <h3>Búsquedas recientes</h3>
+        <ul id="recentList"></ul>
+      </div>
+      
+      <div id="searchSpinner" class="search-spinner" style="display:none;"></div>
+      <div id="searchResults" class="search-results"></div>
     </div>
-    <div class="trending">
-      <h3>Tendencias</h3>
-      <ul id="trendingList"></ul>
-    </div>
-    <div id="searchSpinner" class="search-spinner" style="display:none;"></div>
-    <div id="searchResults" class="search-results"></div>
   </div>
 
-  <!-- Video player and report modal removed -->
+  <!-- ===== Overlay de Artículo Completo (Estilo Twitter) ===== -->
+  <div id="articleOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000; z-index: 16000; overflow-y: auto;">
+    <div class="article-container" style="max-width: 600px; margin: 0 auto; background: #000000; min-height: 100vh; position: relative;">
+      <!-- Header del artículo -->
+      <div class="article-header" style="position: sticky; top: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid #2f3336; padding: 15px 20px; display: flex; align-items: center; gap: 15px; z-index: 100;">
+        <button id="closeArticle" style="background: none; border: none; color: #1d9bf0; font-size: 20px; cursor: pointer; padding: 8px; border-radius: 50%; transition: all 0.2s ease;">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h2 style="color: #ffffff; font-size: 18px; font-weight: 700; margin: 0; flex: 1;">Artículo</h2>
+      </div>
+      
+      <!-- Contenido del artículo -->
+      <div class="article-content" style="padding: 20px; color: #ffffff; line-height: 1.6;">
+        <div class="article-meta" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #2f3336;">
+          <div class="author-avatar" style="width: 40px; height: 40px; background: linear-gradient(45deg, #1d9bf0, #1a8cd8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px;">
+            W
+          </div>
+          <div class="author-info">
+            <div style="color: #ffffff; font-weight: 600; font-size: 15px;">Wikipedia</div>
+            <div style="color: #71767b; font-size: 14px;">Artículo verificado • <span id="articleDate"></span></div>
+          </div>
+          <button id="followAuthor" style="background: #1d9bf0; color: white; border: none; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer; margin-left: auto; transition: all 0.2s ease;">
+            Seguir
+          </button>
+        </div>
+        
+        <h1 id="articleTitle" style="color: #ffffff; font-size: 28px; font-weight: 800; margin-bottom: 20px; line-height: 1.3;"></h1>
+        
+        <div id="articleBody" style="font-size: 16px; line-height: 1.7; color: #e7e9ea;">
+          <!-- Contenido del artículo se carga aquí -->
+        </div>
+        
+        <!-- Acciones del artículo -->
+        <div class="article-actions" style="display: flex; align-items: center; gap: 20px; padding: 20px 0; margin-top: 30px; border-top: 1px solid #2f3336;">
+          <button class="action-btn" id="likeArticle" style="background: none; border: none; color: #71767b; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; transition: all 0.2s ease; font-size: 14px;">
+            <i class="far fa-heart"></i>
+            <span id="likeCount">0</span>
+          </button>
+          <button class="action-btn" id="bookmarkArticle" style="background: none; border: none; color: #71767b; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; transition: all 0.2s ease; font-size: 14px;">
+            <i class="far fa-bookmark"></i>
+            <span>Guardar</span>
+          </button>
+          <button class="action-btn" id="readerArticle" style="background: none; border: none; color: #71767b; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; transition: all 0.2s ease; font-size: 14px;">
+            <i class="fas fa-volume-up" id="readerIcon"></i>
+            <span id="readerText">Lector</span>
+          </button>
+          <button class="action-btn" id="reportArticle" style="background: none; border: none; color: #71767b; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; transition: all 0.2s ease; font-size: 14px; margin-left: auto;">
+            <i class="fas fa-flag"></i>
+            <span>Reportar</span>
+          </button>
+        </div>
+        
+        <!-- Artículos relacionados -->
+        <div class="related-articles" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #2f3336;">
+          <h3 style="color: #ffffff; font-size: 20px; font-weight: 700; margin-bottom: 20px;">Artículos relacionados</h3>
+          <div id="relatedArticlesList" style="display: flex; flex-direction: column; gap: 15px;">
+            <!-- Se llenan dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal de Reporte de Artículo ===== -->
+  <div id="reportArticleModal" style="display: none; position: fixed; z-index: 17000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; padding: 20px;">
+    <div class="modal-content" style="background: #16181c; color: #ffffff; width: 100%; max-width: 500px; padding: 30px; border-radius: 16px; border: 1px solid #2f3336;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+        <h3 style="margin: 0; font-size: 20px; font-weight: 700;">Reportar artículo</h3>
+        <button id="closeReportModal" style="background: none; border: none; color: #71767b; font-size: 20px; cursor: pointer; padding: 8px; border-radius: 50%;">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #e7e9ea;">Motivo del reporte:</label>
+        <select id="reportReason" style="width: 100%; padding: 12px; border: 1px solid #2f3336; border-radius: 8px; background: #000000; color: #ffffff; font-size: 14px;">
+          <option value="">Seleccionar motivo</option>
+          <option value="spam">Spam o contenido repetitivo</option>
+          <option value="misinformation">Información incorrecta</option>
+          <option value="inappropriate">Contenido inapropiado</option>
+          <option value="copyright">Violación de derechos de autor</option>
+          <option value="other">Otro</option>
+        </select>
+      </div>
+      
+      <div style="margin-bottom: 25px;">
+        <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #e7e9ea;">Detalles adicionales:</label>
+        <textarea id="reportDetails" placeholder="Describe el problema (opcional)" style="width: 100%; min-height: 80px; padding: 12px; resize: vertical; border: 1px solid #2f3336; border-radius: 8px; background: #000000; color: #ffffff; font-size: 14px; font-family: inherit;"></textarea>
+      </div>
+      
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button id="cancelReport" style="background: none; border: 1px solid #2f3336; color: #e7e9ea; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;">
+          Cancelar
+        </button>
+        <button id="submitArticleReport" style="background: #f91880; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;">
+          Enviar reporte
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== Script Principal ===== -->
   <!-- Offline Message -->
@@ -2486,6 +2955,13 @@
       'ko': { name: '한국어', flag: '🇰🇷', code: 'ko' },
       'vi': { name: 'Tiếng Việt', flag: '🇻🇳', code: 'vi' }
     };
+
+    // Variables para el lector de artículos
+    let speechSynthesis = window.speechSynthesis;
+    let currentUtterance = null;
+    let isReading = false;
+    let availableVoices = [];
+    let isTranslating = false;
 
     // Si no existe un idioma guardado, se usa "es"
     if (!localStorage.getItem('currentLang')) {
@@ -3136,7 +3612,9 @@
           document.querySelectorAll('.openArticleBtn').forEach(btn => {
             btn.addEventListener('click', e => {
               const title = e.target.getAttribute('data-title');
-              window.open(`https://es.wikipedia.org/wiki/${encodeURIComponent(title)}`, '_blank');
+              const card = e.target.closest('.video-card');
+              const snippet = card.querySelector('p').textContent;
+              openArticleOverlay(title, snippet);
             });
           });
         } else {
@@ -3229,148 +3707,511 @@
         list.appendChild(li);
       });
     }
-    function loadTrending() {
-      const trendingTopics = [
-        { topic: "React Hooks", views: 1200, trending: true },
-        { topic: "Node.js Streams", views: 980, trending: true },
-        { topic: "Python Async", views: 850, trending: false },
-        { topic: "Docker Compose", views: 750, trending: true },
-        { topic: "Kubernetes", views: 600, trending: false }
-      ];
-      return trendingTopics;
+    // Funciones de artículos completos
+    function openArticleOverlay(title, content) {
+      const overlay = document.getElementById('articleOverlay');
+      const articleTitle = document.getElementById('articleTitle');
+      const articleBody = document.getElementById('articleBody');
+      const articleDate = document.getElementById('articleDate');
+      
+      // Detener cualquier lectura anterior
+      if (isReading) {
+        stopReading();
+      }
+      
+      // Resetear botón de lector
+      updateReaderButton(false);
+      
+      articleTitle.textContent = title;
+      articleDate.textContent = new Date().toLocaleDateString();
+      
+      // Simular contenido completo del artículo
+      articleBody.innerHTML = `
+        <p style="margin-bottom: 20px;">${content}</p>
+        <p style="margin-bottom: 20px;">Este es un artículo completo con contenido expandido para demostrar la funcionalidad de lectura. En una implementación real, este contenido vendría de la API de Wikipedia con el texto completo del artículo.</p>
+        <p style="margin-bottom: 20px;">Los usuarios pueden navegar por el contenido completo, interactuar con funciones como seguir al autor (Wikipedia en este caso), dar like al artículo, guardarlo en favoritos o reportarlo si encuentran contenido inapropiado.</p>
+        <p style="margin-bottom: 20px;">La interfaz está diseñada para proporcionar una experiencia de lectura limpia y moderna, enfocándose en el contenido educativo y la facilidad de navegación.</p>
+        <p>Al final del artículo, los usuarios pueden encontrar artículos relacionados generados dinámicamente para continuar su exploración del tema.</p>
+      `;
+      
+      // Generar artículos relacionados
+      generateRelatedArticles(title);
+      
+      overlay.style.display = 'block';
+      document.body.style.overflow = 'hidden';
     }
-    function renderTrending() {
-      const trending = loadTrending();
-      const list = document.getElementById('trendingList');
-      list.innerHTML = "";
-      trending.forEach(item => {
-        const li = document.createElement('li');
-        li.style.cssText = `
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 15px;
-          margin-bottom: 10px;
-          background: rgba(255,255,255,0.05);
-          border-radius: 12px;
-          backdrop-filter: blur(10px);
-          transition: all 0.3s ease;
-          cursor: pointer;
-          border: 1px solid rgba(255,255,255,0.1);
-        `;
 
-        li.addEventListener('mouseover', () => {
-          li.style.transform = 'translateX(5px)';
-          li.style.background = 'rgba(255,255,255,0.1)';
-        });
+    function closeArticleOverlay() {
+      const overlay = document.getElementById('articleOverlay');
+      overlay.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
 
-        li.addEventListener('mouseout', () => {
-          li.style.transform = 'translateX(0)';
-          li.style.background = 'rgba(255,255,255,0.05)';
-        });
+    async function generateRelatedArticles(mainTitle) {
+      const relatedList = document.getElementById('relatedArticlesList');
+      
+      // Mostrar skeleton de carga
+      relatedList.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+          <div style="height: 80px; background: #2f3336; border-radius: 12px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); animation: skeletonShimmer 1.8s infinite;"></div>
+          </div>
+          <div style="height: 80px; background: #2f3336; border-radius: 12px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); animation: skeletonShimmer 1.8s infinite;"></div>
+          </div>
+          <div style="height: 80px; background: #2f3336; border-radius: 12px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); animation: skeletonShimmer 1.8s infinite;"></div>
+          </div>
+        </div>
+      `;
 
-        const leftContent = document.createElement('div');
-        leftContent.style.cssText = `
-          display: flex;
-          align-items: center;
-          gap: 15px;
-        `;
-
-        // Punto de tendencia con animación
-        const trendDot = document.createElement('div');
-        trendDot.style.cssText = `
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background: ${item.trending ? '#1877f2' : '#666'};
-          position: relative;
-          ${item.trending ? 'animation: pulse 2s infinite;' : ''}
-        `;
-
-        const topicText = document.createElement('span');
-        topicText.style.cssText = `
-          font-size: 1.1em;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        `;
-
-        const topicSpan = document.createElement('span');
-        topicSpan.textContent = item.topic;
-        topicText.appendChild(topicSpan);
-
-        // Agregar ícono de verificado si tiene muchas vistas
-        if (item.views >= 800) {
-          const verifiedIcon = document.createElement('i');
-          verifiedIcon.className = 'fas fa-check-circle';
-          verifiedIcon.style.cssText = `
-            color: #1877f2;
-            font-size: 0.9em;
+      try {
+        // Buscar artículos relacionados reales usando Wikipedia API
+        const searchTerms = mainTitle.split(' ').slice(0, 2).join(' ');
+        const url = `https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchTerms)}&format=json&origin=*&srlimit=4`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // Esperar un poco para mostrar el skeleton
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        relatedList.innerHTML = '';
+        
+        if (data.query && data.query.search && data.query.search.length > 0) {
+          // Excluir el artículo actual y tomar los primeros 3
+          const relatedArticles = data.query.search
+            .filter(article => article.title !== mainTitle)
+            .slice(0, 3);
+          
+          relatedArticles.forEach((article, index) => {
+            const item = document.createElement('div');
+            item.className = 'related-article-item';
+            
+            // Iconos temáticos dinámicos
+            const icons = ['📖', '💡', '🔬', '🌐', '⚡', '🛡️'];
+            const randomIcon = icons[index % icons.length];
+            
+            item.innerHTML = `
+              <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #1d9bf0, #1a8cd8); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                  ${randomIcon}
+                </div>
+                <div style="flex: 1;">
+                  <h4 style="color: #ffffff; font-size: 16px; font-weight: 600; margin: 0 0 5px 0;">${article.title}</h4>
+                  <p style="color: #71767b; font-size: 14px; margin: 0; line-height: 1.3;">${article.snippet.substring(0, 80)}...</p>
+                  <div style="margin-top: 5px;">
+                    <span style="color: #1d9bf0; font-size: 12px;">
+                      <i class="fas fa-clock" style="margin-right: 4px;"></i>
+                      ${Math.floor(Math.random() * 8) + 3} min de lectura
+                    </span>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: #71767b; font-size: 14px;"></i>
+              </div>
+            `;
+            
+            item.addEventListener('click', () => {
+              openArticleOverlay(article.title, article.snippet);
+            });
+            
+            relatedList.appendChild(item);
+          });
+        } else {
+          // Fallback si no hay resultados de la API
+          relatedList.innerHTML = `
+            <div style="text-align: center; color: #71767b; padding: 20px;">
+              <i class="fas fa-search" style="font-size: 24px; margin-bottom: 10px;"></i>
+              <p>No se encontraron artículos relacionados en este momento.</p>
+            </div>
           `;
-          const wikiLabel = document.createElement('span');
-          wikiLabel.textContent = 'Wikipedia';
-          wikiLabel.style.cssText = `
-            font-size: 0.7em;
-            color: #666;
-          `;
-          topicText.appendChild(verifiedIcon);
-          topicText.appendChild(wikiLabel);
         }
-
-        leftContent.appendChild(trendDot);
-        leftContent.appendChild(topicText);
-
-        // Estadísticas con iconos y animación
-        const stats = document.createElement('div');
-        stats.style.cssText = `
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          color: #888;
-          font-size: 0.9em;
+      } catch (error) {
+        console.error('Error cargando artículos relacionados:', error);
+        relatedList.innerHTML = `
+          <div style="text-align: center; color: #71767b; padding: 20px;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
+            <p>Error al cargar artículos relacionados.</p>
+          </div>
         `;
-
-        // Icono de estadísticas
-        const statsIcon = document.createElement('i');
-        statsIcon.className = 'fas fa-chart-line';
-        statsIcon.style.color = item.trending ? '#1877f2' : '#666';
-
-        const viewsText = document.createElement('span');
-        viewsText.textContent = `${item.views.toLocaleString()}`;
-
-        const viewsIcon = document.createElement('i');
-        viewsIcon.className = 'fas fa-eye';
-        viewsIcon.style.marginLeft = '5px';
-
-        stats.appendChild(statsIcon);
-        stats.appendChild(viewsText);
-        stats.appendChild(viewsIcon);
-
-        li.appendChild(leftContent);
-        li.appendChild(stats);
-
-        li.addEventListener('click', () => {
-          document.getElementById('searchInput').value = item.topic;
-          executeSearch();
-        });
-
-        list.appendChild(li);
-      });
-
-      // Actualizar tendencias cada 30 segundos
-      setTimeout(() => {
-        updateTrendingStats();
-      }, 30000);
+      }
     }
 
-    function updateTrendingStats() {
-      const trending = loadTrending();
-      trending.forEach(item => {
-        // Simular cambios en tiempo real
-        item.views += Math.floor(Math.random() * 50);
-        item.trending = Math.random() > 0.3;
-      });
-      renderTrending();
+    function toggleArticleLike() {
+      const likeBtn = document.getElementById('likeArticle');
+      const likeCount = document.getElementById('likeCount');
+      const icon = likeBtn.querySelector('i');
+      
+      if (likeBtn.classList.contains('liked')) {
+        likeBtn.classList.remove('liked');
+        icon.className = 'far fa-heart';
+        likeCount.textContent = parseInt(likeCount.textContent) - 1;
+      } else {
+        likeBtn.classList.add('liked');
+        icon.className = 'fas fa-heart';
+        likeCount.textContent = parseInt(likeCount.textContent) + 1;
+        
+        // Animación de corazón
+        const heart = document.createElement('div');
+        heart.innerHTML = '❤️';
+        heart.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 60px;
+          pointer-events: none;
+          z-index: 18000;
+          animation: likePop 0.8s forwards;
+        `;
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 800);
+      }
+    }
+
+    function toggleFollow() {
+      const followBtn = document.getElementById('followAuthor');
+      
+      if (followBtn.classList.contains('following')) {
+        followBtn.classList.remove('following');
+        followBtn.textContent = 'Seguir';
+        followBtn.style.background = '#1d9bf0';
+        followBtn.style.color = 'white';
+        followBtn.style.border = 'none';
+      } else {
+        followBtn.classList.add('following');
+        followBtn.textContent = 'Siguiendo';
+        followBtn.style.background = 'transparent';
+        followBtn.style.color = '#1d9bf0';
+        followBtn.style.border = '1px solid #1d9bf0';
+      }
+    }
+
+    function toggleBookmark() {
+      const bookmarkBtn = document.getElementById('bookmarkArticle');
+      const icon = bookmarkBtn.querySelector('i');
+      
+      if (bookmarkBtn.classList.contains('bookmarked')) {
+        bookmarkBtn.classList.remove('bookmarked');
+        icon.className = 'far fa-bookmark';
+        bookmarkBtn.querySelector('span').textContent = 'Guardar';
+      } else {
+        bookmarkBtn.classList.add('bookmarked');
+        icon.className = 'fas fa-bookmark';
+        bookmarkBtn.querySelector('span').textContent = 'Guardado';
+      }
+    }
+
+    
+
+    function openReportArticleModal() {
+      document.getElementById('reportArticleModal').style.display = 'flex';
+    }
+
+    function closeReportArticleModal() {
+      document.getElementById('reportArticleModal').style.display = 'none';
+      document.getElementById('reportReason').value = '';
+      document.getElementById('reportDetails').value = '';
+    }
+
+    function submitArticleReport() {
+      const reason = document.getElementById('reportReason').value;
+      const details = document.getElementById('reportDetails').value;
+      
+      if (!reason) {
+        alert('Por favor selecciona un motivo para el reporte');
+        return;
+      }
+      
+      // Simular envío del reporte
+      closeReportArticleModal();
+      showNotification('Reporte enviado. Gracias por ayudar a mantener la comunidad segura.', 'success');
+    }
+
+    // Cargar voces disponibles
+    function loadAvailableVoices() {
+      availableVoices = speechSynthesis.getVoices();
+      
+      // Si las voces no están cargadas, esperar el evento
+      if (availableVoices.length === 0) {
+        speechSynthesis.onvoiceschanged = () => {
+          availableVoices = speechSynthesis.getVoices();
+        };
+      }
+    }
+
+    // Obtener mejor voz para el idioma
+    function getBestVoiceForLanguage(lang) {
+      if (availableVoices.length === 0) {
+        loadAvailableVoices();
+      }
+
+      const voiceLangMap = {
+        'es': ['es-ES', 'es-MX', 'es-AR', 'es'],
+        'en': ['en-US', 'en-GB', 'en-AU', 'en'],
+        'pt': ['pt-BR', 'pt-PT', 'pt'],
+        'ko': ['ko-KR', 'ko'],
+        'vi': ['vi-VN', 'vi'],
+        'zh': ['zh-CN', 'zh-TW', 'zh'],
+        'ja': ['ja-JP', 'ja'],
+        'fr': ['fr-FR', 'fr-CA', 'fr'],
+        'de': ['de-DE', 'de'],
+        'it': ['it-IT', 'it'],
+        'ru': ['ru-RU', 'ru']
+      };
+
+      const preferredLangs = voiceLangMap[lang] || [lang];
+      
+      // Buscar voz nativa preferida
+      for (const prefLang of preferredLangs) {
+        const voice = availableVoices.find(v => 
+          v.lang.toLowerCase().startsWith(prefLang.toLowerCase()) && 
+          v.localService
+        );
+        if (voice) return voice;
+      }
+      
+      // Buscar cualquier voz del idioma
+      for (const prefLang of preferredLangs) {
+        const voice = availableVoices.find(v => 
+          v.lang.toLowerCase().startsWith(prefLang.toLowerCase())
+        );
+        if (voice) return voice;
+      }
+      
+      // Fallback a voz por defecto
+      return availableVoices.find(v => v.default) || availableVoices[0] || null;
+    }
+
+    // Traducir texto usando Google Translate API gratuita
+    async function translateArticleText(text, targetLang) {
+      if (targetLang === 'es') return text;
+      
+      try {
+        const chunks = text.match(/.{1,4500}/g) || [text]; // Dividir en chunks para evitar límites
+        let translatedText = '';
+        
+        for (const chunk of chunks) {
+          const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=${targetLang}&dt=t&q=${encodeURIComponent(chunk)}`;
+          
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+          
+          const result = await response.json();
+          
+          if (result && result[0] && Array.isArray(result[0])) {
+            result[0].forEach(item => {
+              if (item && item[0]) {
+                translatedText += item[0];
+              }
+            });
+          }
+          
+          // Pequeña pausa entre requests para no sobrecargar la API
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        return translatedText || text;
+      } catch (error) {
+        console.error('Error de traducción:', error);
+        return text; // Retornar texto original si falla
+      }
+    }
+
+    // Función para leer artículo con voz mejorada y traducción
+    async function toggleArticleReader() {
+      const readerBtn = document.getElementById('readerArticle');
+      const readerIcon = document.getElementById('readerIcon');
+      const readerText = document.getElementById('readerText');
+      
+      if (!speechSynthesis) {
+        showNotification('La síntesis de voz no está disponible en este navegador', 'error');
+        return;
+      }
+      
+      if (isReading) {
+        stopReading();
+      } else {
+        await startReading();
+      }
+    }
+
+    async function startReading() {
+      // Obtener texto del artículo
+      const articleTitle = document.getElementById('articleTitle').textContent;
+      const articleBody = document.getElementById('articleBody').textContent;
+      
+      // Crear texto completo
+      let fullText = `${articleTitle}. ${articleBody}`;
+      
+      if (fullText.trim() === '') {
+        showNotification('No hay contenido para leer', 'info');
+        return;
+      }
+      
+      // Detener cualquier lectura anterior
+      speechSynthesis.cancel();
+      
+      // Cargar voces si no están disponibles
+      if (availableVoices.length === 0) {
+        loadAvailableVoices();
+        await new Promise(resolve => setTimeout(resolve, 500)); // Esperar a que se carguen
+      }
+      
+      // Determinar idioma objetivo
+      const targetLang = currentLang === 'es' ? 'es' : currentLang;
+      
+      // Mostrar indicador de procesamiento
+      updateReaderButton(true, 'Procesando...');
+      
+      try {
+        // Traducir si es necesario
+        if (targetLang !== 'es') {
+          isTranslating = true;
+          showNotification(`🌐 Traduciendo artículo a ${getLanguageName(targetLang)}...`, 'info');
+          
+          fullText = await translateArticleText(fullText, targetLang);
+          
+          isTranslating = false;
+          showNotification(`✅ Artículo traducido a ${getLanguageName(targetLang)}`, 'success');
+        }
+        
+        // Obtener mejor voz para el idioma
+        const selectedVoice = getBestVoiceForLanguage(targetLang);
+        
+        // Crear nueva síntesis de voz
+        currentUtterance = new SpeechSynthesisUtterance(fullText);
+        
+        // Configurar voz y parámetros mejorados
+        if (selectedVoice) {
+          currentUtterance.voice = selectedVoice;
+          currentUtterance.lang = selectedVoice.lang;
+          console.log(`Usando voz: ${selectedVoice.name} (${selectedVoice.lang})`);
+        } else {
+          const voiceLangs = {
+            'es': 'es-ES',
+            'en': 'en-US',
+            'pt': 'pt-BR',
+            'ko': 'ko-KR',
+            'vi': 'vi-VN',
+            'zh': 'zh-CN',
+            'ja': 'ja-JP',
+            'fr': 'fr-FR',
+            'de': 'de-DE',
+            'it': 'it-IT',
+            'ru': 'ru-RU'
+          };
+          currentUtterance.lang = voiceLangs[targetLang] || 'es-ES';
+        }
+        
+        // Configurar parámetros de voz optimizados
+        currentUtterance.rate = 0.85; // Velocidad más natural
+        currentUtterance.pitch = 1.1; // Tono ligeramente más alto
+        currentUtterance.volume = 0.9; // Volumen óptimo
+        
+        // Eventos de la síntesis de voz
+        currentUtterance.onstart = function() {
+          isReading = true;
+          updateReaderButton(true, 'Leyendo...');
+          const voiceName = selectedVoice ? selectedVoice.name : 'Voz del sistema';
+          showNotification(`📢 Iniciando lectura con ${voiceName}`, 'info');
+        };
+        
+        currentUtterance.onend = function() {
+          isReading = false;
+          updateReaderButton(false);
+          showNotification('✅ Lectura completada', 'success');
+        };
+        
+        currentUtterance.onerror = function(event) {
+          isReading = false;
+          updateReaderButton(false);
+          showNotification('❌ Error durante la lectura: ' + event.error, 'error');
+          console.error('Error de síntesis de voz:', event.error);
+        };
+        
+        currentUtterance.onpause = function() {
+          isReading = false;
+          updateReaderButton(false);
+        };
+        
+        currentUtterance.onresume = function() {
+          isReading = true;
+          updateReaderButton(true, 'Leyendo...');
+        };
+        
+        // Iniciar lectura
+        speechSynthesis.speak(currentUtterance);
+        
+      } catch (error) {
+        console.error('Error al procesar artículo para lectura:', error);
+        showNotification('❌ Error al procesar el artículo', 'error');
+        isReading = false;
+        isTranslating = false;
+        updateReaderButton(false);
+      }
+    }
+    
+    // Función auxiliar para obtener nombre del idioma
+    function getLanguageName(lang) {
+      const languageNames = {
+        'es': 'Español',
+        'en': 'Inglés',
+        'pt': 'Portugués',
+        'ko': '한국어',
+        'vi': 'Tiếng Việt',
+        'zh': '中文',
+        'ja': '日本語',
+        'fr': 'Français',
+        'de': 'Deutsch',
+        'it': 'Italiano',
+        'ru': 'Русский'
+      };
+      return languageNames[lang] || lang.toUpperCase();
+    }
+
+    function stopReading() {
+      if (speechSynthesis && currentUtterance) {
+        speechSynthesis.cancel();
+        isReading = false;
+        isTranslating = false;
+        updateReaderButton(false);
+        showNotification('⏸️ Lectura detenida', 'info');
+      }
+    }
+
+    function updateReaderButton(reading, customText = null) {
+      const readerBtn = document.getElementById('readerArticle');
+      const readerIcon = document.getElementById('readerIcon');
+      const readerText = document.getElementById('readerText');
+      
+      if (reading) {
+        readerBtn.classList.add('reading');
+        if (isTranslating) {
+          readerIcon.className = 'fas fa-language';
+          readerText.textContent = customText || 'Traduciendo...';
+        } else {
+          readerIcon.className = 'fas fa-stop';
+          readerText.textContent = customText || 'Detener';
+        }
+      } else {
+        readerBtn.classList.remove('reading');
+        readerIcon.className = 'fas fa-volume-up';
+        readerText.textContent = 'Lector';
+      }
+    }
+
+    // Función para pausar/reanudar lectura cuando se cierra el artículo
+    function closeArticleOverlay() {
+      const overlay = document.getElementById('articleOverlay');
+      
+      // Detener lectura si está activa
+      if (isReading) {
+        stopReading();
+      }
+      
+      overlay.style.display = 'none';
+      document.body.style.overflow = 'auto';
     }
 
     /* ========================
@@ -4345,6 +5186,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Idioma cargado desde localStorage: ${currentLang}`);
       }
       
+      // Cargar voces disponibles
+      loadAvailableVoices();
+      
       // Aplicar idioma sin animación al cargar
       const t = translations[currentLang] || translations["es"];
       updateAllTexts(t);
@@ -4352,9 +5196,21 @@ document.addEventListener('DOMContentLoaded', () => {
       checkSession();
       setupSwipeDetection();
       renderRecentSearches();
-      renderTrending();
       renderProjectsList();
       updateThemeDisplay();
+      
+      // Inicializar eventos del overlay de artículos
+      document.getElementById('closeArticle').addEventListener('click', closeArticleOverlay);
+      document.getElementById('followAuthor').addEventListener('click', toggleFollow);
+      document.getElementById('likeArticle').addEventListener('click', toggleArticleLike);
+      document.getElementById('bookmarkArticle').addEventListener('click', toggleBookmark);
+      document.getElementById('readerArticle').addEventListener('click', toggleArticleReader);
+      document.getElementById('reportArticle').addEventListener('click', openReportArticleModal);
+      
+      // Eventos del modal de reporte
+      document.getElementById('closeReportModal').addEventListener('click', closeReportArticleModal);
+      document.getElementById('cancelReport').addEventListener('click', closeReportArticleModal);
+      document.getElementById('submitArticleReport').addEventListener('click', submitArticleReport);
 
       // Elementos de Clack
       const codeEffect = document.querySelector('.code-effect');
