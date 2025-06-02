@@ -43,12 +43,15 @@
         padding: 0 10px;
         height: auto;
         min-height: calc(100vh - 120px);
+        gap: 15px;
       }
       
       #inicio .editor-container {
         grid-template-columns: 1fr;
         height: auto;
-        min-height: calc(100vh - 60px);
+        min-height: calc(100vh - 80px);
+        padding: 10px;
+        gap: 15px;
       }
       
       /* Header responsivo */
@@ -195,6 +198,80 @@
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+      
+      /* Inicio en móviles muy pequeños */
+      #inicio .editor-container {
+        padding: 5px !important;
+        gap: 10px !important;
+      }
+      
+      #inicio .editor-area {
+        min-height: 200px !important;
+      }
+      
+      /* Modal de reporte en pantallas pequeñas */
+      #reportArticleModal {
+        padding: 5px !important;
+      }
+      
+      #reportArticleModal .modal-content {
+        padding: 12px !important;
+        border-radius: 8px !important;
+      }
+      
+      /* Header responsive */
+      header {
+        padding: 5px 10px !important;
+      }
+      
+      header h1 {
+        font-size: 1.2rem !important;
+      }
+      
+      /* Navegación responsive */
+      nav {
+        padding: 8px 10px !important;
+        gap: 10px !important;
+      }
+      
+      nav a {
+        padding: 6px 10px !important;
+        font-size: 13px !important;
+      }
+      
+      /* Proyectos en móviles pequeños */
+      .project-list {
+        max-height: 250px !important;
+      }
+      
+      .project-editor {
+        min-height: 350px !important;
+      }
+      
+      .project-header {
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: 10px 15px !important;
+      }
+      
+      .project-header input {
+        margin-right: 0 !important;
+        margin-bottom: 10px !important;
+        font-size: 14px !important;
+      }
+      
+      .project-header .project-actions {
+        flex-wrap: wrap !important;
+        gap: 5px !important;
+        justify-content: center !important;
+      }
+      
+      .project-header .project-actions button {
+        flex: 1 1 calc(50% - 5px) !important;
+        min-width: 0 !important;
+        font-size: 11px !important;
+        padding: 8px 5px !important;
       }
     }
     @keyframes pulse {
@@ -1223,6 +1300,68 @@
       .quick-questions {
         padding: 8px 15px;
       }
+      
+      /* Modal de reporte responsive */
+      #reportArticleModal {
+        padding: 10px !important;
+      }
+      
+      #reportArticleModal .modal-content {
+        padding: 15px !important;
+        margin: 0 !important;
+        max-height: 85vh !important;
+        border-radius: 12px !important;
+      }
+      
+      #reportArticleModal h3 {
+        font-size: 16px !important;
+      }
+      
+      #reportArticleModal label {
+        font-size: 13px !important;
+      }
+      
+      #reportArticleModal select,
+      #reportArticleModal textarea {
+        font-size: 13px !important;
+        padding: 10px !important;
+      }
+      
+      #reportArticleModal button {
+        padding: 10px 16px !important;
+        font-size: 13px !important;
+      }
+      
+      /* Inicio responsive mejorado */
+      #inicio .editor-container {
+        grid-template-columns: 1fr !important;
+        padding: 10px !important;
+        gap: 15px !important;
+        height: auto !important;
+        min-height: calc(100vh - 140px) !important;
+      }
+      
+      #inicio .editor-area {
+        min-height: 250px !important;
+      }
+      
+      /* Proyectos responsive mejorado */
+      .projects-container {
+        flex-direction: column !important;
+        height: auto !important;
+        max-height: none !important;
+      }
+      
+      .project-list {
+        width: 100% !important;
+        max-height: 300px !important;
+        order: 2;
+      }
+      
+      .project-editor {
+        order: 1;
+        min-height: 400px !important;
+      }
     }
     /* Botón de Soporte dentro de Ajustes */
     #supportOption {
@@ -2213,6 +2352,7 @@
       background: #000000;
       color: #ffffff;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     #inicio h2 {
@@ -2245,6 +2385,7 @@
       gap: 20px;
       height: calc(100vh - 80px);
       background: #000000;
+      box-sizing: border-box;
     }
 
     #inicio .editor-area {
@@ -3196,18 +3337,18 @@
   </div>
 
   <!-- ===== Modal de Reporte de Artículo ===== -->
-  <div id="reportArticleModal" style="display: none; position: fixed; z-index: 17000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; padding: 20px;">
-    <div class="modal-content" style="background: #16181c; color: #ffffff; width: 100%; max-width: 500px; padding: 30px; border-radius: 16px; border: 1px solid #2f3336;">
+  <div id="reportArticleModal" style="display: none; position: fixed; z-index: 17000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+    <div class="modal-content" style="background: #16181c; color: #ffffff; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 20px; border-radius: 16px; border: 1px solid #2f3336; box-sizing: border-box; margin: auto;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-        <h3 style="margin: 0; font-size: 20px; font-weight: 700;">Reportar artículo</h3>
-        <button id="closeReportModal" style="background: none; border: none; color: #71767b; font-size: 20px; cursor: pointer; padding: 8px; border-radius: 50%;">
+        <h3 style="margin: 0; font-size: 18px; font-weight: 700;">Reportar artículo</h3>
+        <button id="closeReportModal" style="background: none; border: none; color: #71767b; font-size: 20px; cursor: pointer; padding: 8px; border-radius: 50%; min-width: 40px; min-height: 40px; display: flex; align-items: center; justify-content: center;">
           <i class="fas fa-times"></i>
         </button>
       </div>
       
       <div style="margin-bottom: 20px;">
-        <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #e7e9ea;">Motivo del reporte:</label>
-        <select id="reportReason" style="width: 100%; padding: 12px; border: 1px solid #2f3336; border-radius: 8px; background: #000000; color: #ffffff; font-size: 14px;">
+        <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #e7e9ea; font-size: 14px;">Motivo del reporte:</label>
+        <select id="reportReason" style="width: 100%; padding: 12px; border: 1px solid #2f3336; border-radius: 8px; background: #000000; color: #ffffff; font-size: 14px; box-sizing: border-box;">
           <option value="">Seleccionar motivo</option>
           <option value="spam">Spam o contenido repetitivo</option>
           <option value="misinformation">Información incorrecta</option>
@@ -3218,16 +3359,16 @@
       </div>
       
       <div style="margin-bottom: 25px;">
-        <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #e7e9ea;">Detalles adicionales:</label>
-        <textarea id="reportDetails" placeholder="Describe el problema (opcional)" style="width: 100%; min-height: 80px; padding: 12px; resize: vertical; border: 1px solid #2f3336; border-radius: 8px; background: #000000; color: #ffffff; font-size: 14px; font-family: inherit;"></textarea>
+        <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #e7e9ea; font-size: 14px;">Detalles adicionales:</label>
+        <textarea id="reportDetails" placeholder="Describe el problema (opcional)" style="width: 100%; min-height: 80px; padding: 12px; resize: vertical; border: 1px solid #2f3336; border-radius: 8px; background: #000000; color: #ffffff; font-size: 14px; font-family: inherit; box-sizing: border-box;"></textarea>
       </div>
       
-      <div style="display: flex; gap: 10px; justify-content: flex-end;">
-        <button id="cancelReport" style="background: none; border: 1px solid #2f3336; color: #e7e9ea; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;">
-          Cancelar
-        </button>
-        <button id="submitArticleReport" style="background: #f91880; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button id="submitArticleReport" style="background: #f91880; color: white; border: none; padding: 12px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; width: 100%; font-size: 14px;">
           Enviar reporte
+        </button>
+        <button id="cancelReport" style="background: none; border: 1px solid #2f3336; color: #e7e9ea; padding: 12px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; width: 100%; font-size: 14px;">
+          Cancelar
         </button>
       </div>
     </div>
