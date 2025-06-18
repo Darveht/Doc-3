@@ -3615,12 +3615,708 @@
         // Actualizar todos los textos de la interfaz
         updateAllTexts(t);
         
+        // Traducir TODOS los elementos dinámicos
+        translateAllDynamicContent(lang);
+        
         // Ocultar skeleton después de "traducir"
         setTimeout(() => {
           hidePageSkeleton();
           document.getElementById('settingsOverlay').style.display = 'none';
         }, 1500);
       }, 800);
+    }
+
+    // Nueva función para traducir TODO el contenido dinámico
+    function translateAllDynamicContent(lang) {
+      // Traducir página de mantenimiento
+      translateMaintenancePage(lang);
+      
+      // Traducir textos de proyectos
+      translateProjectsSection(lang);
+      
+      // Traducir textos de búsqueda  
+      translateSearchSection(lang);
+      
+      // Traducir textos de ajustes
+      translateSettingsSection(lang);
+      
+      // Traducir textos del asistente (aunque esté bloqueado)
+      translateAssistantSection(lang);
+      
+      // Traducir placeholders y labels
+      translateInputsAndLabels(lang);
+      
+      // Traducir tooltips y títulos
+      translateTooltipsAndTitles(lang);
+    }
+
+    function translateMaintenancePage(lang) {
+      const maintenanceTexts = {
+        'es': {
+          notAvailable: 'Editor no disponible',
+          description: 'El editor está temporalmente fuera de servicio para mantenimiento.',
+          working: 'Trabajando en mejoras', 
+          message: 'Estamos actualizando el editor principal para ofrecerte una mejor experiencia. Mientras tanto, puedes usar la sección de Proyectos.',
+          goToProjects: 'Ir a Proyectos',
+          status: 'Estado: En mantenimiento'
+        },
+        'en': {
+          notAvailable: 'Editor not available',
+          description: 'The editor is temporarily out of service for maintenance.',
+          working: 'Working on improvements',
+          message: 'We are updating the main editor to offer you a better experience. Meanwhile, you can use the Projects section.',
+          goToProjects: 'Go to Projects', 
+          status: 'Status: Under maintenance'
+        },
+        'ja': {
+          notAvailable: 'エディタは利用できません',
+          description: 'エディタはメンテナンスのため一時的にサービスを停止しています。',
+          working: '改善作業中',
+          message: 'より良い体験を提供するためにメインエディタを更新しています。その間、プロジェクトセクションをご利用ください。',
+          goToProjects: 'プロジェクトへ移動',
+          status: 'ステータス: メンテナンス中'
+        },
+        'ko': {
+          notAvailable: '편집기를 사용할 수 없음',
+          description: '편집기가 유지보수를 위해 일시적으로 서비스를 중단했습니다.',
+          working: '개선 작업 중',
+          message: '더 나은 경험을 제공하기 위해 메인 편집기를 업데이트하고 있습니다. 그 동안 프로젝트 섹션을 이용하실 수 있습니다.',
+          goToProjects: '프로젝트로 이동',
+          status: '상태: 유지보수 중'
+        },
+        'vi': {
+          notAvailable: 'Trình chỉnh sửa không khả dụng',
+          description: 'Trình chỉnh sửa tạm thời ngừng hoạt động để bảo trì.',
+          working: 'Đang làm việc để cải thiện',
+          message: 'Chúng tôi đang cập nhật trình chỉnh sửa chính để mang đến cho bạn trải nghiệm tốt hơn. Trong thời gian này, bạn có thể sử dụng phần Dự án.',
+          goToProjects: 'Đi đến Dự án',
+          status: 'Trạng thái: Đang bảo trì'
+        },
+        'zh': {
+          notAvailable: '编辑器不可用',
+          description: '编辑器因维护暂时停止服务。',
+          working: '正在改进中',
+          message: '我们正在更新主编辑器以为您提供更好的体验。与此同时，您可以使用项目部分。',
+          goToProjects: '转到项目',
+          status: '状态：维护中'
+        }
+      };
+
+      const texts = maintenanceTexts[lang] || maintenanceTexts['es'];
+      
+      // Actualizar texto del título principal
+      const mainTitle = document.querySelector('#inicio h1');
+      if (mainTitle) mainTitle.textContent = texts.notAvailable;
+      
+      // Actualizar descripción
+      const description = document.querySelector('#inicio p');
+      if (description) description.textContent = texts.description;
+      
+      // Actualizar textos dentro del contenedor de mantenimiento
+      const workingTitle = document.querySelector('#inicio .maintenance-container div:nth-child(4) div');
+      if (workingTitle) workingTitle.textContent = texts.working;
+      
+      const workingMessage = document.querySelector('#inicio .maintenance-container div:nth-child(4) p');
+      if (workingMessage) workingMessage.textContent = texts.message;
+      
+      // Actualizar botón
+      const goButton = document.querySelector('#inicio button');
+      if (goButton) {
+        const icon = goButton.querySelector('i');
+        goButton.innerHTML = '';
+        if (icon) goButton.appendChild(icon);
+        goButton.append(' ' + texts.goToProjects);
+      }
+      
+      // Actualizar estado
+      const statusText = document.querySelector('#inicio .maintenance-container div:last-child span');
+      if (statusText) statusText.textContent = texts.status;
+    }
+
+    function translateProjectsSection(lang) {
+      const projectTexts = {
+        'es': {
+          myProjects: 'Mis Proyectos',
+          newProject: 'Nuevo Proyecto',
+          import: 'Importar',
+          save: 'Guardar',
+          duplicate: 'Duplicar',
+          export: 'Exportar',
+          close: 'Cerrar',
+          noProjects: 'No hay proyectos',
+          createFirst: 'Crea tu primer proyecto para comenzar a programar',
+          open: 'Abrir',
+          preview: 'Vista Previa',
+          scan: 'Escanear',
+          share: 'Compartir',
+          config: 'Config'
+        },
+        'en': {
+          myProjects: 'My Projects',
+          newProject: 'New Project', 
+          import: 'Import',
+          save: 'Save',
+          duplicate: 'Duplicate',
+          export: 'Export',
+          close: 'Close',
+          noProjects: 'No projects',
+          createFirst: 'Create your first project to start programming',
+          open: 'Open',
+          preview: 'Preview',
+          scan: 'Scan',
+          share: 'Share',
+          config: 'Config'
+        },
+        'ja': {
+          myProjects: 'マイプロジェクト',
+          newProject: '新しいプロジェクト',
+          import: 'インポート',
+          save: '保存',
+          duplicate: '複製',
+          export: 'エクスポート',
+          close: '閉じる',
+          noProjects: 'プロジェクトがありません',
+          createFirst: 'プログラミングを開始するには最初のプロジェクトを作成してください',
+          open: '開く',
+          preview: 'プレビュー',
+          scan: 'スキャン',
+          share: '共有',
+          config: '設定'
+        },
+        'ko': {
+          myProjects: '내 프로젝트',
+          newProject: '새 프로젝트',
+          import: '가져오기',
+          save: '저장',
+          duplicate: '복제',
+          export: '내보내기',
+          close: '닫기',
+          noProjects: '프로젝트가 없습니다',
+          createFirst: '프로그래밍을 시작하려면 첫 번째 프로젝트를 만드세요',
+          open: '열기',
+          preview: '미리보기',
+          scan: '스캔',
+          share: '공유',
+          config: '설정'
+        },
+        'vi': {
+          myProjects: 'Dự án của tôi',
+          newProject: 'Dự án mới',
+          import: 'Nhập khẩu',
+          save: 'Lưu',
+          duplicate: 'Sao chép',
+          export: 'Xuất',
+          close: 'Đóng',
+          noProjects: 'Không có dự án',
+          createFirst: 'Tạo dự án đầu tiên để bắt đầu lập trình',
+          open: 'Mở',
+          preview: 'Xem trước',
+          scan: 'Quét',
+          share: 'Chia sẻ',
+          config: 'Cấu hình'
+        },
+        'zh': {
+          myProjects: '我的项目',
+          newProject: '新项目',
+          import: '导入',
+          save: '保存',
+          duplicate: '复制',
+          export: '导出',
+          close: '关闭',
+          noProjects: '没有项目',
+          createFirst: '创建您的第一个项目开始编程',
+          open: '打开',
+          preview: '预览',
+          scan: '扫描',
+          share: '分享',
+          config: '配置'
+        }
+      };
+
+      const texts = projectTexts[lang] || projectTexts['es'];
+      
+      // Título de proyectos
+      const projectsTitle = document.querySelector('#proyectos h2');
+      if (projectsTitle) {
+        const icon = projectsTitle.querySelector('i');
+        projectsTitle.innerHTML = '';
+        if (icon) projectsTitle.appendChild(icon);
+        projectsTitle.append(' ' + texts.myProjects);
+      }
+      
+      // Botones principales
+      const newProjectBtn = document.querySelector('.new-project-btn');
+      if (newProjectBtn) {
+        const icon = newProjectBtn.querySelector('i');
+        newProjectBtn.innerHTML = '';
+        if (icon) newProjectBtn.appendChild(icon);
+        newProjectBtn.append(' ' + texts.newProject);
+      }
+      
+      const importBtn = document.querySelector('.import-project-btn');
+      if (importBtn) {
+        const icon = importBtn.querySelector('i');
+        importBtn.innerHTML = '';
+        if (icon) importBtn.appendChild(icon);
+        importBtn.append(' ' + texts.import);
+      }
+      
+      // Mensaje de sin proyectos
+      const noProjectsTitle = document.querySelector('#projectsList h3');
+      if (noProjectsTitle) noProjectsTitle.textContent = texts.noProjects;
+      
+      const noProjectsDesc = document.querySelector('#projectsList p');
+      if (noProjectsDesc) noProjectsDesc.textContent = texts.createFirst;
+      
+      // Botones del editor de proyecto
+      const saveBtn = document.querySelector('.save-btn');
+      if (saveBtn) {
+        const icon = saveBtn.querySelector('i');
+        saveBtn.innerHTML = '';
+        if (icon) saveBtn.appendChild(icon);
+        saveBtn.append(' ' + texts.save);
+      }
+      
+      const closeBtn = document.querySelector('.close-btn');
+      if (closeBtn) {
+        const icon = closeBtn.querySelector('i');
+        closeBtn.innerHTML = '';
+        if (icon) closeBtn.appendChild(icon);
+        closeBtn.append(' ' + texts.close);
+      }
+      
+      // Botones de proyecto individuales
+      document.querySelectorAll('.open-project-btn').forEach(btn => {
+        const icon = btn.querySelector('i');
+        btn.innerHTML = '';
+        if (icon) btn.appendChild(icon);
+        btn.append(' ' + texts.open);
+      });
+      
+      // Botones de herramientas
+      const previewBtnProject = document.getElementById('previewBtnTextProject');
+      if (previewBtnProject) previewBtnProject.textContent = texts.preview;
+      
+      const scanBtnText = document.querySelector('#scanBtnProject span');
+      if (scanBtnText) scanBtnText.textContent = texts.scan;
+      
+      const shareBtnText = document.querySelector('button[onclick="shareProject()"] span');
+      if (shareBtnText) shareBtnText.textContent = texts.share;
+      
+      const configBtnText = document.querySelector('button[onclick="showProjectSettings()"] span');
+      if (configBtnText) configBtnText.textContent = texts.config;
+    }
+
+    function translateSearchSection(lang) {
+      const searchTexts = {
+        'es': {
+          search: 'Buscar',
+          searchInClack: 'Buscar en Clack...',
+          recentSearches: 'Búsquedas recientes',
+          articles: 'Artículos',
+          noResults: 'No se encontraron videos o artículos.',
+          openArticle: 'Abrir Artículo'
+        },
+        'en': {
+          search: 'Search',
+          searchInClack: 'Search in Clack...',
+          recentSearches: 'Recent searches',
+          articles: 'Articles',
+          noResults: 'No videos or articles found.',
+          openArticle: 'Open Article'
+        },
+        'ja': {
+          search: '検索',
+          searchInClack: 'Clackで検索...',
+          recentSearches: '最近の検索',
+          articles: '記事',
+          noResults: 'ビデオや記事が見つかりませんでした。',
+          openArticle: '記事を開く'
+        },
+        'ko': {
+          search: '검색',
+          searchInClack: 'Clack에서 검색...',
+          recentSearches: '최근 검색',
+          articles: '기사',
+          noResults: '동영상이나 기사를 찾을 수 없습니다.',
+          openArticle: '기사 열기'
+        },
+        'vi': {
+          search: 'Tìm kiếm',
+          searchInClack: 'Tìm kiếm trong Clack...',
+          recentSearches: 'Tìm kiếm gần đây',
+          articles: 'Bài viết',
+          noResults: 'Không tìm thấy video hoặc bài viết.',
+          openArticle: 'Mở bài viết'
+        },
+        'zh': {
+          search: '搜索',
+          searchInClack: '在Clack中搜索...',
+          recentSearches: '最近搜索',
+          articles: '文章',
+          noResults: '未找到视频或文章。',
+          openArticle: '打开文章'
+        }
+      };
+
+      const texts = searchTexts[lang] || searchTexts['es'];
+      
+      // Botón de búsqueda
+      const searchBtn = document.getElementById('searchExecuteBtn');
+      if (searchBtn) searchBtn.textContent = texts.search;
+      
+      // Placeholder de búsqueda  
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.placeholder = texts.searchInClack;
+      
+      // Títulos de secciones
+      const recentTitle = document.querySelector('.recent-searches h3');
+      if (recentTitle) recentTitle.textContent = texts.recentSearches;
+      
+      const articlesBtn = document.getElementById('toggleArticles');
+      if (articlesBtn) articlesBtn.textContent = texts.articles;
+      
+      // Botones de abrir artículo
+      document.querySelectorAll('.openArticleBtn').forEach(btn => {
+        const icon = btn.querySelector('i');
+        btn.innerHTML = '';
+        if (icon) btn.appendChild(icon);
+        btn.append(' ' + texts.openArticle);
+      });
+    }
+
+    function translateSettingsSection(lang) {
+      const settingsTexts = {
+        'es': {
+          settings: 'Configuración',
+          search: 'Buscar',
+          language: 'Idioma',
+          theme: 'Tema',
+          privacy: 'Privacidad',
+          security: 'Seguridad',
+          assistant: 'Asistente Virtual',
+          maintenance: 'En mantenimiento - Próximamente',
+          about: 'Acerca de',
+          information: 'Información'
+        },
+        'en': {
+          settings: 'Settings',
+          search: 'Search',
+          language: 'Language',
+          theme: 'Theme',
+          privacy: 'Privacy',
+          security: 'Security',
+          assistant: 'Virtual Assistant',
+          maintenance: 'Under maintenance - Coming soon',
+          about: 'About',
+          information: 'Information'
+        },
+        'ja': {
+          settings: '設定',
+          search: '検索',
+          language: '言語',
+          theme: 'テーマ',
+          privacy: 'プライバシー',
+          security: 'セキュリティ',
+          assistant: 'バーチャルアシスタント',
+          maintenance: 'メンテナンス中 - 近日公開',
+          about: 'について',
+          information: '情報'
+        },
+        'ko': {
+          settings: '설정',
+          search: '검색',
+          language: '언어',
+          theme: '테마',
+          privacy: '개인정보',
+          security: '보안',
+          assistant: '가상 어시스턴트',
+          maintenance: '유지보수 중 - 곧 출시',
+          about: '정보',
+          information: '정보'
+        },
+        'vi': {
+          settings: 'Cài đặt',
+          search: 'Tìm kiếm',
+          language: 'Ngôn ngữ',
+          theme: 'Chủ đề',
+          privacy: 'Riêng tư',
+          security: 'Bảo mật',
+          assistant: 'Trợ lý ảo',
+          maintenance: 'Đang bảo trì - Sắp ra mắt',
+          about: 'Giới thiệu',
+          information: 'Thông tin'
+        },
+        'zh': {
+          settings: '设置',
+          search: '搜索',
+          language: '语言',
+          theme: '主题',
+          privacy: '隐私',
+          security: '安全',
+          assistant: '虚拟助手',
+          maintenance: '维护中 - 即将推出',
+          about: '关于',
+          information: '信息'
+        }
+      };
+
+      const texts = settingsTexts[lang] || settingsTexts['es'];
+      
+      // Título principal
+      const settingsTitle = document.querySelector('.settings-header h2');
+      if (settingsTitle) settingsTitle.textContent = texts.settings;
+      
+      // Barra de búsqueda
+      const settingsSearch = document.getElementById('settingsSearch');
+      if (settingsSearch) settingsSearch.placeholder = texts.search;
+      
+      // Items de configuración
+      const settingsItems = document.querySelectorAll('.settings-item-title');
+      if (settingsItems[0]) settingsItems[0].textContent = texts.language;
+      if (settingsItems[1]) settingsItems[1].textContent = texts.theme;
+      if (settingsItems[2]) settingsItems[2].textContent = texts.privacy;
+      if (settingsItems[3]) settingsItems[3].textContent = texts.security;
+      if (settingsItems[4]) settingsItems[4].textContent = texts.assistant;
+      if (settingsItems[5]) settingsItems[5].textContent = texts.about;
+      
+      // Subtitle del asistente
+      const assistantSubtitle = document.querySelector('#helpBotItem .settings-item-subtitle');
+      if (assistantSubtitle) assistantSubtitle.textContent = texts.maintenance;
+      
+      // Sección de información
+      const infoSection = document.querySelector('.settings-section-title');
+      if (infoSection) infoSection.textContent = texts.information;
+    }
+
+    function translateAssistantSection(lang) {
+      const assistantTexts = {
+        'es': {
+          maintenance: 'Asistente en Mantenimiento',
+          description: 'El asistente virtual está temporalmente fuera de servicio. Estamos trabajando en mejoras increíbles que estarán disponibles para todos los usuarios en la próxima actualización.',
+          comingSoon: 'Próximamente con nuevas funciones',
+          understood: 'Entendido'
+        },
+        'en': {
+          maintenance: 'Assistant Under Maintenance',
+          description: 'The virtual assistant is temporarily out of service. We are working on incredible improvements that will be available to all users in the next update.',
+          comingSoon: 'Coming soon with new features',
+          understood: 'Understood'
+        },
+        'ja': {
+          maintenance: 'アシスタントメンテナンス中',
+          description: 'バーチャルアシスタントは一時的にサービスを停止しています。次のアップデートで全ユーザーが利用できる素晴らしい改善に取り組んでいます。',
+          comingSoon: '新機能と共に近日公開',
+          understood: '了解しました'
+        },
+        'ko': {
+          maintenance: '어시스턴트 유지보수 중',
+          description: '가상 어시스턴트가 일시적으로 서비스를 중단했습니다. 다음 업데이트에서 모든 사용자가 이용할 수 있는 놀라운 개선 사항을 작업하고 있습니다.',
+          comingSoon: '새로운 기능으로 곧 출시',
+          understood: '이해했습니다'
+        },
+        'vi': {
+          maintenance: 'Trợ lý đang bảo trì',
+          description: 'Trợ lý ảo tạm thời ngừng hoạt động. Chúng tôi đang làm việc trên những cải tiến tuyệt vời sẽ có sẵn cho tất cả người dùng trong bản cập nhật tiếp theo.',
+          comingSoon: 'Sắp ra mắt với các tính năng mới',
+          understood: 'Đã hiểu'
+        },
+        'zh': {
+          maintenance: '助手维护中',
+          description: '虚拟助手暂时停止服务。我们正在开发令人难以置信的改进，将在下次更新中向所有用户提供。',
+          comingSoon: '即将推出新功能',
+          understood: '明白了'
+        }
+      };
+
+      const texts = assistantTexts[lang] || assistantTexts['es'];
+      
+      // Guardar textos para cuando se abra el modal de mantenimiento
+      window.assistantMaintenanceTexts = texts;
+    }
+
+    function translateInputsAndLabels(lang) {
+      const inputTexts = {
+        'es': {
+          projectName: 'Nombre del proyecto',
+          htmlPlaceholder: 'Escribe tu código HTML aquí...',
+          cssPlaceholder: 'Escribe tu código CSS aquí...',
+          jsPlaceholder: 'Escribe tu código JavaScript aquí...'
+        },
+        'en': {
+          projectName: 'Project name',
+          htmlPlaceholder: 'Write your HTML code here...',
+          cssPlaceholder: 'Write your CSS code here...',
+          jsPlaceholder: 'Write your JavaScript code here...'
+        },
+        'ja': {
+          projectName: 'プロジェクト名',
+          htmlPlaceholder: 'HTMLコードをここに書いてください...',
+          cssPlaceholder: 'CSSコードをここに書いてください...',
+          jsPlaceholder: 'JavaScriptコードをここに書いてください...'
+        },
+        'ko': {
+          projectName: '프로젝트 이름',
+          htmlPlaceholder: 'HTML 코드를 여기에 작성하세요...',
+          cssPlaceholder: 'CSS 코드를 여기에 작성하세요...',
+          jsPlaceholder: 'JavaScript 코드를 여기에 작성하세요...'
+        },
+        'vi': {
+          projectName: 'Tên dự án',
+          htmlPlaceholder: 'Viết mã HTML của bạn tại đây...',
+          cssPlaceholder: 'Viết mã CSS của bạn tại đây...',
+          jsPlaceholder: 'Viết mã JavaScript của bạn tại đây...'
+        },
+        'zh': {
+          projectName: '项目名称',
+          htmlPlaceholder: '在此处编写您的HTML代码...',
+          cssPlaceholder: '在此处编写您的CSS代码...',
+          jsPlaceholder: '在此处编写您的JavaScript代码...'
+        }
+      };
+
+      const texts = inputTexts[lang] || inputTexts['es'];
+      
+      // Input de nombre de proyecto
+      const projectNameInput = document.getElementById('projectName');
+      if (projectNameInput) projectNameInput.placeholder = texts.projectName;
+      
+      // Placeholders de editores
+      const htmlEditor = document.getElementById('htmlEditor');
+      if (htmlEditor) htmlEditor.placeholder = texts.htmlPlaceholder;
+      
+      const cssEditor = document.getElementById('cssEditor');
+      if (cssEditor) cssEditor.placeholder = texts.cssPlaceholder;
+      
+      const jsEditor = document.getElementById('jsEditor');
+      if (jsEditor) jsEditor.placeholder = texts.jsPlaceholder;
+    }
+
+    function translateTooltipsAndTitles(lang) {
+      const tooltipTexts = {
+        'es': {
+          settings: 'Ajustes',
+          search: 'Buscar',
+          duplicate: 'Duplicar proyecto',
+          export: 'Exportar proyecto',
+          fullscreen: 'Pantalla completa',
+          security: 'Escanear seguridad',
+          format: 'Formatear todo el código',
+          findReplace: 'Buscar y reemplazar',
+          validate: 'Validar código',
+          undo: 'Deshacer',
+          redo: 'Rehacer',
+          clear: 'Limpiar todo',
+          share: 'Compartir proyecto',
+          config: 'Configuraciones del proyecto'
+        },
+        'en': {
+          settings: 'Settings',
+          search: 'Search',
+          duplicate: 'Duplicate project',
+          export: 'Export project',
+          fullscreen: 'Fullscreen',
+          security: 'Security scan',
+          format: 'Format all code',
+          findReplace: 'Find and replace',
+          validate: 'Validate code',
+          undo: 'Undo',
+          redo: 'Redo',
+          clear: 'Clear all',
+          share: 'Share project',
+          config: 'Project settings'
+        },
+        'ja': {
+          settings: '設定',
+          search: '検索',
+          duplicate: 'プロジェクトを複製',
+          export: 'プロジェクトをエクスポート',
+          fullscreen: 'フルスクリーン',
+          security: 'セキュリティスキャン',
+          format: 'すべてのコードをフォーマット',
+          findReplace: '検索と置換',
+          validate: 'コードを検証',
+          undo: '元に戻す',
+          redo: 'やり直し',
+          clear: 'すべてクリア',
+          share: 'プロジェクトを共有',
+          config: 'プロジェクト設定'
+        },
+        'ko': {
+          settings: '설정',
+          search: '검색',
+          duplicate: '프로젝트 복제',
+          export: '프로젝트 내보내기',
+          fullscreen: '전체화면',
+          security: '보안 스캔',
+          format: '모든 코드 포맷',
+          findReplace: '찾기 및 바꾸기',
+          validate: '코드 검증',
+          undo: '실행 취소',
+          redo: '다시 실행',
+          clear: '모두 지우기',
+          share: '프로젝트 공유',
+          config: '프로젝트 설정'
+        },
+        'vi': {
+          settings: 'Cài đặt',
+          search: 'Tìm kiếm',
+          duplicate: 'Sao chép dự án',
+          export: 'Xuất dự án',
+          fullscreen: 'Toàn màn hình',
+          security: 'Quét bảo mật',
+          format: 'Định dạng tất cả mã',
+          findReplace: 'Tìm và thay thế',
+          validate: 'Xác thực mã',
+          undo: 'Hoàn tác',
+          redo: 'Làm lại',
+          clear: 'Xóa tất cả',
+          share: 'Chia sẻ dự án',
+          config: 'Cài đặt dự án'
+        },
+        'zh': {
+          settings: '设置',
+          search: '搜索',
+          duplicate: '复制项目',
+          export: '导出项目',
+          fullscreen: '全屏',
+          security: '安全扫描',
+          format: '格式化所有代码',
+          findReplace: '查找和替换',
+          validate: '验证代码',
+          undo: '撤销',
+          redo: '重做',
+          clear: '清除所有',
+          share: '分享项目',
+          config: '项目设置'
+        }
+      };
+
+      const texts = tooltipTexts[lang] || tooltipTexts['es'];
+      
+      // Actualizar todos los títulos/tooltips
+      const elements = [
+        { selector: '#settingsBtn', title: texts.settings },
+        { selector: '#searchBtn', title: texts.search },
+        { selector: '.duplicate-btn', title: texts.duplicate },
+        { selector: '.export-btn', title: texts.export },
+        { selector: '.fullscreen-btn', title: texts.fullscreen },
+        { selector: '#scanBtn', title: texts.security },
+        { selector: '#scanBtnProject', title: texts.security },
+        { selector: 'button[onclick="formatAllCode()"]', title: texts.format },
+        { selector: 'button[onclick="findAndReplace()"]', title: texts.findReplace },
+        { selector: 'button[onclick="validateCode()"]', title: texts.validate },
+        { selector: 'button[onclick="undoChanges()"]', title: texts.undo },
+        { selector: 'button[onclick="redoChanges()"]', title: texts.redo },
+        { selector: 'button[onclick="clearAllEditors()"]', title: texts.clear },
+        { selector: 'button[onclick="shareProject()"]', title: texts.share },
+        { selector: 'button[onclick="showProjectSettings()"]', title: texts.config }
+      ];
+      
+      elements.forEach(({ selector, title }) => {
+        const element = document.querySelector(selector);
+        if (element) element.title = title;
+      });
     }
     
     function showPageSkeleton(lang) {
@@ -6552,6 +7248,14 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Abrir bot de ayuda (BLOQUEADO - EN MANTENIMIENTO)
       document.getElementById('helpBotItem').addEventListener('click', () => {
+        // Usar textos traducidos si están disponibles
+        const texts = window.assistantMaintenanceTexts || {
+          maintenance: 'Asistente en Mantenimiento',
+          description: 'El asistente virtual está temporalmente fuera de servicio. Estamos trabajando en mejoras increíbles que estarán disponibles para todos los usuarios en la próxima actualización.',
+          comingSoon: 'Próximamente con nuevas funciones',
+          understood: 'Entendido'
+        };
+        
         // Mostrar mensaje de mantenimiento
         const maintenanceModal = document.createElement('div');
         maintenanceModal.style.cssText = `
@@ -6583,14 +7287,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         content.innerHTML = `
           <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 2s infinite;">🔧</div>
-          <h3 style="color: #ffffff; font-size: 20px; font-weight: 700; margin-bottom: 15px;">Asistente en Mantenimiento</h3>
+          <h3 style="color: #ffffff; font-size: 20px; font-weight: 700; margin-bottom: 15px;">${texts.maintenance}</h3>
           <p style="color: #71767b; font-size: 16px; line-height: 1.5; margin-bottom: 25px;">
-            El asistente virtual está temporalmente fuera de servicio. Estamos trabajando en mejoras increíbles que estarán disponibles para todos los usuarios en la próxima actualización.
+            ${texts.description}
           </p>
           <div style="background: rgba(29, 155, 240, 0.1); border: 1px solid #1d9bf0; border-radius: 12px; padding: 15px; margin-bottom: 25px;">
             <div style="display: flex; align-items: center; gap: 10px; color: #1d9bf0; font-size: 14px; font-weight: 600;">
               <i class="fas fa-info-circle"></i>
-              <span>Próximamente con nuevas funciones</span>
+              <span>${texts.comingSoon}</span>
             </div>
           </div>
           <button onclick="this.closest('div[style*=\"position: fixed\"]').remove()" style="
@@ -6605,7 +7309,7 @@ document.addEventListener('DOMContentLoaded', () => {
             transition: all 0.2s ease;
             width: 100%;
           " onmouseover="this.style.background='#1a8cd8'" onmouseout="this.style.background='#1d9bf0'">
-            Entendido
+            ${texts.understood}
           </button>
         `;
         
