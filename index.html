@@ -2346,13 +2346,30 @@
       height: calc(100vh - 120px);
     }
 
-    /* Estilos para la sección de inicio - Estilo Twitter */
+    /* Estilos para la sección de inicio - Página de mantenimiento */
     #inicio {
       padding: 0;
-      background: #000000;
-      color: #ffffff;
+      background: #f5f5f7;
+      color: #1d1d1f;
       min-height: 100vh;
       overflow-x: hidden;
+    }
+
+    .dark-mode #inicio {
+      background: #1d1d1f;
+      color: #f5f5f7;
+    }
+
+    .dark-mode #inicio .maintenance-container {
+      background: #1d1d1f !important;
+    }
+
+    .dark-mode #inicio h1 {
+      color: #f5f5f7 !important;
+    }
+
+    .dark-mode #inicio p {
+      color: #a1a1a6 !important;
     }
 
     #inicio h2 {
@@ -2360,8 +2377,8 @@
       font-weight: 700;
       margin: 0;
       padding: 16px 20px;
-      border-bottom: 1px solid #2f3336;
-      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 1px solid #d2d2d7;
+      background: rgba(245, 245, 247, 0.95);
       backdrop-filter: blur(20px);
       position: sticky;
       top: 0;
@@ -2371,21 +2388,19 @@
       gap: 12px;
     }
 
+    .dark-mode #inicio h2 {
+      border-bottom-color: #2f3336;
+      background: rgba(29, 29, 31, 0.95);
+      color: #f5f5f7;
+    }
+
     #inicio h2::before {
-      content: "💻";
+      content: "🛠️";
       font-size: 18px;
     }
 
     #inicio .editor-container {
-      max-width: 100%; 
-      margin: 0; 
-      padding: 20px;
-      display: grid; 
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      height: calc(100vh - 80px);
-      background: #000000;
-      box-sizing: border-box;
+      display: none;
     }
 
     #inicio .editor-area {
@@ -2912,16 +2927,16 @@
       
       <div class="settings-item" id="helpBotItem">
         <div class="settings-item-icon">
-          <i class="fas fa-robot"></i>
+          <i class="fas fa-tools" style="color: #f39c12;"></i>
         </div>
         <div class="settings-item-content">
           <div class="settings-item-title">Asistente Virtual</div>
-          <div class="settings-item-subtitle">Chat de ayuda en tiempo real</div>
+          <div class="settings-item-subtitle">En mantenimiento - Próximamente</div>
         </div>
         <div class="settings-item-arrow">
-          <i class="fas fa-chevron-right"></i>
+          <i class="fas fa-exclamation-triangle" style="color: #f39c12;"></i>
         </div>
-      </div>
+      </div></div>
       
       <div class="settings-item">
         <div class="settings-item-icon">
@@ -3071,29 +3086,120 @@
         <a href="#" onclick="showSection('proyectos')">Proyectos</a>
     </nav>
 
-  <!-- ===== Sección Inicio (Editor Principal) ===== -->
+  <!-- ===== Sección Inicio (Página de Mantenimiento) ===== -->
   <section id="inicio" class="section active">
-    <div class="editor-container">
-      <div class="editor-area" data-language="HTML">
-        <div class="editor-wrapper">
-          <div class="line-numbers" id="htmlLineNumbersMain">1</div>
-          <textarea id="htmlEditorMain" placeholder="Escribe tu código HTML aquí..." spellcheck="false"></textarea>
-          <div class="syntax-highlight" id="htmlHighlightMain"></div>
-        </div>
+    <div class="maintenance-container" style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 140px);
+      padding: 40px 20px;
+      background: #f5f5f7;
+      text-align: center;
+    ">
+      <!-- Icono de información -->
+      <div style="
+        width: 80px;
+        height: 80px;
+        background: #c7c7cc;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+        font-size: 40px;
+        color: white;
+      ">
+        <i class="fas fa-info"></i>
       </div>
-      <div class="editor-area" data-language="CSS">
-        <div class="editor-wrapper">
-          <div class="line-numbers" id="cssLineNumbersMain">1</div>
-          <textarea id="cssEditorMain" placeholder="Escribe tu código CSS aquí..." spellcheck="false"></textarea>
-          <div class="syntax-highlight" id="cssHighlightMain"></div>
+      
+      <!-- Título principal -->
+      <h1 style="
+        font-size: 32px;
+        font-weight: 700;
+        color: #1d1d1f;
+        margin-bottom: 16px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      ">Editor no disponible</h1>
+      
+      <!-- Descripción -->
+      <p style="
+        font-size: 18px;
+        color: #86868b;
+        margin-bottom: 40px;
+        max-width: 400px;
+        line-height: 1.5;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      ">El editor está temporalmente fuera de servicio para mantenimiento.</p>
+      
+      <!-- Mensaje adicional -->
+      <div style="
+        background: rgba(29, 155, 240, 0.1);
+        border: 1px solid rgba(29, 155, 240, 0.3);
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 450px;
+        margin-bottom: 30px;
+      ">
+        <div style="
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          color: #1d9bf0;
+          font-weight: 600;
+          font-size: 16px;
+          margin-bottom: 8px;
+        ">
+          <i class="fas fa-tools"></i>
+          <span>Trabajando en mejoras</span>
         </div>
+        <p style="
+          color: #86868b;
+          font-size: 15px;
+          margin: 0;
+          line-height: 1.4;
+        ">
+          Estamos actualizando el editor principal para ofrecerte una mejor experiencia. 
+          Mientras tanto, puedes usar la sección de Proyectos.
+        </p>
       </div>
-      <div class="editor-area" data-language="javascript">
-        <div class="editor-wrapper">
-          <div class="line-numbers" id="jsLineNumbersMain">1</div>
-          <textarea id="jsEditorMain" placeholder="Escribe tu código JavaScript aquí..." spellcheck="false"></textarea>
-          <div class="syntax-highlight" id="jsHighlightMain"></div>
-        </div>
+      
+      <!-- Botón de acción -->
+      <button onclick="showSection('proyectos')" style="
+        background: #1d9bf0;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(29, 155, 240, 0.3);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      " onmouseover="this.style.background='#1a8cd8'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#1d9bf0'; this.style.transform='translateY(0)'">
+        <i class="fas fa-folder" style="margin-right: 8px;"></i>
+        Ir a Proyectos
+      </button>
+      
+      <!-- Indicador de estado -->
+      <div style="
+        margin-top: 40px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #86868b;
+        font-size: 14px;
+      ">
+        <div style="
+          width: 8px;
+          height: 8px;
+          background: #ff9500;
+          border-radius: 50%;
+          animation: pulse 2s infinite;
+        "></div>
+        <span>Estado: En mantenimiento</span>
       </div>
     </div>
   </section>
@@ -6444,12 +6550,83 @@ document.addEventListener('DOMContentLoaded', () => {
         updateThemeDisplay();
       });
       
-      // Abrir bot de ayuda
+      // Abrir bot de ayuda (BLOQUEADO - EN MANTENIMIENTO)
       document.getElementById('helpBotItem').addEventListener('click', () => {
-        document.getElementById('helpBotOverlay').classList.add('show');
-        document.getElementById('settingsOverlay').style.display = 'none';
-        initHelpBot();
-        initChatLanguageSelector();
+        // Mostrar mensaje de mantenimiento
+        const maintenanceModal = document.createElement('div');
+        maintenanceModal.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.8);
+          z-index: 12000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          animation: fadeIn 0.3s ease;
+        `;
+        
+        const content = document.createElement('div');
+        content.style.cssText = `
+          background: #16181c;
+          border: 1px solid #2f3336;
+          border-radius: 16px;
+          padding: 30px;
+          max-width: 400px;
+          text-align: center;
+          color: #ffffff;
+          position: relative;
+        `;
+        
+        content.innerHTML = `
+          <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 2s infinite;">🔧</div>
+          <h3 style="color: #ffffff; font-size: 20px; font-weight: 700; margin-bottom: 15px;">Asistente en Mantenimiento</h3>
+          <p style="color: #71767b; font-size: 16px; line-height: 1.5; margin-bottom: 25px;">
+            El asistente virtual está temporalmente fuera de servicio. Estamos trabajando en mejoras increíbles que estarán disponibles para todos los usuarios en la próxima actualización.
+          </p>
+          <div style="background: rgba(29, 155, 240, 0.1); border: 1px solid #1d9bf0; border-radius: 12px; padding: 15px; margin-bottom: 25px;">
+            <div style="display: flex; align-items: center; gap: 10px; color: #1d9bf0; font-size: 14px; font-weight: 600;">
+              <i class="fas fa-info-circle"></i>
+              <span>Próximamente con nuevas funciones</span>
+            </div>
+          </div>
+          <button onclick="this.closest('div[style*=\"position: fixed\"]').remove()" style="
+            background: #1d9bf0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            width: 100%;
+          " onmouseover="this.style.background='#1a8cd8'" onmouseout="this.style.background='#1d9bf0'">
+            Entendido
+          </button>
+        `;
+        
+        maintenanceModal.appendChild(content);
+        document.body.appendChild(maintenanceModal);
+        
+        // Cerrar con ESC
+        const closeOnEsc = (e) => {
+          if (e.key === 'Escape') {
+            maintenanceModal.remove();
+            document.removeEventListener('keydown', closeOnEsc);
+          }
+        };
+        document.addEventListener('keydown', closeOnEsc);
+        
+        // Cerrar al hacer clic fuera
+        maintenanceModal.addEventListener('click', (e) => {
+          if (e.target === maintenanceModal) {
+            maintenanceModal.remove();
+          }
+        });
       });
       
       // Cerrar bot de ayuda
