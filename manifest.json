@@ -28,52 +28,52 @@
   ],
   "icons": [
     {
-      "src": "https://via.placeholder.com/72x72/1877f2/ffffff?text=CK",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231877f2'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='60' font-weight='bold' text-anchor='middle' fill='white'%3ECK%3C/text%3E%3C/svg%3E",
       "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "https://via.placeholder.com/96x96/1877f2/ffffff?text=CK",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231877f2'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='60' font-weight='bold' text-anchor='middle' fill='white'%3ECK%3C/text%3E%3C/svg%3E",
       "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "https://via.placeholder.com/128x128/1877f2/ffffff?text=CK",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231877f2'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='60' font-weight='bold' text-anchor='middle' fill='white'%3ECK%3C/text%3E%3C/svg%3E",
       "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "https://via.placeholder.com/144x144/1877f2/ffffff?text=CK",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231877f2'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='60' font-weight='bold' text-anchor='middle' fill='white'%3ECK%3C/text%3E%3C/svg%3E",
       "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "https://via.placeholder.com/152x152/1877f2/ffffff?text=CK",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231877f2'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='60' font-weight='bold' text-anchor='middle' fill='white'%3ECK%3C/text%3E%3C/svg%3E",
       "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "https://via.placeholder.com/192x192/1877f2/ffffff?text=CK",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231877f2'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='60' font-weight='bold' text-anchor='middle' fill='white'%3ECK%3C/text%3E%3C/svg%3E",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "https://via.placeholder.com/384x384/1877f2/ffffff?text=CK",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231877f2'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='60' font-weight='bold' text-anchor='middle' fill='white'%3ECK%3C/text%3E%3C/svg%3E",
       "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "https://via.placeholder.com/512x512/1877f2/ffffff?text=CK",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231877f2'/%3E%3Ctext x='50' y='65' font-family='Arial' font-size='60' font-weight='bold' text-anchor='middle' fill='white'%3ECK%3C/text%3E%3C/svg%3E",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
