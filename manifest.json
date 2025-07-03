@@ -1,0 +1,126 @@
+
+{
+  "name": "ClackKoder - Editor de Código",
+  "short_name": "ClackKoder",
+  "description": "Editor de código profesional con compilación en tiempo real, diseño y desarrollo web",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1877f2",
+  "theme_color": "#1877f2",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["productivity", "developer", "utilities"],
+  "screenshots": [
+    {
+      "src": "https://via.placeholder.com/540x720/1877f2/ffffff?text=ClackKoder+Editor",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "https://via.placeholder.com/720x540/1877f2/ffffff?text=ClackKoder+Desktop",
+      "sizes": "720x540",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/72x72/1877f2/ffffff?text=CK",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/96x96/1877f2/ffffff?text=CK",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/128x128/1877f2/ffffff?text=CK",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/144x144/1877f2/ffffff?text=CK",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/152x152/1877f2/ffffff?text=CK",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/192x192/1877f2/ffffff?text=CK",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/384x384/1877f2/ffffff?text=CK",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/1877f2/ffffff?text=CK",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nuevo Proyecto",
+      "short_name": "Nuevo",
+      "description": "Crear un nuevo proyecto",
+      "url": "/?action=new",
+      "icons": [
+        {
+          "src": "https://via.placeholder.com/96x96/28a745/ffffff?text=+",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Mis Proyectos",
+      "short_name": "Proyectos",
+      "description": "Ver todos mis proyectos",
+      "url": "/?section=proyectos",
+      "icons": [
+        {
+          "src": "https://via.placeholder.com/96x96/ffc107/ffffff?text=📁",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "text/html": [".html", ".htm"],
+        "text/css": [".css"],
+        "text/javascript": [".js"],
+        "application/json": [".json"]
+      }
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+clackkoder",
+      "url": "/?handler=%s"
+    }
+  ]
+}

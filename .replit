@@ -2,3 +2,15 @@ modules = ["web"]
 
 [nix]
 channel = "stable-24_05"
+
+[workflows]
+runButton = "Start PWA Server"
+
+[[workflows.workflow]]
+name = "Start PWA Server"
+author = 44566751
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m http.server 5000"
