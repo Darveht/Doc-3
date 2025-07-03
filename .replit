@@ -4,7 +4,7 @@ modules = ["web"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Start PWA Server"
+runButton = "Start Real Server"
 
 [[workflows.workflow]]
 name = "Start PWA Server"
@@ -14,3 +14,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python3 -m http.server 5000 --bind 0.0.0.0"
+
+[[workflows.workflow]]
+name = "Start Real Server"
+author = 44566751
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m http.server 5000 --bind 0.0.0.0"
