@@ -6952,15 +6952,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       introSound.volume = 0.5;
       introSound.play().catch(e => console.log('Error playing sound:', e));
-      function generateRandomCode() {
-        let code = '';
-        const characters = '01';
-        for (let i = 0; i < 1000; i++) {
-          code += characters[Math.floor(Math.random() * characters.length)];
-        }
-        return code;
-      }
-      document.querySelector('.code-effect').textContent = generateRandomCode();
       setTimeout(() => {
         document.querySelector('.intro').style.animation = 'fadeOut 1s forwards';
         document.getElementById('loginModal').style.display = 'block';
