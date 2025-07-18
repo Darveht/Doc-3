@@ -1287,6 +1287,28 @@
         opacity: 1;
       }
     }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
     
     @media (max-width: 768px) {
       .settings-header {
@@ -4891,7 +4913,299 @@
     function checkSession() { if(localStorage.getItem('loggedIn') === 'true') document.getElementById('loginModal').style.display = 'none'; }
     function loginSimulated() {
       localStorage.setItem('loggedIn', 'true');
-      document.getElementById('loginModal').style.display = 'none';
+      showDataLoadingAnimation();
+    }
+
+    function showDataLoadingAnimation() {
+      // Crear overlay de carga de datos
+      const loadingOverlay = document.createElement('div');
+      loadingOverlay.id = 'dataLoadingOverlay';
+      loadingOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #1877f2 0%, #42a5f5 100%);
+        z-index: 15000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      `;
+
+      loadingOverlay.innerHTML = `
+        <div style="text-align: center; max-width: 400px; padding: 0 20px;">
+          <!-- Logo y título -->
+          <div style="margin-bottom: 40px;">
+            <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; backdrop-filter: blur(10px);">
+              <i class="fa-solid fa-code" style="font-size: 36px; color: white;"></i>
+            </div>
+            <h1 style="margin: 0; font-size: 28px; font-weight: 700;">Clack</h1>
+            <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Cargando tu plataforma de desarrollo</p>
+          </div>
+
+          <!-- Progreso general -->
+          <div style="margin-bottom: 40px; width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span style="font-size: 14px; font-weight: 600;" id="loadingMainText">Inicializando...</span>
+              <span style="font-size: 14px; font-weight: 600;" id="loadingPercentage">0%</span>
+            </div>
+            <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; overflow: hidden;">
+              <div id="loadingMainProgress" style="width: 0%; height: 100%; background: linear-gradient(90deg, #ffffff, rgba(255,255,255,0.8)); border-radius: 3px; transition: width 0.3s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Detalles de carga de datos -->
+          <div style="width: 100%; max-width: 350px;">
+            <h3 style="margin: 0 0 20px 0; font-size: 16px; font-weight: 600; opacity: 0.9;">Cargando componentes del sistema</h3>
+            
+            <!-- Editor de código -->
+            <div class="data-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-code" style="font-size: 16px; opacity: 0.8;"></i>
+                <span style="font-size: 14px;">Editor de código</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="data-size" style="font-size: 12px; opacity: 0.7;">2.3 MB</span>
+                <div class="loading-dot" style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; opacity: 0;"></div>
+              </div>
+            </div>
+
+            <!-- Sistema de proyectos -->
+            <div class="data-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-folder" style="font-size: 16px; opacity: 0.8;"></i>
+                <span style="font-size: 14px;">Sistema de proyectos</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="data-size" style="font-size: 12px; opacity: 0.7;">1.8 MB</span>
+                <div class="loading-dot" style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; opacity: 0;"></div>
+              </div>
+            </div>
+
+            <!-- Vista previa -->
+            <div class="data-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-eye" style="font-size: 16px; opacity: 0.8;"></i>
+                <span style="font-size: 14px;">Motor de vista previa</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="data-size" style="font-size: 12px; opacity: 0.7;">3.1 MB</span>
+                <div class="loading-dot" style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; opacity: 0;"></div>
+              </div>
+            </div>
+
+            <!-- Análisis de seguridad -->
+            <div class="data-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-shield-alt" style="font-size: 16px; opacity: 0.8;"></i>
+                <span style="font-size: 14px;">Módulo de seguridad</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="data-size" style="font-size: 12px; opacity: 0.7;">1.5 MB</span>
+                <div class="loading-dot" style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; opacity: 0;"></div>
+              </div>
+            </div>
+
+            <!-- Sistema de búsqueda -->
+            <div class="data-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-search" style="font-size: 16px; opacity: 0.8;"></i>
+                <span style="font-size: 14px;">Motor de búsqueda</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="data-size" style="font-size: 12px; opacity: 0.7;">2.7 MB</span>
+                <div class="loading-dot" style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; opacity: 0;"></div>
+              </div>
+            </div>
+
+            <!-- Generador APK -->
+            <div class="data-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-mobile-alt" style="font-size: 16px; opacity: 0.8;"></i>
+                <span style="font-size: 14px;">Generador de APK</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="data-size" style="font-size: 12px; opacity: 0.7;">4.2 MB</span>
+                <div class="loading-dot" style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; opacity: 0;"></div>
+              </div>
+            </div>
+
+            <!-- Asistente virtual -->
+            <div class="data-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-robot" style="font-size: 16px; opacity: 0.8;"></i>
+                <span style="font-size: 14px;">Asistente virtual</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="data-size" style="font-size: 12px; opacity: 0.7;">3.9 MB</span>
+                <div class="loading-dot" style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; opacity: 0;"></div>
+              </div>
+            </div>
+
+            <!-- Configuraciones -->
+            <div class="data-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-cog" style="font-size: 16px; opacity: 0.8;"></i>
+                <span style="font-size: 14px;">Configuraciones</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="data-size" style="font-size: 12px; opacity: 0.7;">0.8 MB</span>
+                <div class="loading-dot" style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; opacity: 0;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información adicional -->
+          <div style="margin-top: 30px; text-align: center;">
+            <p style="margin: 0; font-size: 12px; opacity: 0.7;" id="loadingStatus">Preparando tu experiencia de desarrollo...</p>
+            <p style="margin: 5px 0 0 0; font-size: 11px; opacity: 0.5;">Total estimado: <span id="totalSize">20.3 MB</span></p>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(loadingOverlay);
+      startDataLoadingAnimation();
+    }
+
+    function startDataLoadingAnimation() {
+      const items = document.querySelectorAll('.data-item');
+      const loadingDots = document.querySelectorAll('.loading-dot');
+      const mainProgress = document.getElementById('loadingMainProgress');
+      const mainText = document.getElementById('loadingMainText');
+      const percentage = document.getElementById('loadingPercentage');
+      const status = document.getElementById('loadingStatus');
+      
+      const loadingSteps = [
+        { text: 'Conectando con GitHub...', status: 'Verificando credenciales de usuario' },
+        { text: 'Inicializando entorno...', status: 'Configurando espacio de trabajo' },
+        { text: 'Cargando editores...', status: 'Preparando herramientas de desarrollo' },
+        { text: 'Configurando proyectos...', status: 'Sincronizando datos del usuario' },
+        { text: 'Preparando vista previa...', status: 'Optimizando renderizado en tiempo real' },
+        { text: 'Activando seguridad...', status: 'Implementando análisis de código' },
+        { text: 'Indexando búsqueda...', status: 'Construyendo índices de contenido' },
+        { text: 'Compilando herramientas...', status: 'Preparando generadores de aplicaciones' },
+        { text: 'Cargando IA...', status: 'Inicializando asistente inteligente' },
+        { text: 'Finalizando...', status: 'Aplicando configuraciones personales' }
+      ];
+
+      let currentStep = 0;
+      let currentItem = 0;
+      let totalProgress = 0;
+
+      const stepInterval = setInterval(() => {
+        if (currentStep < loadingSteps.length) {
+          const step = loadingSteps[currentStep];
+          mainText.textContent = step.text;
+          status.textContent = step.status;
+          
+          totalProgress = Math.round((currentStep / loadingSteps.length) * 100);
+          percentage.textContent = totalProgress + '%';
+          mainProgress.style.width = totalProgress + '%';
+          
+          currentStep++;
+        }
+      }, 600);
+
+      const itemInterval = setInterval(() => {
+        if (currentItem < items.length) {
+          const dot = loadingDots[currentItem];
+          const item = items[currentItem];
+          
+          // Simular carga de datos con efectos visuales
+          item.style.background = 'rgba(255,255,255,0.05)';
+          item.style.transform = 'scale(1.02)';
+          item.style.transition = 'all 0.3s ease';
+          
+          setTimeout(() => {
+            dot.style.opacity = '1';
+            dot.style.animation = 'pulse 0.5s ease';
+            item.style.background = 'transparent';
+            item.style.transform = 'scale(1)';
+            
+            // Efecto de bytes cargándose
+            const sizeElement = item.querySelector('.data-size');
+            let currentSize = 0;
+            const targetSize = parseFloat(sizeElement.textContent);
+            const sizeInterval = setInterval(() => {
+              currentSize += targetSize / 20;
+              if (currentSize >= targetSize) {
+                currentSize = targetSize;
+                clearInterval(sizeInterval);
+              }
+              sizeElement.textContent = currentSize.toFixed(1) + ' MB';
+            }, 50);
+            
+          }, 300);
+          
+          currentItem++;
+        }
+      }, 800);
+
+      // Completar carga después de 8 segundos
+      setTimeout(() => {
+        clearInterval(stepInterval);
+        clearInterval(itemInterval);
+        
+        mainText.textContent = '¡Listo para programar!';
+        status.textContent = 'Tu plataforma de desarrollo está lista';
+        percentage.textContent = '100%';
+        mainProgress.style.width = '100%';
+        
+        // Animación de finalización
+        setTimeout(() => {
+          const overlay = document.getElementById('dataLoadingOverlay');
+          overlay.style.animation = 'fadeOut 1s forwards';
+          
+          setTimeout(() => {
+            overlay.remove();
+            document.getElementById('loginModal').style.display = 'none';
+            
+            // Mostrar notificación de bienvenida
+            showWelcomeNotification();
+          }, 1000);
+        }, 1500);
+      }, 8000);
+    }
+
+    function showWelcomeNotification() {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(45deg, #1877f2, #42a5f5);
+        color: white;
+        padding: 20px 25px;
+        border-radius: 12px;
+        z-index: 10000;
+        max-width: 350px;
+        box-shadow: 0 8px 32px rgba(24, 119, 242, 0.3);
+        backdrop-filter: blur(10px);
+        animation: slideInRight 0.5s ease;
+      `;
+      
+      notification.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-check" style="font-size: 24px;"></i>
+          </div>
+          <div>
+            <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">¡Bienvenido a Clack!</div>
+            <div style="font-size: 14px; opacity: 0.9;">Tu entorno de desarrollo está listo. Total cargado: 20.3 MB</div>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.5s ease forwards';
+        setTimeout(() => notification.remove(), 500);
+      }, 4000);
     }
 
     /* ========================
