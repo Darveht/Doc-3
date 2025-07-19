@@ -609,10 +609,13 @@
       background: var(--editor-bg);
       z-index: 11002;
       flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
     }
     
     #helpBotOverlay.show {
       display: flex;
+      transform: translateX(0);
     }
     
     .chat-header {
@@ -3042,7 +3045,7 @@
         </div>
         <div class="settings-item-content">
           <div class="settings-item-title">Asistente Virtual</div>
-          <div class="settings-item-subtitle">🤖 Listo para ayudarte - Haz clic aquí</div>
+          <div class="settings-item-subtitle">Listo para ayudarte - Haz clic aquí</div>
         </div>
         <div class="settings-item-arrow">
           <i class="fas fa-chevron-right"></i>
@@ -3138,7 +3141,7 @@
     <div class="settings-content">
       <div class="settings-item" id="reportProblemOption">
         <div class="settings-item-icon">
-          <i class="fas fa-bug" style="color: #dc3545;"></i>
+          <i class="fas fa-exclamation-triangle" style="color: #dc3545;"></i>
         </div>
         <div class="settings-item-content">
           <div class="settings-item-title">Reportar un problema</div>
@@ -3151,7 +3154,7 @@
       
       <div class="settings-item" id="helpRequestOption">
         <div class="settings-item-icon">
-          <i class="fas fa-hands-helping" style="color: #17a2b8;"></i>
+          <i class="fas fa-headset" style="color: #17a2b8;"></i>
         </div>
         <div class="settings-item-content">
           <div class="settings-item-title">Solicitar ayuda</div>
@@ -3164,7 +3167,7 @@
       
       <div class="settings-item" id="faqOption">
         <div class="settings-item-icon">
-          <i class="fas fa-question" style="color: #ffc107;"></i>
+          <i class="fas fa-info-circle" style="color: #ffc107;"></i>
         </div>
         <div class="settings-item-content">
           <div class="settings-item-title">Preguntas frecuentes</div>
@@ -3177,7 +3180,7 @@
       
       <div class="settings-item" id="contactSupportOption">
         <div class="settings-item-icon">
-          <i class="fas fa-envelope" style="color: #6f42c1;"></i>
+          <i class="fas fa-comment-dots" style="color: #6f42c1;"></i>
         </div>
         <div class="settings-item-content">
           <div class="settings-item-title">Contactar soporte</div>
@@ -7492,6 +7495,19 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('bookmarkArticle').addEventListener('click', toggleBookmark);
       document.getElementById('readerArticle').addEventListener('click', toggleArticleReader);
       document.getElementById('reportArticle').addEventListener('click', openReportArticleModal);
+      
+      // Navegación mejorada del asistente
+      document.getElementById('closeHelpBot').addEventListener('click', () => {
+        document.getElementById('helpBotOverlay').classList.remove('show');
+        setTimeout(() => {
+          document.getElementById('helpBotOverlay').style.display = 'none';
+        }, 300);
+      });
+      
+      document.getElementById('backToSettingsFromHelp').addEventListener('click', () => {
+        document.getElementById('helpSection').classList.remove('show');
+        document.getElementById('settingsOverlay').style.display = 'block';
+      });
       
       // Eventos del modal de reporte
       document.getElementById('closeReportModal').addEventListener('click', closeReportArticleModal);
