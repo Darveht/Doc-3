@@ -2974,6 +2974,19 @@
         <div class="settings-item-arrow">
           <i class="fas fa-chevron-right"></i>
         </div>
+      </div>
+      
+      <div class="settings-item" id="helpSectionItem">
+        <div class="settings-item-icon">
+          <i class="fas fa-question-circle" style="color: #28a745;"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Ayuda</div>
+          <div class="settings-item-subtitle">Centro de ayuda y soporte</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
       </div></div>
       
       <div class="settings-section-title">Información</div>
@@ -3036,6 +3049,70 @@
         <div class="flag">🇨🇳</div>
         <div class="name">中文</div>
         <div class="check" style="display: none;"><i class="fas fa-check"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Sección de Ayuda ===== -->
+  <div id="helpSection" class="language-submenu">
+    <div class="settings-header">
+      <button class="back-btn" id="backToSettingsFromHelp">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h2>Centro de Ayuda</h2>
+    </div>
+    
+    <div class="settings-content">
+      <div class="settings-item" id="reportProblemOption">
+        <div class="settings-item-icon">
+          <i class="fas fa-bug" style="color: #dc3545;"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Reportar un problema</div>
+          <div class="settings-item-subtitle">Informa sobre errores o fallos</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      
+      <div class="settings-item" id="helpRequestOption">
+        <div class="settings-item-icon">
+          <i class="fas fa-hands-helping" style="color: #17a2b8;"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Solicitar ayuda</div>
+          <div class="settings-item-subtitle">Obtén asistencia personalizada</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      
+      <div class="settings-item" id="faqOption">
+        <div class="settings-item-icon">
+          <i class="fas fa-question" style="color: #ffc107;"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Preguntas frecuentes</div>
+          <div class="settings-item-subtitle">Respuestas a dudas comunes</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      
+      <div class="settings-item" id="contactSupportOption">
+        <div class="settings-item-icon">
+          <i class="fas fa-envelope" style="color: #6f42c1;"></i>
+        </div>
+        <div class="settings-item-content">
+          <div class="settings-item-title">Contactar soporte</div>
+          <div class="settings-item-subtitle">Comunicación directa con el equipo</div>
+        </div>
+        <div class="settings-item-arrow">
+          <i class="fas fa-chevron-right"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -7202,6 +7279,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const searchExecuteBtn = document.getElementById('searchExecuteBtn');
       const toggleVideos = document.getElementById('toggleVideos');
       const toggleArticles = document.getElementById('toggleArticles');
+      // Elementos de video (solo si existen)
       const likeVideoBtn = document.getElementById('likeVideoBtn');
       const reportVideoBtn = document.getElementById('reportVideoBtn');
       const closeVideoBtn = document.getElementById('closeVideoBtn');
@@ -7656,6 +7734,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Mostrar notificación de activación
         showNotification('🤖 Asistente virtual activado - ¡Pregúntame lo que necesites!', 'success');
+      });
+      
+      // Abrir sección de ayuda
+      document.getElementById('helpSectionItem').addEventListener('click', () => {
+        document.getElementById('helpSection').classList.add('show');
+      });
+      
+      // Volver a ajustes desde ayuda
+      document.getElementById('backToSettingsFromHelp').addEventListener('click', () => {
+        document.getElementById('helpSection').classList.remove('show');
       });
       
       // Cerrar bot de ayuda
@@ -8154,17 +8242,29 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleArticles.classList.add('active');
         executeSearch();
       });
-      likeVideoBtn.addEventListener('click', () => {
-        likeAnimation.style.opacity = "1";
-        likeAnimation.style.animation = "likePop 0.8s forwards";
-        setTimeout(() => {
-          likeAnimation.style.opacity = "0";
-          likeAnimation.style.animation = "none";
-        }, 900);
-      });
-      reportVideoBtn.addEventListener('click', openReportModal);
-      closeVideoBtn.addEventListener('click', () => { toggleVideoPlayerOverlay(false); });
-      submitReportBtn.addEventListener('click', submitReport);
+      // Event listeners para video solo si los elementos existen
+      if (likeVideoBtn) {
+        likeVideoBtn.addEventListener('click', () => {
+          likeAnimation.style.opacity = "1";
+          likeAnimation.style.animation = "likePop 0.8s forwards";
+          setTimeout(() => {
+            likeAnimation.style.opacity = "0";
+            likeAnimation.style.animation = "none";
+          }, 900);
+        });
+      }
+      
+      if (reportVideoBtn) {
+        reportVideoBtn.addEventListener('click', openReportModal);
+      }
+      
+      if (closeVideoBtn) {
+        closeVideoBtn.addEventListener('click', () => { toggleVideoPlayerOverlay(false); });
+      }
+      
+      if (submitReportBtn) {
+        submitReportBtn.addEventListener('click', submitReport);
+      }
 
 
     });
