@@ -2388,30 +2388,12 @@
       height: calc(100vh - 120px);
     }
 
-    /* Estilos para la sección de inicio - Página de mantenimiento */
+    /* Estilos para la sección de inicio - Editor principal */
     #inicio {
       padding: 0;
-      background: #f5f5f7;
-      color: #1d1d1f;
+      background: var(--bg-color);
+      color: var(--text-color);
       min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .dark-mode #inicio {
-      background: #1d1d1f;
-      color: #f5f5f7;
-    }
-
-    .dark-mode #inicio .maintenance-container {
-      background: #1d1d1f !important;
-    }
-
-    .dark-mode #inicio h1 {
-      color: #f5f5f7 !important;
-    }
-
-    .dark-mode #inicio p {
-      color: #a1a1a6 !important;
     }
 
     #inicio h2 {
@@ -2436,75 +2418,81 @@
       color: #f5f5f7;
     }
 
-    #inicio h2::before {
-      content: "🛠️";
-      font-size: 18px;
-    }
-
     #inicio .editor-container {
-      display: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      height: calc(100vh - 200px);
     }
 
     #inicio .editor-area {
-      background: #16181c;
-      border: 1px solid #2f3336;
+      background: var(--editor-bg);
+      border: 1px solid rgba(0,0,0,0.1);
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3); 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
       overflow: hidden;
       display: flex;
       flex-direction: column;
       height: 100%;
     }
 
+    .dark-mode #inicio .editor-area {
+      background: #16181c;
+      border: 1px solid #2f3336;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
     #inicio .editor-area::before {
       content: attr(data-language);
       padding: 12px 20px;
-      background: #000000;
-      color: #ffffff;
+      background: rgba(0,0,0,0.1);
+      color: var(--text-color);
       font-size: 14px;
       font-weight: 700;
       text-transform: uppercase;
-      border-bottom: 1px solid #2f3336;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
     }
 
-    #inicio .editor-area[data-language="HTML"]::before {
-      content: "HTML";
-    }
-
-    #inicio .editor-area[data-language="CSS"]::before {
-      content: "CSS";
-    }
-
-    #inicio .editor-area[data-language="javascript"]::before {
-      content: "JavaScript";
+    .dark-mode #inicio .editor-area::before {
+      background: #000000;
+      color: #ffffff;
+      border-bottom-color: #2f3336;
     }
 
     #inicio .editor-wrapper {
       position: relative;
       height: 100%;
+      background: var(--editor-bg);
+    }
+
+    .dark-mode #inicio .editor-wrapper {
       background: #16181c;
     }
 
     #inicio .line-numbers {
       width: 45px;
       padding: 16px 8px;
-      background: #16181c;
-      color: #71767b;
+      background: var(--editor-bg);
+      color: #666;
       font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
       font-size: 14px;
       line-height: 1.5;
       text-align: right;
       user-select: none;
-      border-right: 1px solid #2f3336;
+      border-right: 1px solid rgba(0,0,0,0.1);
       white-space: pre;
       position: absolute;
       top: 0;
       left: 0;
       bottom: 0;
       overflow: hidden;
+    }
+
+    .dark-mode #inicio .line-numbers {
+      background: #16181c;
+      color: #71767b;
+      border-right-color: #2f3336;
     }
 
     #inicio textarea {
@@ -2517,19 +2505,27 @@
       line-height: 1.5;
       tab-size: 2;
       resize: none;
-      background: #16181c;
-      color: #ffffff;
+      background: var(--editor-bg);
+      color: var(--text-color);
       white-space: pre;
       overflow-wrap: normal;
       overflow-x: auto;
     }
 
+    .dark-mode #inicio textarea {
+      background: #16181c;
+      color: #ffffff;
+    }
+
     #inicio textarea:focus {
       outline: none;
-      background: #16181c;
     }
 
     #inicio textarea::placeholder {
+      color: #999;
+    }
+
+    .dark-mode #inicio textarea::placeholder {
       color: #71767b;
     }
 
@@ -3130,121 +3126,72 @@
         <a href="#" onclick="showSection('proyectos')">Proyectos</a>
     </nav>
 
-  <!-- ===== Sección Inicio (Página de Mantenimiento) ===== -->
+  <!-- ===== Sección Inicio (Editor Principal) ===== -->
   <section id="inicio" class="section active">
-    <div class="maintenance-container" style="
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: calc(100vh - 140px);
-      padding: 40px 20px;
-      background: #f5f5f7;
-      text-align: center;
-    ">
-      <!-- Icono de información -->
-      <div style="
-        width: 80px;
-        height: 80px;
-        background: #c7c7cc;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 30px;
-        font-size: 40px;
-        color: white;
-      ">
-        <i class="fas fa-info"></i>
-      </div>
-      
-      <!-- Título principal -->
-      <h1 style="
-        font-size: 32px;
-        font-weight: 700;
-        color: #1d1d1f;
-        margin-bottom: 16px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      ">Editor no disponible</h1>
-      
-      <!-- Descripción -->
-      <p style="
-        font-size: 18px;
-        color: #86868b;
-        margin-bottom: 40px;
-        max-width: 400px;
-        line-height: 1.5;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      ">El editor está temporalmente fuera de servicio para mantenimiento.</p>
-      
-      <!-- Mensaje adicional -->
-      <div style="
-        background: rgba(29, 155, 240, 0.1);
-        border: 1px solid rgba(29, 155, 240, 0.3);
-        border-radius: 12px;
-        padding: 20px;
-        max-width: 450px;
-        margin-bottom: 30px;
-      ">
-        <div style="
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          color: #1d9bf0;
-          font-weight: 600;
-          font-size: 16px;
-          margin-bottom: 8px;
-        ">
-          <i class="fas fa-tools"></i>
-          <span>Trabajando en mejoras</span>
+    <h2>
+      <i class="fas fa-code" style="margin-right: 12px; color: #1d9bf0;"></i>
+      Editor de Código
+    </h2>
+    
+    <div class="editor-container">
+      <div class="editor-area" data-language="HTML">
+        <div class="editor-wrapper">
+          <div class="line-numbers" id="htmlLineNumbersMain">1</div>
+          <textarea id="htmlEditorMain" placeholder="Escribe tu código HTML aquí..." spellcheck="false"></textarea>
+          <div class="syntax-highlight" id="htmlHighlightMain"></div>
         </div>
-        <p style="
-          color: #86868b;
-          font-size: 15px;
-          margin: 0;
-          line-height: 1.4;
-        ">
-          Estamos actualizando el editor principal para ofrecerte una mejor experiencia. 
-          Mientras tanto, puedes usar la sección de Proyectos.
-        </p>
       </div>
-      
-      <!-- Botón de acción -->
-      <button onclick="showSection('proyectos')" style="
-        background: #1d9bf0;
-        color: white;
-        border: none;
-        padding: 14px 28px;
-        border-radius: 25px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(29, 155, 240, 0.3);
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      " onmouseover="this.style.background='#1a8cd8'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#1d9bf0'; this.style.transform='translateY(0)'">
-        <i class="fas fa-folder" style="margin-right: 8px;"></i>
-        Ir a Proyectos
+      <div class="editor-area" data-language="CSS">
+        <div class="editor-wrapper">
+          <div class="line-numbers" id="cssLineNumbersMain">1</div>
+          <textarea id="cssEditorMain" placeholder="Escribe tu código CSS aquí..." spellcheck="false"></textarea>
+          <div class="syntax-highlight" id="cssHighlightMain"></div>
+        </div>
+      </div>
+      <div class="editor-area" data-language="JavaScript">
+        <div class="editor-wrapper">
+          <div class="line-numbers" id="jsLineNumbersMain">1</div>
+          <textarea id="jsEditorMain" placeholder="Escribe tu código JavaScript aquí..." spellcheck="false"></textarea>
+          <div class="syntax-highlight" id="jsHighlightMain"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-tools">
+      <div class="tool-group">
+        <button onclick="formatAllCode()" title="Formatear todo el código">
+          <i class="fas fa-code"></i> Formatear
+        </button>
+        <button onclick="findAndReplace()" title="Buscar y reemplazar">
+          <i class="fas fa-search"></i> B&R
+        </button>
+        <button onclick="validateCode()" title="Validar código">
+          <i class="fas fa-check-circle"></i> Validar
+        </button>
+      </div>
+      <div class="tool-group">
+        <button onclick="undoChanges()" title="Deshacer">
+          <i class="fas fa-undo"></i>
+        </button>
+        <button onclick="redoChanges()" title="Rehacer">
+          <i class="fas fa-redo"></i>
+        </button>
+        <button onclick="clearAllEditors()" title="Limpiar todo">
+          <i class="fas fa-trash"></i> Limpiar
+        </button>
+      </div>
+    </div>
+    
+    <div class="preview-tools">
+      <button id="previewBtn">
+        <i class="fa-solid fa-eye"></i> <span id="previewBtnText">Vista Previa</span>
       </button>
-      
-      <!-- Indicador de estado -->
-      <div style="
-        margin-top: 40px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #86868b;
-        font-size: 14px;
-      ">
-        <div style="
-          width: 8px;
-          height: 8px;
-          background: #ff9500;
-          border-radius: 50%;
-          animation: pulse 2s infinite;
-        "></div>
-        <span>Estado: En mantenimiento</span>
-      </div>
+      <button id="scanBtn" title="Escanear seguridad">
+        <i class="fa-solid fa-shield-virus"></i> Escanear
+      </button>
+      <button onclick="openAPKGenerator()" title="Generar APK">
+        <i class="fas fa-mobile-alt"></i> Generar APK
+      </button>
     </div>
   </section>
 
@@ -4897,10 +4844,24 @@
     /* ========================
        Funciones de Sesión
        ======================== */
-    function checkSession() { if(localStorage.getItem('loggedIn') === 'true') document.getElementById('loginModal').style.display = 'none'; }
+    function checkSession() { 
+      if(localStorage.getItem('loggedIn') === 'true') {
+        document.getElementById('loginModal').style.display = 'none';
+      }
+    }
     function loginSimulated() {
       localStorage.setItem('loggedIn', 'true');
-      showDataLoadingAnimation();
+      
+      // Solo mostrar animación de carga si es la primera vez
+      const hasSeenLoadingAnimation = localStorage.getItem('hasSeenLoadingAnimation');
+      if (!hasSeenLoadingAnimation) {
+        localStorage.setItem('hasSeenLoadingAnimation', 'true');
+        showDataLoadingAnimation();
+      } else {
+        // Si ya vio la animación, solo cerrar el modal directamente
+        document.getElementById('loginModal').style.display = 'none';
+        showWelcomeNotification();
+      }
     }
 
     function showDataLoadingAnimation() {
@@ -7461,6 +7422,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       
+      // Función para abrir generador de APK
+      function openAPKGenerator() {
+        document.getElementById('apkGeneratorModal').style.display = 'block';
+      }
+
+      // Agregar evento para cerrar generador de APK
+      document.getElementById('closeAPKGenerator').addEventListener('click', () => {
+        document.getElementById('apkGeneratorModal').style.display = 'none';
+      });
+
       // Configurar botones de vista previa y escáner en proyectos
       const previewBtnProject = document.getElementById('previewBtnProject');
       const scanBtnProject = document.getElementById('scanBtnProject');
