@@ -4,7 +4,7 @@ modules = ["web", "nodejs-20"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Start Real Server"
+runButton = "Start Server"
 
 [[workflows.workflow]]
 name = "Start PWA Server"
@@ -23,3 +23,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python3 -m http.server 5000 --bind 0.0.0.0"
+
+[[workflows.workflow]]
+name = "Start Server"
+author = 45226964
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx serve -s . -l 5000"
