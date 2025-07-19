@@ -1288,6 +1288,79 @@
       }
     }
 
+    /* Animaciones para reporte de problemas */
+    @keyframes reportSuccessPulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 20px rgba(40, 167, 69, 0);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+      }
+    }
+
+    @keyframes reportSuccessCheck {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes reportSuccessRing {
+      0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes reportSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Efectos hover para elementos del reporte */
+    #imageUploadArea:hover {
+      border-color: #1d9bf0 !important;
+      background: rgba(29, 155, 240, 0.05) !important;
+    }
+
+    #problemDescription:focus {
+      border-color: #1d9bf0 !important;
+      box-shadow: 0 0 0 1px #1d9bf0 !important;
+    }
+
+    #problemType:focus {
+      border-color: #1d9bf0 !important;
+      box-shadow: 0 0 0 1px #1d9bf0 !important;
+    }
+
+    .report-step {
+      animation: reportSlideIn 0.5s ease;
+    }
+
     @keyframes slideInRight {
       from {
         transform: translateX(100%);
@@ -3632,6 +3705,166 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal de Reporte de Problemas Expandido ===== -->
+  <div id="reportProblemModal" style="display: none; position: fixed; z-index: 17000; top: 0; left: 0; width: 100%; height: 100%; background: #000000; overflow-y: auto; padding: 0;">
+    <div class="report-container" style="max-width: 600px; margin: 0 auto; background: #000000; min-height: 100vh; position: relative; color: #ffffff;">
+      <!-- Header del reporte -->
+      <div class="report-header" style="position: sticky; top: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid #2f3336; padding: 15px 20px; display: flex; align-items: center; gap: 15px; z-index: 100;">
+        <button id="closeReportProblemModal" style="background: none; border: none; color: #1d9bf0; font-size: 20px; cursor: pointer; padding: 8px; border-radius: 50%; transition: all 0.2s ease;">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h2 style="color: #ffffff; font-size: 18px; font-weight: 700; margin: 0; flex: 1;">Reportar un problema</h2>
+        <div style="color: #71767b; font-size: 14px;" id="reportProgressIndicator">1/3</div>
+      </div>
+      
+      <!-- Contenido del reporte -->
+      <div class="report-content" style="padding: 20px;">
+        <!-- Paso 1: Descripción del problema -->
+        <div class="report-step" id="reportStep1" style="display: block;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #dc3545, #c82333); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 36px;">
+              🐛
+            </div>
+            <h3 style="color: #ffffff; font-size: 20px; margin-bottom: 8px;">¿Qué problema encontraste?</h3>
+            <p style="color: #71767b; font-size: 14px; line-height: 1.4;">Cuéntanos en detalle lo que está funcionando mal para que podamos ayudarte mejor.</p>
+          </div>
+          
+          <div style="margin-bottom: 25px;">
+            <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #e7e9ea; font-size: 14px;">Descripción del problema <span style="color: #dc3545;">*</span></label>
+            <div style="position: relative;">
+              <textarea id="problemDescription" placeholder="Describe el problema que encontraste..." style="width: 100%; min-height: 120px; padding: 15px; border: 2px solid #2f3336; border-radius: 12px; background: #16181c; color: #ffffff; font-size: 15px; font-family: inherit; box-sizing: border-box; resize: vertical; transition: border-color 0.3s ease;" maxlength="200"></textarea>
+              <div style="position: absolute; bottom: 10px; right: 15px; color: #71767b; font-size: 12px; font-weight: 500;">
+                <span id="characterCount">0</span>/200
+              </div>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 25px;">
+            <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #e7e9ea; font-size: 14px;">Tipo de problema</label>
+            <select id="problemType" style="width: 100%; padding: 15px; border: 2px solid #2f3336; border-radius: 12px; background: #16181c; color: #ffffff; font-size: 15px; box-sizing: border-box; cursor: pointer;">
+              <option value="">Selecciona el tipo de problema</option>
+              <option value="bug">🐛 Error o fallo en la aplicación</option>
+              <option value="performance">⚡ Problema de rendimiento</option>
+              <option value="ui">🎨 Problema de interfaz</option>
+              <option value="feature">💡 Funcionalidad no funciona</option>
+              <option value="data">💾 Pérdida de datos</option>
+              <option value="login">🔐 Problema de inicio de sesión</option>
+              <option value="other">🔧 Otro problema</option>
+            </select>
+          </div>
+          
+          <button id="nextToImages" style="background: linear-gradient(45deg, #1d9bf0, #1a8cd8); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-weight: 700; font-size: 16px; width: 100%; transition: all 0.3s ease; opacity: 0.5; pointer-events: none;">
+            Continuar
+          </button>
+        </div>
+        
+        <!-- Paso 2: Subir imágenes -->
+        <div class="report-step" id="reportStep2" style="display: none;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #1d9bf0, #1a8cd8); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 36px;">
+              📷
+            </div>
+            <h3 style="color: #ffffff; font-size: 20px; margin-bottom: 8px;">Adjunta evidencia</h3>
+            <p style="color: #71767b; font-size: 14px; line-height: 1.4;">Sube hasta 3 imágenes que muestren el problema (opcional).</p>
+          </div>
+          
+          <div style="margin-bottom: 30px;">
+            <div id="imageUploadArea" style="border: 2px dashed #2f3336; border-radius: 12px; padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.3s ease; background: #16181c;" onclick="document.getElementById('imageInput').click()">
+              <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #71767b; margin-bottom: 15px;"></i>
+              <div style="color: #ffffff; font-size: 16px; font-weight: 600; margin-bottom: 5px;">Haz clic para subir imágenes</div>
+              <div style="color: #71767b; font-size: 14px;">O arrastra y suelta aquí</div>
+              <div style="color: #71767b; font-size: 12px; margin-top: 10px;">Máximo 3 imágenes • PNG, JPG • Máx 5MB cada una</div>
+            </div>
+            <input type="file" id="imageInput" accept="image/*" multiple style="display: none;" />
+            
+            <div id="imagePreviewContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px;">
+              <!-- Las imágenes se mostrarán aquí -->
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 15px;">
+            <button id="backToDescription" style="background: none; border: 2px solid #2f3336; color: #e7e9ea; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 16px; flex: 1; transition: all 0.3s ease;">
+              Atrás
+            </button>
+            <button id="nextToReview" style="background: linear-gradient(45deg, #1d9bf0, #1a8cd8); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-weight: 700; font-size: 16px; flex: 2; transition: all 0.3s ease;">
+              Continuar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Paso 3: Revisión y envío -->
+        <div class="report-step" id="reportStep3" style="display: none;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #28a745, #20c997); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 36px;">
+              ✅
+            </div>
+            <h3 style="color: #ffffff; font-size: 20px; margin-bottom: 8px;">Revisar y enviar</h3>
+            <p style="color: #71767b; font-size: 14px; line-height: 1.4;">Revisa la información antes de enviar tu reporte.</p>
+          </div>
+          
+          <div style="background: #16181c; border-radius: 12px; padding: 20px; margin-bottom: 30px; border: 1px solid #2f3336;">
+            <div style="margin-bottom: 20px;">
+              <div style="color: #71767b; font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 5px;">Descripción</div>
+              <div id="reviewDescription" style="color: #ffffff; font-size: 15px; line-height: 1.4;"></div>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+              <div style="color: #71767b; font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 5px;">Tipo de problema</div>
+              <div id="reviewType" style="color: #ffffff; font-size: 15px;"></div>
+            </div>
+            
+            <div id="reviewImagesSection" style="display: none;">
+              <div style="color: #71767b; font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 10px;">Imágenes adjuntas</div>
+              <div id="reviewImages" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 15px;">
+            <button id="backToImages" style="background: none; border: 2px solid #2f3336; color: #e7e9ea; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 16px; flex: 1; transition: all 0.3s ease;">
+              Atrás
+            </button>
+            <button id="submitProblemReport" style="background: linear-gradient(45deg, #28a745, #20c997); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-weight: 700; font-size: 16px; flex: 2; transition: all 0.3s ease;">
+              <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>
+              Enviar reporte
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===== Overlay de Reporte Enviado ===== -->
+  <div id="reportSentOverlay" style="display: none; position: fixed; z-index: 18000; top: 0; left: 0; width: 100%; height: 100%; background: #000000; justify-content: center; align-items: center;">
+    <div style="text-align: center; padding: 40px;">
+      <div id="reportSentAnimation" style="width: 120px; height: 120px; margin: 0 auto 30px; position: relative;">
+        <div style="width: 120px; height: 120px; border: 4px solid #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(40, 167, 69, 0.1); animation: reportSuccessPulse 2s infinite;">
+          <i class="fas fa-check" style="font-size: 48px; color: #28a745; animation: reportSuccessCheck 0.8s ease 0.5s both;"></i>
+        </div>
+        <div style="position: absolute; top: -10px; left: -10px; width: 140px; height: 140px; border: 2px solid rgba(40, 167, 69, 0.3); border-radius: 50%; animation: reportSuccessRing 1.5s ease-out infinite;"></div>
+      </div>
+      
+      <h2 style="color: #ffffff; font-size: 24px; font-weight: 700; margin-bottom: 15px;">¡Reporte enviado!</h2>
+      <p style="color: #71767b; font-size: 16px; line-height: 1.5; max-width: 400px; margin: 0 auto 30px;">
+        Gracias por ayudarnos a mejorar. Hemos recibido tu reporte y nuestro equipo lo revisará pronto.
+      </p>
+      
+      <div style="background: #16181c; border-radius: 12px; padding: 20px; margin: 30px auto; max-width: 300px; border: 1px solid #2f3336;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <i class="fas fa-ticket-alt" style="color: #1d9bf0; font-size: 20px;"></i>
+          <div>
+            <div style="color: #71767b; font-size: 12px;">ID de reporte</div>
+            <div style="color: #ffffff; font-weight: 600;" id="reportId">#REP-0000</div>
+          </div>
+        </div>
+        <div style="color: #71767b; font-size: 12px;">Tiempo estimado de respuesta: 24-48 horas</div>
+      </div>
+      
+      <button id="closeReportSent" style="background: linear-gradient(45deg, #1d9bf0, #1a8cd8); color: white; border: none; padding: 15px 40px; border-radius: 25px; cursor: pointer; font-weight: 700; font-size: 16px; transition: all 0.3s ease;">
+        Continuar
+      </button>
     </div>
   </div>
 
@@ -7264,6 +7497,115 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('closeReportModal').addEventListener('click', closeReportArticleModal);
       document.getElementById('cancelReport').addEventListener('click', closeReportArticleModal);
       document.getElementById('submitArticleReport').addEventListener('click', submitArticleReport);
+      
+      // Funciones para el reporte de problemas
+      function showReportStep(stepNumber) {
+        // Ocultar todos los pasos
+        document.querySelectorAll('.report-step').forEach(step => {
+          step.style.display = 'none';
+        });
+        
+        // Mostrar el paso actual
+        document.getElementById(`reportStep${stepNumber}`).style.display = 'block';
+        
+        // Actualizar indicador de progreso
+        document.getElementById('reportProgressIndicator').textContent = `${stepNumber}/3`;
+      }
+      
+      function resetReportForm() {
+        document.getElementById('problemDescription').value = '';
+        document.getElementById('problemType').value = '';
+        document.getElementById('characterCount').textContent = '0';
+        uploadedImages = [];
+        imagePreviewContainer.innerHTML = '';
+        showReportStep(1);
+        
+        const nextBtn = document.getElementById('nextToImages');
+        nextBtn.style.opacity = '0.5';
+        nextBtn.style.pointerEvents = 'none';
+        nextBtn.style.background = '#71767b';
+      }
+      
+      function renderImagePreview() {
+        imagePreviewContainer.innerHTML = '';
+        
+        uploadedImages.forEach((imageData, index) => {
+          const imageDiv = document.createElement('div');
+          imageDiv.style.cssText = `
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #2f3336;
+            aspect-ratio: 1;
+          `;
+          
+          imageDiv.innerHTML = `
+            <img src="${imageData.data}" style="width: 100%; height: 100%; object-fit: cover;" />
+            <button onclick="removeImage(${index})" style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s ease;">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
+          
+          imagePreviewContainer.appendChild(imageDiv);
+        });
+      }
+      
+      function removeImage(index) {
+        uploadedImages.splice(index, 1);
+        renderImagePreview();
+      }
+      
+      function updateReviewSection() {
+        const description = document.getElementById('problemDescription').value;
+        const typeSelect = document.getElementById('problemType');
+        const selectedType = typeSelect.options[typeSelect.selectedIndex].text;
+        
+        document.getElementById('reviewDescription').textContent = description;
+        document.getElementById('reviewType').textContent = selectedType;
+        
+        const reviewImagesSection = document.getElementById('reviewImagesSection');
+        const reviewImages = document.getElementById('reviewImages');
+        
+        if (uploadedImages.length > 0) {
+          reviewImagesSection.style.display = 'block';
+          reviewImages.innerHTML = '';
+          
+          uploadedImages.forEach(imageData => {
+            const img = document.createElement('img');
+            img.src = imageData.data;
+            img.style.cssText = 'width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #2f3336;';
+            reviewImages.appendChild(img);
+          });
+        } else {
+          reviewImagesSection.style.display = 'none';
+        }
+      }
+      
+      function submitProblemReport() {
+        // Mostrar overlay de carga
+        const submitBtn = document.getElementById('submitProblemReport');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Enviando...';
+        submitBtn.disabled = true;
+        
+        // Simular envío del reporte
+        setTimeout(() => {
+          // Generar ID único de reporte
+          const reportId = 'REP-' + Math.floor(Math.random() * 9000 + 1000);
+          document.getElementById('reportId').textContent = '#' + reportId;
+          
+          // Mostrar overlay de éxito
+          document.getElementById('reportProblemModal').style.display = 'none';
+          document.getElementById('reportSentOverlay').style.display = 'flex';
+          
+          // Resetear botón
+          submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 8px;"></i>Enviar reporte';
+          submitBtn.disabled = false;
+          
+          // Mostrar notificación
+          showNotification('🎉 Reporte enviado exitosamente', 'success');
+          
+        }, 2000);
+      }
 
       // Elementos de Clack
       const codeEffect = document.querySelector('.code-effect');
@@ -7744,6 +8086,166 @@ document.addEventListener('DOMContentLoaded', () => {
       // Volver a ajustes desde ayuda
       document.getElementById('backToSettingsFromHelp').addEventListener('click', () => {
         document.getElementById('helpSection').classList.remove('show');
+      });
+      
+      // Abrir modal de reporte de problemas
+      document.getElementById('reportProblemOption').addEventListener('click', () => {
+        document.getElementById('helpSection').classList.remove('show');
+        document.getElementById('settingsOverlay').style.display = 'none';
+        document.getElementById('reportProblemModal').style.display = 'block';
+        resetReportForm();
+      });
+      
+      // Cerrar modal de reporte
+      document.getElementById('closeReportProblemModal').addEventListener('click', () => {
+        document.getElementById('reportProblemModal').style.display = 'none';
+      });
+      
+      // Navegación entre pasos del reporte
+      document.getElementById('nextToImages').addEventListener('click', () => {
+        showReportStep(2);
+      });
+      
+      document.getElementById('backToDescription').addEventListener('click', () => {
+        showReportStep(1);
+      });
+      
+      document.getElementById('nextToReview').addEventListener('click', () => {
+        updateReviewSection();
+        showReportStep(3);
+      });
+      
+      document.getElementById('backToImages').addEventListener('click', () => {
+        showReportStep(2);
+      });
+      
+      // Enviar reporte
+      document.getElementById('submitProblemReport').addEventListener('click', () => {
+        submitProblemReport();
+      });
+      
+      // Cerrar overlay de reporte enviado
+      document.getElementById('closeReportSent').addEventListener('click', () => {
+        document.getElementById('reportSentOverlay').style.display = 'none';
+        document.getElementById('reportProblemModal').style.display = 'none';
+      });
+      
+      // Funcionalidad del textarea con contador
+      document.getElementById('problemDescription').addEventListener('input', function() {
+        const text = this.value;
+        const count = text.length;
+        document.getElementById('characterCount').textContent = count;
+        
+        const nextBtn = document.getElementById('nextToImages');
+        const problemType = document.getElementById('problemType').value;
+        
+        if (count > 0 && count <= 200 && problemType) {
+          nextBtn.style.opacity = '1';
+          nextBtn.style.pointerEvents = 'auto';
+          nextBtn.style.background = 'linear-gradient(45deg, #1d9bf0, #1a8cd8)';
+        } else {
+          nextBtn.style.opacity = '0.5';
+          nextBtn.style.pointerEvents = 'none';
+          nextBtn.style.background = '#71767b';
+        }
+        
+        // Cambiar color del borde según el límite
+        if (count > 200) {
+          this.style.borderColor = '#dc3545';
+        } else if (count > 0) {
+          this.style.borderColor = '#1d9bf0';
+        } else {
+          this.style.borderColor = '#2f3336';
+        }
+      });
+      
+      // Validación del tipo de problema
+      document.getElementById('problemType').addEventListener('change', function() {
+        const description = document.getElementById('problemDescription').value;
+        const nextBtn = document.getElementById('nextToImages');
+        
+        if (description.length > 0 && description.length <= 200 && this.value) {
+          nextBtn.style.opacity = '1';
+          nextBtn.style.pointerEvents = 'auto';
+          nextBtn.style.background = 'linear-gradient(45deg, #1d9bf0, #1a8cd8)';
+        } else {
+          nextBtn.style.opacity = '0.5';
+          nextBtn.style.pointerEvents = 'none';
+          nextBtn.style.background = '#71767b';
+        }
+      });
+      
+      // Funcionalidad de subida de imágenes
+      const imageInput = document.getElementById('imageInput');
+      const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+      let uploadedImages = [];
+      
+      imageInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        
+        files.forEach(file => {
+          if (uploadedImages.length >= 3) {
+            showNotification('Máximo 3 imágenes permitidas', 'warning');
+            return;
+          }
+          
+          if (file.size > 5 * 1024 * 1024) {
+            showNotification('Imagen muy grande. Máximo 5MB', 'error');
+            return;
+          }
+          
+          if (!file.type.startsWith('image/')) {
+            showNotification('Solo se permiten imágenes', 'error');
+            return;
+          }
+          
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const imageData = {
+              file: file,
+              data: e.target.result,
+              id: Date.now() + Math.random()
+            };
+            
+            uploadedImages.push(imageData);
+            renderImagePreview();
+          };
+          reader.readAsDataURL(file);
+        });
+        
+        // Limpiar input
+        this.value = '';
+      });
+      
+      // Drag and drop para imágenes
+      const uploadArea = document.getElementById('imageUploadArea');
+      
+      uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '#1d9bf0';
+        this.style.background = 'rgba(29, 155, 240, 0.1)';
+      });
+      
+      uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '#2f3336';
+        this.style.background = '#16181c';
+      });
+      
+      uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '#2f3336';
+        this.style.background = '#16181c';
+        
+        const files = Array.from(e.dataTransfer.files);
+        const event = { target: { files: files } };
+        imageInput.dispatchEvent(new Event('change'));
+        
+        // Simular files en input
+        const dt = new DataTransfer();
+        files.forEach(file => dt.items.add(file));
+        imageInput.files = dt.files;
+        imageInput.dispatchEvent(new Event('change'));
       });
       
       // Cerrar bot de ayuda
