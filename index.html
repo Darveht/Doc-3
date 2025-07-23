@@ -3720,7 +3720,10 @@
             W
           </div>
           <div class="author-info">
-            <div style="color: #ffffff; font-weight: 600; font-size: 15px;">Wikipedia</div>
+            <div style="color: #ffffff; font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+              Wikipedia
+              <i class="fas fa-check-circle" style="color: #1d9bf0; font-size: 16px;" title="Cuenta verificada"></i>
+            </div>
             <div style="color: #71767b; font-size: 14px;">Artículo verificado • <span id="articleDate"></span></div>
           </div>
           <button id="followAuthor" style="background: #1d9bf0; color: white; border: none; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer; margin-left: auto; transition: all 0.2s ease;">
@@ -5612,40 +5615,7 @@
     }
 
     function showWelcomeNotification() {
-      const notification = document.createElement('div');
-      notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(45deg, #1877f2, #42a5f5);
-        color: white;
-        padding: 20px 25px;
-        border-radius: 12px;
-        z-index: 10000;
-        max-width: 350px;
-        box-shadow: 0 8px 32px rgba(24, 119, 242, 0.3);
-        backdrop-filter: blur(10px);
-        animation: slideInRight 0.5s ease;
-      `;
-      
-      notification.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 15px;">
-          <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-            <i class="fas fa-check" style="font-size: 24px;"></i>
-          </div>
-          <div>
-            <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">¡Bienvenido a Clack!</div>
-            <div style="font-size: 14px; opacity: 0.9;">Tu entorno de desarrollo está listo. Total cargado: 20.3 MB</div>
-          </div>
-        </div>
-      `;
-      
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.5s ease forwards';
-        setTimeout(() => notification.remove(), 500);
-      }, 4000);
+      // Función removida - ya no muestra notificación de bienvenida
     }
 
     /* ========================
@@ -5698,11 +5668,6 @@
             card.className = 'video-card';
             card.innerHTML = `<div class="video-info">
               <h3>${title}</h3>
-              <div class="article-stats">
-                <i class="fas fa-eye" style="color: #1877f2;"></i>
-                <span>${Math.floor(Math.random() * 5000 + 1000)} vistas</span>
-                ${Math.random() > 0.5 ? '<i class="fas fa-chart-line" style="color: #00f2ea; margin-left: 10px;"></i>' : ''}
-              </div>
               <p>${snippet}</p>
               </div>
               <div class="video-actions">
