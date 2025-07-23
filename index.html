@@ -5782,9 +5782,15 @@
           });
           document.querySelectorAll('.openArticleBtn').forEach(btn => {
             btn.addEventListener('click', e => {
-              const title = e.target.getAttribute('data-title');
-              const card = e.target.closest('.video-card');
+              e.preventDefault();
+              e.stopPropagation();
+              
+              const button = e.currentTarget;
+              const title = button.getAttribute('data-title');
+              const card = button.closest('.video-card');
               const snippet = card.querySelector('p').textContent;
+              
+              console.log('Abriendo artículo:', title);
               openArticleOverlay(title, snippet);
             });
           });
@@ -5880,10 +5886,17 @@
     }
     // Funciones de artículos completos
     function openArticleOverlay(title, content) {
+      console.log('Función openArticleOverlay llamada con:', { title, content });
+      
       const overlay = document.getElementById('articleOverlay');
       const articleTitle = document.getElementById('articleTitle');
       const articleBody = document.getElementById('articleBody');
       const articleDate = document.getElementById('articleDate');
+      
+      if (!overlay || !articleTitle || !articleBody || !articleDate) {
+        console.error('No se encontraron elementos del overlay de artículo');
+        return;
+      }
       
       // Detener cualquier lectura anterior
       if (isReading) {
@@ -6422,7 +6435,13 @@
 
     // Función para pausar/reanudar lectura cuando se cierra el artículo
     function closeArticleOverlay() {
+      console.log('Cerrando overlay de artículo');
       const overlay = document.getElementById('articleOverlay');
+      
+      if (!overlay) {
+        console.error('No se encontró el overlay de artículo');
+        return;
+      }
       
       // Detener lectura si está activa
       if (isReading) {
@@ -7783,9 +7802,19 @@ document.addEventListener('DOMContentLoaded', () => {
       updateThemeDisplay();
       
       // Inicializar eventos del overlay de artículos
-      document.getElementById('closeArticle').addEventListener('click', closeArticleOverlay);
-      document.getElementById('followAuthor').addEventListener('click', toggleFollow);
-      document.getElementById('reportArticle').addEventListener('click', openReportArticleModal);
+      const closeArticleBtn = document.getElementById('closeArticle');
+      const followAuthorBtn = document.getElementById('followAuthor');
+      const reportArticleBtn = document.getElementById('reportArticle');
+      
+      if (closeArticleBtn) {
+        closeArticleBtn.addEventListener('click', closeArticleOverlay);
+      }
+      if (followAuthorBtn) {
+        followAuthorBtn.addEventListener('click', toggleFollow);
+      }
+      if (reportArticleBtn) {
+        reportArticleBtn.addEventListener('click', openReportArticleModal);
+      }
       
       // Navegación mejorada del asistente
       document.getElementById('closeHelpBot').addEventListener('click', () => {
