@@ -3738,22 +3738,10 @@
         </div>
         
         <!-- Acciones del artículo -->
-        <div class="article-actions" style="display: flex; align-items: center; gap: 20px; padding: 20px 0; margin-top: 30px; border-top: 1px solid #2f3336;">
-          <button class="action-btn" id="likeArticle" style="background: none; border: none; color: #71767b; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; transition: all 0.2s ease; font-size: 14px;">
-            <i class="far fa-heart"></i>
-            <span id="likeCount">0</span>
-          </button>
-          <button class="action-btn" id="bookmarkArticle" style="background: none; border: none; color: #71767b; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; transition: all 0.2s ease; font-size: 14px;">
-            <i class="far fa-bookmark"></i>
-            <span>Guardar</span>
-          </button>
-          <button class="action-btn" id="readerArticle" style="background: none; border: none; color: #71767b; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; transition: all 0.2s ease; font-size: 14px;">
-            <i class="fas fa-volume-up" id="readerIcon"></i>
-            <span id="readerText">Lector</span>
-          </button>
-          <button class="action-btn" id="reportArticle" style="background: none; border: none; color: #71767b; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; transition: all 0.2s ease; font-size: 14px; margin-left: auto;">
+        <div class="article-actions" style="display: flex; align-items: center; justify-content: center; padding: 20px 0; margin-top: 30px; border-top: 1px solid #2f3336;">
+          <button class="action-btn" id="reportArticle" style="background: linear-gradient(45deg, #f91880, #e0166a); border: none; color: white; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 25px; transition: all 0.3s ease; font-size: 15px; font-weight: 600; box-shadow: 0 4px 15px rgba(249, 24, 128, 0.3);">
             <i class="fas fa-flag"></i>
-            <span>Reportar</span>
+            <span>Reportar Artículo</span>
           </button>
         </div>
         
@@ -4053,41 +4041,155 @@
     </div>
   </div>
 
-  <!-- ===== Modal de Reporte de Artículo ===== -->
-  <div id="reportArticleModal" style="display: none; position: fixed; z-index: 17000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
-    <div class="modal-content" style="background: #16181c; color: #ffffff; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 20px; border-radius: 16px; border: 1px solid #2f3336; box-sizing: border-box; margin: auto;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-        <h3 style="margin: 0; font-size: 18px; font-weight: 700;">Reportar artículo</h3>
-        <button id="closeReportModal" style="background: none; border: none; color: #71767b; font-size: 20px; cursor: pointer; padding: 8px; border-radius: 50%; min-width: 40px; min-height: 40px; display: flex; align-items: center; justify-content: center;">
+  <!-- ===== Modal de Reporte de Artículo Moderno ===== -->
+  <div id="reportArticleModal" style="display: none; position: fixed; z-index: 17000; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%); overflow-y: auto;">
+    <div class="report-modal-container" style="min-height: 100vh; display: flex; flex-direction: column;">
+      
+      <!-- Header moderno -->
+      <div class="report-header" style="background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid #2f3336; padding: 20px; display: flex; align-items: center; gap: 20px; position: sticky; top: 0; z-index: 100;">
+        <button id="closeReportModal" style="background: rgba(255,255,255,0.1); border: none; color: #ffffff; font-size: 18px; cursor: pointer; padding: 12px; border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
           <i class="fas fa-times"></i>
         </button>
+        <div style="flex: 1;">
+          <h2 style="color: #ffffff; font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.5px;">Reportar Contenido</h2>
+          <p style="color: #71767b; font-size: 14px; margin: 4px 0 0 0;">Ayúdanos a mantener la comunidad segura</p>
+        </div>
+        <div style="background: linear-gradient(45deg, #f91880, #e0166a); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 0.5px;">
+          Prioritario
+        </div>
       </div>
-      
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #e7e9ea; font-size: 14px;">Motivo del reporte:</label>
-        <select id="reportReason" style="width: 100%; padding: 12px; border: 1px solid #2f3336; border-radius: 8px; background: #000000; color: #ffffff; font-size: 14px; box-sizing: border-box;">
-          <option value="">Seleccionar motivo</option>
-          <option value="spam">Spam o contenido repetitivo</option>
-          <option value="misinformation">Información incorrecta</option>
-          <option value="inappropriate">Contenido inapropiado</option>
-          <option value="copyright">Violación de derechos de autor</option>
-          <option value="other">Otro</option>
-        </select>
+
+      <!-- Contenido principal -->
+      <div style="flex: 1; padding: 40px 20px; max-width: 800px; margin: 0 auto; width: 100%;">
+        
+        <!-- Información del artículo -->
+        <div style="background: linear-gradient(145deg, #16181c, #1e2328); border: 1px solid #2f3336; border-radius: 20px; padding: 30px; margin-bottom: 30px; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: -50%; right: -50%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(249, 24, 128, 0.1) 0%, transparent 70%); pointer-events: none;"></div>
+          <div style="position: relative; z-index: 1;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+              <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #f91880, #e0166a); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                📄
+              </div>
+              <div>
+                <h3 style="color: #ffffff; font-size: 18px; font-weight: 700; margin: 0;">Artículo Seleccionado</h3>
+                <p style="color: #71767b; font-size: 14px; margin: 4px 0 0 0;" id="reportArticleTitle">Título del artículo aparecerá aquí</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario de reporte -->
+        <div style="background: linear-gradient(145deg, #16181c, #1e2328); border: 1px solid #2f3336; border-radius: 20px; padding: 30px; margin-bottom: 30px;">
+          
+          <!-- Selección de motivo -->
+          <div style="margin-bottom: 30px;">
+            <label style="display: block; margin-bottom: 15px; font-weight: 700; color: #ffffff; font-size: 16px;">¿Cuál es el problema con este contenido?</label>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+              
+              <div class="report-reason-option" data-value="spam" style="background: #000000; border: 2px solid #2f3336; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s ease; position: relative;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                  <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #ff6b35, #f7931e); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    🚫
+                  </div>
+                  <div>
+                    <h4 style="color: #ffffff; font-size: 15px; font-weight: 600; margin: 0 0 4px 0;">Spam o repetitivo</h4>
+                    <p style="color: #71767b; font-size: 13px; margin: 0; line-height: 1.4;">Contenido duplicado o no deseado</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="report-reason-option" data-value="misinformation" style="background: #000000; border: 2px solid #2f3336; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s ease; position: relative;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                  <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #e74c3c, #c0392b); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    ⚠️
+                  </div>
+                  <div>
+                    <h4 style="color: #ffffff; font-size: 15px; font-weight: 600; margin: 0 0 4px 0;">Información incorrecta</h4>
+                    <p style="color: #71767b; font-size: 13px; margin: 0; line-height: 1.4;">Datos falsos o engañosos</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="report-reason-option" data-value="inappropriate" style="background: #000000; border: 2px solid #2f3336; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s ease; position: relative;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                  <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #9b59b6, #8e44ad); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    🔞
+                  </div>
+                  <div>
+                    <h4 style="color: #ffffff; font-size: 15px; font-weight: 600; margin: 0 0 4px 0;">Contenido inapropiado</h4>
+                    <p style="color: #71767b; font-size: 13px; margin: 0; line-height: 1.4;">Ofensivo o inadecuado</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="report-reason-option" data-value="copyright" style="background: #000000; border: 2px solid #2f3336; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s ease; position: relative;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                  <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #1abc9c, #16a085); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    📋
+                  </div>
+                  <div>
+                    <h4 style="color: #ffffff; font-size: 15px; font-weight: 600; margin: 0 0 4px 0;">Derechos de autor</h4>
+                    <p style="color: #71767b; font-size: 13px; margin: 0; line-height: 1.4;">Uso no autorizado de contenido</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="report-reason-option" data-value="other" style="background: #000000; border: 2px solid #2f3336; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s ease; position: relative;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                  <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #34495e, #2c3e50); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    ❓
+                  </div>
+                  <div>
+                    <h4 style="color: #ffffff; font-size: 15px; font-weight: 600; margin: 0 0 4px 0;">Otro motivo</h4>
+                    <p style="color: #71767b; font-size: 13px; margin: 0; line-height: 1.4;">Especifica en los detalles</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Detalles adicionales -->
+          <div style="margin-bottom: 30px;">
+            <label style="display: block; margin-bottom: 15px; font-weight: 700; color: #ffffff; font-size: 16px;">Detalles adicionales (opcional)</label>
+            <div style="position: relative;">
+              <textarea id="reportDetails" placeholder="Proporciona más información sobre el problema. Esto nos ayudará a revisar tu reporte más rápidamente..." style="width: 100%; min-height: 120px; padding: 20px; resize: vertical; border: 2px solid #2f3336; border-radius: 15px; background: #000000; color: #ffffff; font-size: 15px; font-family: inherit; box-sizing: border-box; line-height: 1.6; transition: border-color 0.3s ease;" maxlength="500"></textarea>
+              <div style="position: absolute; bottom: 15px; right: 20px; color: #71767b; font-size: 12px; font-weight: 500;">
+                <span id="reportCharCount">0</span>/500
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Información adicional -->
+        <div style="background: rgba(29, 155, 240, 0.1); border: 1px solid rgba(29, 155, 240, 0.3); border-radius: 15px; padding: 20px; margin-bottom: 30px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+            <i class="fas fa-info-circle" style="color: #1d9bf0; font-size: 18px;"></i>
+            <span style="color: #ffffff; font-weight: 600; font-size: 15px;">Información importante</span>
+          </div>
+          <ul style="color: #e7e9ea; font-size: 14px; line-height: 1.6; margin: 0; padding-left: 20px;">
+            <li>Tu reporte será revisado por nuestro equipo de moderación</li>
+            <li>Los reportes falsos pueden resultar en restricciones de cuenta</li>
+            <li>Recibirás una notificación sobre el estado de tu reporte</li>
+          </ul>
+        </div>
+
       </div>
-      
-      <div style="margin-bottom: 25px;">
-        <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #e7e9ea; font-size: 14px;">Detalles adicionales:</label>
-        <textarea id="reportDetails" placeholder="Describe el problema (opcional)" style="width: 100%; min-height: 80px; padding: 12px; resize: vertical; border: 1px solid #2f3336; border-radius: 8px; background: #000000; color: #ffffff; font-size: 14px; font-family: inherit; box-sizing: border-box;"></textarea>
+
+      <!-- Footer con acciones -->
+      <div style="background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); border-top: 1px solid #2f3336; padding: 20px; position: sticky; bottom: 0;">
+        <div style="max-width: 800px; margin: 0 auto; display: flex; gap: 15px; justify-content: center;">
+          <button id="cancelReport" style="background: rgba(255,255,255,0.1); border: 2px solid #2f3336; color: #e7e9ea; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; font-size: 15px; min-width: 140px;">
+            Cancelar
+          </button>
+          <button id="submitArticleReport" style="background: linear-gradient(45deg, #f91880, #e0166a); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; font-weight: 700; transition: all 0.3s ease; font-size: 15px; min-width: 180px; box-shadow: 0 4px 15px rgba(249, 24, 128, 0.3); opacity: 0.5; pointer-events: none;">
+            <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>
+            Enviar Reporte
+          </button>
+        </div>
       </div>
-      
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <button id="submitArticleReport" style="background: #f91880; color: white; border: none; padding: 12px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; width: 100%; font-size: 14px;">
-          Enviar reporte
-        </button>
-        <button id="cancelReport" style="background: none; border: 1px solid #2f3336; color: #e7e9ea; padding: 12px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; width: 100%; font-size: 14px;">
-          Cancelar
-        </button>
-      </div>
+
     </div>
   </div>
 
@@ -5974,27 +6076,75 @@
     
 
     function openReportArticleModal() {
-      document.getElementById('reportArticleModal').style.display = 'flex';
+      const modal = document.getElementById('reportArticleModal');
+      const articleTitle = document.getElementById('articleTitle');
+      const reportArticleTitle = document.getElementById('reportArticleTitle');
+      
+      // Establecer el título del artículo en el modal
+      if (articleTitle && reportArticleTitle) {
+        reportArticleTitle.textContent = articleTitle.textContent;
+      }
+      
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      
+      // Resetear formulario
+      resetReportModal();
     }
 
     function closeReportArticleModal() {
-      document.getElementById('reportArticleModal').style.display = 'none';
-      document.getElementById('reportReason').value = '';
-      document.getElementById('reportDetails').value = '';
+      const modal = document.getElementById('reportArticleModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      resetReportModal();
     }
 
-    function submitArticleReport() {
-      const reason = document.getElementById('reportReason').value;
-      const details = document.getElementById('reportDetails').value;
+    function resetReportModal() {
+      // Resetear selección de motivos
+      document.querySelectorAll('.report-reason-option').forEach(option => {
+        option.style.borderColor = '#2f3336';
+        option.style.background = '#000000';
+        option.classList.remove('selected');
+      });
       
-      if (!reason) {
-        alert('Por favor selecciona un motivo para el reporte');
+      // Resetear textarea
+      document.getElementById('reportDetails').value = '';
+      document.getElementById('reportCharCount').textContent = '0';
+      
+      // Resetear botón de envío
+      const submitBtn = document.getElementById('submitArticleReport');
+      submitBtn.style.opacity = '0.5';
+      submitBtn.style.pointerEvents = 'none';
+      
+      selectedReportReason = null;
+    }
+
+    let selectedReportReason = null;
+
+    function submitArticleReport() {
+      if (!selectedReportReason) {
+        showNotification('Por favor selecciona un motivo para el reporte', 'error');
         return;
       }
       
-      // Simular envío del reporte
-      closeReportArticleModal();
-      showNotification('Reporte enviado. Gracias por ayudar a mantener la comunidad segura.', 'success');
+      const details = document.getElementById('reportDetails').value;
+      const articleTitle = document.getElementById('reportArticleTitle').textContent;
+      
+      // Simular envío del reporte con animación
+      const submitBtn = document.getElementById('submitArticleReport');
+      const originalText = submitBtn.innerHTML;
+      
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Enviando...';
+      submitBtn.style.pointerEvents = 'none';
+      
+      setTimeout(() => {
+        closeReportArticleModal();
+        showNotification('✅ Reporte enviado exitosamente. Nuestro equipo lo revisará pronto.', 'success');
+        
+        // Resetear botón
+        submitBtn.innerHTML = originalText;
+        submitBtn.style.pointerEvents = 'auto';
+      }, 2000);
     }
 
     // Cargar voces disponibles
@@ -7635,9 +7785,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Inicializar eventos del overlay de artículos
       document.getElementById('closeArticle').addEventListener('click', closeArticleOverlay);
       document.getElementById('followAuthor').addEventListener('click', toggleFollow);
-      document.getElementById('likeArticle').addEventListener('click', toggleArticleLike);
-      document.getElementById('bookmarkArticle').addEventListener('click', toggleBookmark);
-      document.getElementById('readerArticle').addEventListener('click', toggleArticleReader);
       document.getElementById('reportArticle').addEventListener('click', openReportArticleModal);
       
       // Navegación mejorada del asistente
@@ -7657,6 +7804,79 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('closeReportModal').addEventListener('click', closeReportArticleModal);
       document.getElementById('cancelReport').addEventListener('click', closeReportArticleModal);
       document.getElementById('submitArticleReport').addEventListener('click', submitArticleReport);
+      
+      // Event listeners para selección de motivos de reporte
+      document.querySelectorAll('.report-reason-option').forEach(option => {
+        option.addEventListener('click', function() {
+          // Resetear todas las opciones
+          document.querySelectorAll('.report-reason-option').forEach(opt => {
+            opt.style.borderColor = '#2f3336';
+            opt.style.background = '#000000';
+            opt.classList.remove('selected');
+          });
+          
+          // Seleccionar la opción clickeada
+          this.style.borderColor = '#f91880';
+          this.style.background = 'rgba(249, 24, 128, 0.1)';
+          this.classList.add('selected');
+          
+          selectedReportReason = this.dataset.value;
+          validateReportForm();
+        });
+        
+        // Efectos hover
+        option.addEventListener('mouseenter', function() {
+          if (!this.classList.contains('selected')) {
+            this.style.borderColor = '#71767b';
+            this.style.transform = 'translateY(-2px)';
+          }
+        });
+        
+        option.addEventListener('mouseleave', function() {
+          if (!this.classList.contains('selected')) {
+            this.style.borderColor = '#2f3336';
+            this.style.transform = 'translateY(0)';
+          }
+        });
+      });
+      
+      // Contador de caracteres y validación
+      const reportDetails = document.getElementById('reportDetails');
+      const reportCharCount = document.getElementById('reportCharCount');
+      
+      reportDetails.addEventListener('input', function() {
+        const count = this.value.length;
+        reportCharCount.textContent = count;
+        
+        if (count > 500) {
+          this.value = this.value.substring(0, 500);
+          reportCharCount.textContent = '500';
+        }
+        
+        validateReportForm();
+      });
+      
+      reportDetails.addEventListener('focus', function() {
+        this.style.borderColor = '#f91880';
+      });
+      
+      reportDetails.addEventListener('blur', function() {
+        this.style.borderColor = '#2f3336';
+      });
+      
+      function validateReportForm() {
+        const submitBtn = document.getElementById('submitArticleReport');
+        const isValid = selectedReportReason !== null;
+        
+        if (isValid) {
+          submitBtn.style.opacity = '1';
+          submitBtn.style.pointerEvents = 'auto';
+          submitBtn.style.transform = 'translateY(0)';
+        } else {
+          submitBtn.style.opacity = '0.5';
+          submitBtn.style.pointerEvents = 'none';
+        }
+      }
       
       // Sistema de Chat de Soporte
       let supportChatSession = null;
